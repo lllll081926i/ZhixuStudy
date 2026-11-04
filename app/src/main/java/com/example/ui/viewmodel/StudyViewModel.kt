@@ -428,6 +428,8 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
             val target = all.find { it.name == oldName } ?: return@launch
             dao.upsertBank(target.copy(name = formatted, updatedAt = System.currentTimeMillis()))
             dao.moveQuestionsBank(oldName, formatted)
+            dao.updateRecordsBankName(oldName, formatted)
+            dao.updateImportLogsBankName(oldName, formatted)
             dao.deleteBankByName(oldName)
             _selectedBankName.value = formatted
             showToast("题库已重命名为 $formatted")
@@ -556,9 +558,14 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun startQuickFiveSprint(bankName: String = _selectedBankName.value) {
         val all = allQuestions.value
-        val list = all.filter { it.bank == bankName }.ifEmpty { all }.shuffled().take(5)
+        val bankQuestions = all.filter { it.bank == bankName }
+        if (bankQuestions.isEmpty()) {
+            showToast("该题库暂无题目，请先添加题目")
+            return
+        }
+        val list = bankQuestions.shuffled().take(5)
         launchQuizSession(
-            title = "${bankName.removeSurrounding("《", "》")} · 随手练 5 题",
+            title = "${bankName.removeSurrounding("《", "》")} · 速练 5 题",
             mode = "随机练习",
             questions = list
         )
@@ -933,10 +940,20 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     fun startQuizFromConfig() {
         val cfg = _quizConfig.value
         val all = allQuestions.value
-        val bankQuestions = all.filter { it.bank == cfg.bankName }.ifEmpty { all }
+        val bankQuestions = all.filter { it.bank == cfg.bankName }
+        if (bankQuestions.isEmpty()) {
+            showToast("题库中暂无可练习题目，请先录入或导入题目")
+            return
+        }
         val filtered = when (cfg.range) {
-            "错题" -> bankQuestions.filter { it.wrongCount > 0 }.ifEmpty { bankQuestions }
-            "收藏" -> bankQuestions.filter { it.isStarred }.ifEmpty { bankQuestions }
+            "错题" -> bankQuestions.filter { it.wrongCount > 0 }.ifEmpty {
+                showToast("该题库暂无错题，已为你切换为全部题目")
+                bankQuestions
+            }
+            "收藏" -> bankQuestions.filter { it.isStarred }.ifEmpty {
+                showToast("该题库暂无重点收藏，已为你切换为全部题目")
+                bankQuestions
+            }
             else -> bankQuestions
         }
         val ordered = if (cfg.mode == "随机练习" || cfg.mode == "模拟考试") {

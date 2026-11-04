@@ -69,6 +69,12 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPracticeRecords(records: List<PracticeRecordEntity>)
 
+    @Query("UPDATE practice_records SET bankName = :newName WHERE bankName = :oldName")
+    suspend fun updateRecordsBankName(oldName: String, newName: String)
+
+    @Query("UPDATE import_logs SET targetBank = :newName WHERE targetBank = :oldName")
+    suspend fun updateImportLogsBankName(oldName: String, newName: String)
+
     @Query("SELECT * FROM import_presets ORDER BY id DESC")
     fun observeImportPresets(): Flow<List<ImportPresetEntity>>
 

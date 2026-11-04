@@ -139,13 +139,13 @@ fun ImportSourceScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "导入题目",
+            title = "导入题库",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet
         )
         ImportStepIndicator(
             currentStep = 1,
-            stepLabels = listOf("选文件", "对表格列", "核对题目", "导进去了")
+            stepLabels = listOf("选择来源", "字段映射", "审查去重", "导入完成")
         )
 
         LazyColumn(
@@ -388,7 +388,7 @@ fun ImportMappingScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "对一下表格列",
+            title = "字段与规则映射",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet,
             tabletSplitActive = tabletSplitActive,
@@ -396,7 +396,7 @@ fun ImportMappingScreen(
         )
         ImportStepIndicator(
             currentStep = 2,
-            stepLabels = listOf("选文件", "对表格列", "核对题目", "导进去了")
+            stepLabels = listOf("选择来源", "字段映射", "审查去重", "导入完成")
         )
 
         if (isTablet && tabletSplitActive) {
@@ -1419,13 +1419,13 @@ fun ImportResultScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "导进去了",
+            title = "导入完成",
             onBack = { viewModel.openBankDetail(stats.targetBank) },
             isTablet = isTablet
         )
         ImportStepIndicator(
             currentStep = 4,
-            stepLabels = listOf("选文件", "对表格列", "核对题目", "导进去了")
+            stepLabels = listOf("选择来源", "字段映射", "审查去重", "导入完成")
         )
 
         LazyColumn(
@@ -1447,7 +1447,7 @@ fun ImportResultScreen(
                         CompletionVectorIllustration(size = 104.dp)
                         Spacer(modifier = Modifier.height(14.dp))
                         Text(
-                            text = "题目已经全部导好啦！",
+                            text = "题库导入完成",
                             color = colors.textPrimary,
                             maxLines = 1,
                             softWrap = false,
@@ -1455,7 +1455,7 @@ fun ImportResultScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "已放进 ${stats.targetBank}",
+                            text = "已归入 ${stats.targetBank}",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -1470,7 +1470,7 @@ fun ImportResultScreen(
                         ) {
                             PreviewStatTile(
                                 modifier = Modifier.weight(1f),
-                                label = "新加进去",
+                                label = "新增录入",
                                 count = stats.added.toString(),
                                 unit = "题",
                                 accentColor = colors.mintText,
@@ -1479,7 +1479,7 @@ fun ImportResultScreen(
                             )
                             PreviewStatTile(
                                 modifier = Modifier.weight(1f),
-                                label = "换掉旧题",
+                                label = "替换旧题",
                                 count = stats.replaced.toString(),
                                 unit = "题",
                                 accentColor = colors.primaryAccent,
