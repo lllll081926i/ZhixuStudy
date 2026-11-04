@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
 
             SereneStudyTheme(
                 themeMode = settings.themeMode,
-                dynamicColor = settings.dynamicColor,
                 fontScalePercent = settings.fontScalePercent
             ) {
                 SereneStudyAppRoot(viewModel = studyViewModel)

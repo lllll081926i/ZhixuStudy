@@ -551,3 +551,174 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFourPointStar(
     }
     drawPath(path = path, color = color)
 }
+
+/**
+ * 5. Serene Empty Inbox / Completion Illustration — Soft Open Book with Floating Olive Leaves
+ */
+@Composable
+fun EmptyInboxIllustration(
+    modifier: Modifier = Modifier,
+    size: Dp = 120.dp
+) {
+    val colors = SereneTheme.colors
+    val infiniteTransition = rememberInfiniteTransition(label = "inbox_anim")
+    val leafWave by infiniteTransition.animateFloat(
+        initialValue = -5f,
+        targetValue = 5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "leaf_wave"
+    )
+
+    Canvas(modifier = modifier.size(size)) {
+        val w = this.size.width
+        val h = this.size.height
+
+        // Ground shadow oval
+        drawOval(
+            color = colors.primarySoft.copy(alpha = 0.45f),
+            topLeft = Offset(w * 0.12f, h * 0.82f),
+            size = Size(w * 0.76f, h * 0.12f)
+        )
+
+        // Bottom tilted notebook (peach accent)
+        rotate(degrees = -6f, pivot = Offset(w * 0.5f, h * 0.65f)) {
+            drawRoundRect(
+                color = colors.peachBg,
+                topLeft = Offset(w * 0.22f, h * 0.52f),
+                size = Size(w * 0.56f, h * 0.26f),
+                cornerRadius = CornerRadius(w * 0.05f)
+            )
+            drawRoundRect(
+                color = colors.peachText.copy(alpha = 0.4f),
+                topLeft = Offset(w * 0.22f, h * 0.52f),
+                size = Size(w * 0.56f, h * 0.26f),
+                cornerRadius = CornerRadius(w * 0.05f),
+                style = Stroke(width = w * 0.016f)
+            )
+        }
+
+        // Top main book (primary soft & white pages)
+        rotate(degrees = 4f, pivot = Offset(w * 0.5f, h * 0.55f)) {
+            drawRoundRect(
+                color = colors.primaryAccent.copy(alpha = 0.85f),
+                topLeft = Offset(w * 0.20f, h * 0.40f),
+                size = Size(w * 0.60f, h * 0.28f),
+                cornerRadius = CornerRadius(w * 0.06f)
+            )
+            drawRoundRect(
+                color = Color.White.copy(alpha = 0.95f),
+                topLeft = Offset(w * 0.25f, h * 0.44f),
+                size = Size(w * 0.50f, h * 0.20f),
+                cornerRadius = CornerRadius(w * 0.04f)
+            )
+            // Page rule lines
+            drawLine(
+                color = colors.borderSubtle,
+                start = Offset(w * 0.32f, h * 0.50f),
+                end = Offset(w * 0.68f, h * 0.50f),
+                strokeWidth = w * 0.02f,
+                cap = StrokeCap.Round
+            )
+            drawLine(
+                color = colors.borderSubtle,
+                start = Offset(w * 0.32f, h * 0.56f),
+                end = Offset(w * 0.58f, h * 0.56f),
+                strokeWidth = w * 0.02f,
+                cap = StrokeCap.Round
+            )
+        }
+
+        // Olive branch and natural leaves on top
+        rotate(degrees = leafWave, pivot = Offset(w * 0.32f, h * 0.28f)) {
+            val stemPath = Path().apply {
+                moveTo(w * 0.30f, h * 0.38f)
+                quadraticTo(w * 0.40f, h * 0.24f, w * 0.58f, h * 0.16f)
+            }
+            drawPath(
+                path = stemPath,
+                color = colors.mintText,
+                style = Stroke(width = w * 0.024f, cap = StrokeCap.Round)
+            )
+            // Leaf 1
+            drawOval(
+                color = colors.mintBg,
+                topLeft = Offset(w * 0.38f, h * 0.20f),
+                size = Size(w * 0.14f, h * 0.08f)
+            )
+            drawOval(
+                color = colors.mintText,
+                topLeft = Offset(w * 0.38f, h * 0.20f),
+                size = Size(w * 0.14f, h * 0.08f),
+                style = Stroke(width = w * 0.014f)
+            )
+            // Leaf 2
+            drawOval(
+                color = colors.mintText,
+                topLeft = Offset(w * 0.50f, h * 0.14f),
+                size = Size(w * 0.15f, h * 0.08f)
+            )
+        }
+
+        // Little floating spark
+        drawFourPointStar(center = Offset(w * 0.78f, h * 0.26f), radius = w * 0.045f, color = colors.peachText)
+        drawCircle(color = colors.primaryAccent.copy(alpha = 0.5f), radius = w * 0.02f, center = Offset(w * 0.18f, h * 0.32f))
+    }
+}
+
+/**
+ * 6. Discipline Milestone Medal Illustration
+ */
+@Composable
+fun MilestoneMedalIllustration(
+    modifier: Modifier = Modifier,
+    size: Dp = 80.dp
+) {
+    val colors = SereneTheme.colors
+    Canvas(modifier = modifier.size(size)) {
+        val w = this.size.width
+        val h = this.size.height
+
+        // Hanging ribbon left
+        val ribbonLeft = Path().apply {
+            moveTo(w * 0.38f, h * 0.48f)
+            lineTo(w * 0.30f, h * 0.88f)
+            lineTo(w * 0.40f, h * 0.78f)
+            lineTo(w * 0.48f, h * 0.50f)
+            close()
+        }
+        drawPath(path = ribbonLeft, color = colors.peachBg)
+        drawPath(path = ribbonLeft, color = colors.peachText, style = Stroke(width = w * 0.018f, join = StrokeJoin.Round))
+
+        // Hanging ribbon right
+        val ribbonRight = Path().apply {
+            moveTo(w * 0.62f, h * 0.48f)
+            lineTo(w * 0.70f, h * 0.88f)
+            lineTo(w * 0.60f, h * 0.78f)
+            lineTo(w * 0.52f, h * 0.50f)
+            close()
+        }
+        drawPath(path = ribbonRight, color = colors.peachText)
+
+        // Medal circle
+        drawCircle(
+            color = colors.amberBg,
+            radius = w * 0.32f,
+            center = Offset(w * 0.5f, h * 0.38f)
+        )
+        drawCircle(
+            color = colors.amberText,
+            radius = w * 0.32f,
+            center = Offset(w * 0.5f, h * 0.38f),
+            style = Stroke(width = w * 0.024f)
+        )
+        // Inner laurel star
+        drawFourPointStar(
+            center = Offset(w * 0.5f, h * 0.38f),
+            radius = w * 0.16f,
+            color = colors.amberText
+        )
+    }
+}

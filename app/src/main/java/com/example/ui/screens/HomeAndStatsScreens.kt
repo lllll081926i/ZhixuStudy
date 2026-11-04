@@ -78,6 +78,7 @@ import com.example.data.local.PracticeRecordEntity
 import com.example.data.local.QuestionBankEntity
 import com.example.data.local.QuestionEntity
 import com.example.data.local.UserSettingsState
+import com.example.ui.components.EmptyInboxIllustration
 import com.example.ui.components.ReviewCurveIllustration
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
@@ -302,13 +303,13 @@ private fun HomeHeroBannerCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     SereneBadge(
-                        text = if (remaining == 0) "今日目标已达成" else "今天再做 $remaining 题就达标",
+                        text = if (remaining == 0) "目标已达成" else "今日剩余 $remaining 题",
                         containerColor = colors.cardSurface.copy(alpha = 0.88f),
                         contentColor = colors.primaryAccent
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "每天做一点，心里更踏实",
+                        text = "今日学习进度",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
@@ -402,12 +403,12 @@ private fun HomeRecentBankCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             SereneBadge(
-                text = "正在练的题库",
+                text = "当前题库",
                 containerColor = colors.primarySoft,
                 contentColor = colors.primaryAccent
             )
             Text(
-                text = "查看章节 >",
+                text = "详情 >",
                 color = colors.textSecondary,
                 maxLines = 1,
                 softWrap = false,
@@ -446,18 +447,25 @@ private fun HomeRecentBankCard(
         }
 
         Spacer(modifier = Modifier.height(12.dp))
+        val (bookBg, bookFg) = when (bank.domainTag) {
+            "highway" -> colors.mintBg to colors.mintText
+            "exam" -> colors.peachBg to colors.peachText
+            "cs_math" -> colors.amberBg to colors.amberText
+            else -> colors.primarySoft to colors.primaryAccent
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(colors.primarySoft),
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(bookBg)
+                    .border(1.dp, bookFg.copy(alpha = 0.22f), RoundedCornerShape(15.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Outlined.MenuBook,
                     contentDescription = null,
-                    tint = colors.primaryAccent,
+                    tint = bookFg,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -528,7 +536,7 @@ private fun HomeRecentBankCard(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "随手练 5 题",
+                    text = "速练 5 题",
                     color = colors.primaryAccent,
                     maxLines = 1,
                     softWrap = false,
@@ -951,6 +959,30 @@ fun ReviewScreen(
                         selectedKey = activeFilter,
                         onSelect = { viewModel.setReviewFilter(it) }
                     )
+                }
+
+                if (displayedList.isEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 40.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            EmptyInboxIllustration(size = 130.dp)
+                            Text(
+                                text = "暂无待复习错题",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = colors.textPrimary
+                            )
+                            Text(
+                                text = "题本干净清爽，重点知识掌握牢固",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = colors.textSecondary
+                            )
+                        }
+                    }
                 }
 
                 items(displayedList, key = { it.id }) { q ->

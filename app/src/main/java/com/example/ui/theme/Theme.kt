@@ -135,7 +135,6 @@ val SereneShapes = Shapes(
 @Composable
 fun SereneStudyTheme(
     themeMode: String = "system", // "system", "light", "dark"
-    dynamicColor: Boolean = false,
     fontScalePercent: Int = 100,
     content: @Composable () -> Unit
 ) {
@@ -147,8 +146,9 @@ fun SereneStudyTheme(
     }
 
     val context = LocalContext.current
+    val isMonetSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val baseColorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        isMonetSupported -> {
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         darkTheme -> DarkColorScheme
@@ -158,18 +158,18 @@ fun SereneStudyTheme(
     val extendedColors = if (darkTheme) {
         SereneExtendedColors(
             isDark = true,
-            bgCanvas = if (dynamicColor) baseColorScheme.background else SereneBgDark,
-            cardSurface = if (dynamicColor) baseColorScheme.surface else SereneSurfaceDark,
-            subtleSurface = if (dynamicColor) baseColorScheme.surfaceVariant else SereneSurfaceSubtleDark,
+            bgCanvas = if (isMonetSupported) baseColorScheme.background else SereneBgDark,
+            cardSurface = if (isMonetSupported) baseColorScheme.surface else SereneSurfaceDark,
+            subtleSurface = if (isMonetSupported) baseColorScheme.surfaceVariant else SereneSurfaceSubtleDark,
             highSurface = SereneSurfaceHighDark,
-            borderSubtle = SereneBorderDark,
-            borderStrong = SereneBorderStrongDark,
-            textPrimary = SereneTextPrimaryDark,
-            textSecondary = SereneTextSecondaryDark,
+            borderSubtle = if (isMonetSupported) baseColorScheme.outlineVariant.copy(alpha = 0.4f) else SereneBorderDark,
+            borderStrong = if (isMonetSupported) baseColorScheme.outline else SereneBorderStrongDark,
+            textPrimary = if (isMonetSupported) baseColorScheme.onSurface else SereneTextPrimaryDark,
+            textSecondary = if (isMonetSupported) baseColorScheme.onSurfaceVariant else SereneTextSecondaryDark,
             textMuted = SereneTextMutedDark,
-            primaryAccent = if (dynamicColor) baseColorScheme.primary else SerenePrimaryDark,
-            primaryBright = if (dynamicColor) baseColorScheme.primary else SerenePrimaryBrightDark,
-            primarySoft = if (dynamicColor) baseColorScheme.primaryContainer else SerenePrimarySoftDark,
+            primaryAccent = if (isMonetSupported) baseColorScheme.primary else SerenePrimaryDark,
+            primaryBright = if (isMonetSupported) baseColorScheme.primary else SerenePrimaryBrightDark,
+            primarySoft = if (isMonetSupported) baseColorScheme.primaryContainer else SerenePrimarySoftDark,
             primaryUltraSoft = SerenePrimaryUltraSoftDark,
             mintBg = SereneMintBgDark,
             mintText = SereneMintTextDark,
@@ -183,18 +183,18 @@ fun SereneStudyTheme(
     } else {
         SereneExtendedColors(
             isDark = false,
-            bgCanvas = if (dynamicColor) baseColorScheme.background else SereneBgLight,
-            cardSurface = if (dynamicColor) baseColorScheme.surface else SereneSurfaceLight,
-            subtleSurface = if (dynamicColor) baseColorScheme.surfaceVariant else SereneSurfaceSubtleLight,
+            bgCanvas = if (isMonetSupported) baseColorScheme.background else SereneBgLight,
+            cardSurface = if (isMonetSupported) baseColorScheme.surface else SereneSurfaceLight,
+            subtleSurface = if (isMonetSupported) baseColorScheme.surfaceVariant else SereneSurfaceSubtleLight,
             highSurface = SereneSurfaceHighLight,
-            borderSubtle = SereneBorderLight,
-            borderStrong = SereneBorderStrongLight,
-            textPrimary = SereneTextPrimaryLight,
-            textSecondary = SereneTextSecondaryLight,
+            borderSubtle = if (isMonetSupported) baseColorScheme.outlineVariant.copy(alpha = 0.4f) else SereneBorderLight,
+            borderStrong = if (isMonetSupported) baseColorScheme.outline else SereneBorderStrongLight,
+            textPrimary = if (isMonetSupported) baseColorScheme.onSurface else SereneTextPrimaryLight,
+            textSecondary = if (isMonetSupported) baseColorScheme.onSurfaceVariant else SereneTextSecondaryLight,
             textMuted = SereneTextMutedLight,
-            primaryAccent = if (dynamicColor) baseColorScheme.primary else SerenePrimaryLight,
-            primaryBright = if (dynamicColor) baseColorScheme.primary else SerenePrimaryBrightLight,
-            primarySoft = if (dynamicColor) baseColorScheme.primaryContainer else SerenePrimarySoftLight,
+            primaryAccent = if (isMonetSupported) baseColorScheme.primary else SerenePrimaryLight,
+            primaryBright = if (isMonetSupported) baseColorScheme.primary else SerenePrimaryBrightLight,
+            primarySoft = if (isMonetSupported) baseColorScheme.primaryContainer else SerenePrimarySoftLight,
             primaryUltraSoft = SerenePrimaryUltraSoftLight,
             mintBg = SereneMintBgLight,
             mintText = SereneMintTextLight,

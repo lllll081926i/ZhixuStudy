@@ -150,7 +150,7 @@ fun ImportSourceScreen(
             item {
                 SereneCard(cornerRadius = 22.dp) {
                     Text(
-                        text = "要加到哪本题库里？",
+                        text = "目标题库",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
@@ -211,7 +211,7 @@ fun ImportSourceScreen(
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "把你的题库文件传上来",
+                            text = "选择导入文件",
                             color = colors.textPrimary,
                             maxLines = 1,
                             softWrap = false,
@@ -219,7 +219,7 @@ fun ImportSourceScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "支持 Excel、CSV、Anki 记忆卡片（.txt/.tsv/Cloze）、Word 或纯文本智能解析",
+                            text = "支持 Excel / CSV / Anki / TXT",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -309,7 +309,7 @@ fun ImportSourceScreen(
                             ) {
                                 Icon(Icons.Outlined.Description, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text("选手机里的文件", maxLines = 1, softWrap = false)
+                                Text("选择本地文件", maxLines = 1, softWrap = false)
                             }
                             OutlinedButton(
                                 onClick = { showPasteInline = !showPasteInline },
@@ -322,7 +322,7 @@ fun ImportSourceScreen(
                             ) {
                                 Icon(Icons.Outlined.ContentPaste, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text(if (showPasteInline) "收起粘贴框" else "直接粘贴文字", maxLines = 1, softWrap = false)
+                                Text(if (showPasteInline) "收起文本框" else "粘贴文本", maxLines = 1, softWrap = false)
                             }
                         }
 
@@ -336,7 +336,7 @@ fun ImportSourceScreen(
                                 OutlinedTextField(
                                     value = pastedText,
                                     onValueChange = { pastedText = it },
-                                    label = { Text("把复制好的题目粘贴在下面") },
+                                    label = { Text("粘贴文本题目") },
                                     minLines = 5,
                                     modifier = Modifier.fillMaxWidth()
                                 )
@@ -352,7 +352,7 @@ fun ImportSourceScreen(
                                     shape = RoundedCornerShape(50),
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text("帮我把这些题认出来", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
+                                    Text("开始解析", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }

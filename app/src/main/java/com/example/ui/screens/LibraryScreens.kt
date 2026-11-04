@@ -190,7 +190,7 @@ fun LibraryScreen(
                         onValueChange = { viewModel.setLibrarySearch(it) },
                         placeholder = {
                             Text(
-                                text = "搜科目、章节或者标签...",
+                                text = "搜索题库...",
                                 color = colors.textMuted,
                                 maxLines = 1,
                                 softWrap = false
@@ -225,7 +225,7 @@ fun LibraryScreen(
                             contentPadding = PaddingValues(16.dp)
                         ) {
                             Text(
-                                text = "新建一本自己的题库",
+                                text = "新建题库",
                                 color = colors.textPrimary,
                                 maxLines = 1,
                                 softWrap = false,
@@ -235,7 +235,7 @@ fun LibraryScreen(
                             OutlinedTextField(
                                 value = newBankName,
                                 onValueChange = { newBankName = it },
-                                label = { Text("叫什么名字？（如：行车规章必刷）", maxLines = 1) },
+                                label = { Text("题库名称", maxLines = 1) },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -243,7 +243,7 @@ fun LibraryScreen(
                             OutlinedTextField(
                                 value = newBankSubtitle,
                                 onValueChange = { newBankSubtitle = it },
-                                label = { Text("简单记几个重点词（选填）", maxLines = 1) },
+                                label = { Text("简介描述（选填）", maxLines = 1) },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -254,7 +254,7 @@ fun LibraryScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 TextButton(onClick = { showCreateInline = false }) {
-                                    Text("先不建了", maxLines = 1, softWrap = false)
+                                    Text("取消", maxLines = 1, softWrap = false)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Button(
@@ -269,7 +269,7 @@ fun LibraryScreen(
                                     shape = RoundedCornerShape(50),
                                     colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                                 ) {
-                                    Text("建好并打开", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
+                                    Text("创建", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -285,7 +285,7 @@ fun LibraryScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "手头一共 ${filteredBanks.size} 本题库",
+                            text = "共 ${filteredBanks.size} 本题库",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,

@@ -100,6 +100,7 @@ import com.example.data.local.PracticeRecordEntity
 import com.example.data.local.QuestionBankEntity
 import com.example.data.local.QuestionEntity
 import com.example.ui.components.CompletionVectorIllustration
+import com.example.ui.components.MilestoneMedalIllustration
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
 import com.example.ui.components.SereneFilterChipRow
@@ -123,7 +124,7 @@ fun PracticeConfigScreen(
     val colors = SereneTheme.colors
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "怎么练",
+            title = "练习配置",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet
         )
@@ -136,7 +137,7 @@ fun PracticeConfigScreen(
             item {
                 SereneCard(cornerRadius = 22.dp) {
                     Text(
-                        text = "挑哪本题库？",
+                        text = "目标题库",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
@@ -176,61 +177,46 @@ fun PracticeConfigScreen(
             item {
                 SereneCard(cornerRadius = 22.dp) {
                     Text(
-                        text = "选一种做题方式",
+                        text = "做题模式",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val modes = listOf(
-                        "顺序练习" to "按章节一题接一题做",
-                        "随机练习" to "打乱顺序随便抽题",
-                        "模拟考试" to "全做完再交卷算分",
-                        "背题模式" to "直接带着答案和解析看"
-                    )
+                    val modes = listOf("顺序练习", "随机练习", "模拟考试", "背题模式")
                     modes.chunked(2).forEach { rowModes ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 5.dp),
+                                .padding(vertical = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            rowModes.forEach { (modeTitle, desc) ->
+                            rowModes.forEach { modeTitle ->
                                 val active = config.mode == modeTitle
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
-                                        .clip(RoundedCornerShape(16.dp))
+                                        .clip(RoundedCornerShape(14.dp))
                                         .background(if (active) colors.primarySoft else colors.subtleSurface)
                                         .border(
                                             width = 1.5.dp,
                                             color = if (active) colors.primaryAccent else Color.Transparent,
-                                            shape = RoundedCornerShape(16.dp)
+                                            shape = RoundedCornerShape(14.dp)
                                         )
                                         .clickable {
                                             viewModel.updateQuizConfig { it.copy(mode = modeTitle) }
                                         }
-                                        .padding(14.dp)
+                                        .padding(vertical = 12.dp, horizontal = 14.dp),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Column {
-                                        Text(
-                                            text = modeTitle,
-                                            color = if (active) colors.primaryAccent else colors.textPrimary,
-                                            maxLines = 1,
-                                            softWrap = false,
-                                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                                        )
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = desc,
-                                            color = colors.textSecondary,
-                                            maxLines = 1,
-                                            softWrap = false,
-                                            overflow = TextOverflow.Ellipsis,
-                                            style = MaterialTheme.typography.bodySmall
-                                        )
-                                    }
+                                    Text(
+                                        text = modeTitle,
+                                        color = if (active) colors.primaryAccent else colors.textPrimary,
+                                        maxLines = 1,
+                                        softWrap = false,
+                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                                    )
                                 }
                             }
                         }
@@ -241,7 +227,7 @@ fun PracticeConfigScreen(
             item {
                 SereneCard(cornerRadius = 22.dp) {
                     Text(
-                        text = "做哪些题？一次做几道？",
+                        text = "题量与范围",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
@@ -250,9 +236,9 @@ fun PracticeConfigScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     SereneFilterChipRow(
                         options = listOf(
-                            "全部题目" to "所有题目",
-                            "错题" to "只做错过的",
-                            "收藏" to "只做收藏的"
+                            "全部题目" to "全部题目",
+                            "错题" to "错题本",
+                            "收藏" to "重点收藏"
                         ),
                         selectedKey = config.range,
                         onSelect = { r -> viewModel.updateQuizConfig { it.copy(range = r) } }
@@ -262,7 +248,7 @@ fun PracticeConfigScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("这组做多少题", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.bodyMedium)
+                        Text("题目数量", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.bodyMedium)
                         Text(
                             text = "${config.count} 题",
                             color = colors.primaryAccent,
@@ -286,7 +272,7 @@ fun PracticeConfigScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("选完马上看答案和解析", fontWeight = FontWeight.SemiBold, color = colors.textPrimary, maxLines = 1, softWrap = false)
+                        Text("即时显示解析", fontWeight = FontWeight.SemiBold, color = colors.textPrimary, maxLines = 1, softWrap = false)
                         Switch(
                             checked = config.instantExplanation,
                             onCheckedChange = { v -> viewModel.updateQuizConfig { it.copy(instantExplanation = v) } }
@@ -298,7 +284,7 @@ fun PracticeConfigScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("把 A/B/C/D 选项顺序打乱", fontWeight = FontWeight.SemiBold, color = colors.textPrimary, maxLines = 1, softWrap = false)
+                        Text("选项随机乱序", fontWeight = FontWeight.SemiBold, color = colors.textPrimary, maxLines = 1, softWrap = false)
                         Switch(
                             checked = config.shuffleOptions,
                             onCheckedChange = { v -> viewModel.updateQuizConfig { it.copy(shuffleOptions = v) } }
@@ -907,7 +893,7 @@ private fun QuizActiveQuestionContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (currentQ.type == "calc") "把算出来的结果填在下面" else "把空缺的词填在下面",
+                        text = if (currentQ.type == "calc") "计算结果" else "作答填空",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
@@ -916,7 +902,7 @@ private fun QuizActiveQuestionContent(
                     TextButton(onClick = { viewModel.toggleScratchpad(true) }) {
                         Icon(Icons.Outlined.Draw, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("打开草稿纸", maxLines = 1, softWrap = false)
+                        Text("草稿纸", maxLines = 1, softWrap = false)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -1088,14 +1074,14 @@ private fun QuizActiveQuestionContent(
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
-                            text = if (isCorrect) "答对啦！思路很稳" else "这题选错了，来看看原因",
+                            text = if (isCorrect) "回答正确" else "回答错误",
                             color = if (isCorrect) colors.mintText else colors.dangerText,
                             maxLines = 1,
                             softWrap = false,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold)
                         )
                         Text(
-                            text = "正确答案：${currentQ.answer.joinToString(", ")}  ·  你选了：${userSelected.joinToString(", ").ifBlank { "没填" }}",
+                            text = "正确答案：${currentQ.answer.joinToString(", ")} · 已选：${userSelected.joinToString(", ").ifBlank { "未作答" }}",
                             color = colors.textPrimary,
                             maxLines = 1,
                             softWrap = false,
@@ -1552,7 +1538,7 @@ fun QuizResultScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "这组做完了",
+            title = "练习结果",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet
         )
@@ -1573,7 +1559,11 @@ fun QuizResultScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CompletionVectorIllustration(size = 104.dp)
+                        if (scorePct >= 80) {
+                            MilestoneMedalIllustration(size = 96.dp)
+                        } else {
+                            CompletionVectorIllustration(size = 96.dp)
+                        }
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = "$scorePct%",
@@ -1583,7 +1573,7 @@ fun QuizResultScreen(
                             style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold)
                         )
                         Text(
-                            text = if (scorePct >= 80) "发挥得很稳！继续保持" else "错的几道题正好趁热看一眼",
+                            text = if (scorePct >= 80) "表现优异 · 已记录至今日学情" else "已保存错题至重点巩固本",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -1598,7 +1588,7 @@ fun QuizResultScreen(
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("做对了", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
+                                Text("正确", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
                                 Text(
                                     text = "$correct 题",
                                     color = colors.mintText,
@@ -1608,17 +1598,17 @@ fun QuizResultScreen(
                                 )
                             }
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("做错了", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
+                                Text("错误", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
                                 Text(
                                     text = "$wrong 题",
-                                    color = colors.dangerText,
+                                    color = if (wrong > 0) colors.dangerText else colors.textMuted,
                                     maxLines = 1,
                                     softWrap = false,
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold)
                                 )
                             }
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("花掉时间", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
+                                Text("耗时", color = colors.textSecondary, maxLines = 1, softWrap = false, style = MaterialTheme.typography.labelSmall)
                                 Text(
                                     text = "${session.elapsedSeconds.coerceAtLeast(18)} 秒",
                                     color = colors.textPrimary,
@@ -1640,7 +1630,7 @@ fun QuizResultScreen(
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                         ) {
-                            Text("一题一题回头看看解析", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                            Text("查看答题复盘", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         OutlinedButton(

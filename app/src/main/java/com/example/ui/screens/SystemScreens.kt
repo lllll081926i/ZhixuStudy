@@ -723,19 +723,32 @@ private fun SettingsAppearanceContent(
             }
         }
 
-        // 3. Material You Dynamic Color & Accent Palette
+        // 3. Monet Dynamic Theme & Classic Accent Palettes
         item {
             SereneCard {
-                SettingSwitchRow(
-                    title = "Material You 动态壁纸取色",
-                    subtitle = "提取系统壁纸色彩生成柔和主题",
-                    checked = settings.dynamicColor,
-                    onCheckedChange = { viewModel.setDynamicColor(it) }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "系统莫奈配色",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.textPrimary
+                        )
+                        SereneBadge(
+                            text = "已自适应壁纸",
+                            containerColor = colors.mintBg,
+                            contentColor = colors.mintText
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(14.dp))
+                }
                 Text(
-                    text = "知序经典配色方案",
-                    style = MaterialTheme.typography.labelLarge,
+                    text = "经典主题备选",
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.textSecondary,
                     maxLines = 1,
