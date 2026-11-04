@@ -111,7 +111,6 @@ import com.example.ui.theme.SereneTheme
 import com.example.ui.viewmodel.ActiveQuizSession
 import com.example.ui.viewmodel.AppScreen
 import com.example.ui.viewmodel.QuizConfigState
-import com.example.ui.viewmodel.ScratchpadStroke
 import com.example.ui.viewmodel.StudyViewModel
 
 @Composable
@@ -353,21 +352,6 @@ fun QuizScreen(
                 tabletSplitActive = tabletSplitActive,
                 onToggleTabletSplit = { viewModel.setTabletSplitPreferred(!tabletSplitActive) },
                 actions = {
-                    IconButton(
-                        onClick = { viewModel.toggleScratchpad() },
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(CircleShape)
-                            .background(if (session.showScratchpad) colors.primarySoft else colors.subtleSurface)
-                            .testTag("quiz_scratchpad_toggle")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Draw,
-                            contentDescription = "草稿纸",
-                            tint = if (session.showScratchpad) colors.primaryAccent else colors.textPrimary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
                     IconButton(
                         onClick = { viewModel.toggleQuestionStar(currentQ.id) },
                         modifier = Modifier
@@ -899,11 +883,6 @@ private fun QuizActiveQuestionContent(
                         softWrap = false,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                     )
-                    TextButton(onClick = { viewModel.toggleScratchpad(true) }) {
-                        Icon(Icons.Outlined.Draw, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text("草稿纸", maxLines = 1, softWrap = false)
-                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 currentQ.answer.forEachIndexed { slotIdx, _ ->
@@ -1036,16 +1015,6 @@ private fun QuizActiveQuestionContent(
                 }
             }
         }
-    }
-
-    if (session.showScratchpad || currentQ.type == "calc") {
-        InteractiveScratchpadCard(
-            questionId = currentQ.id,
-            strokes = session.scratchpadStrokes[currentQ.id] ?: emptyList(),
-            onAddStroke = { viewModel.addScratchpadStroke(currentQ.id, it) },
-            onUndo = { viewModel.undoScratchpadStroke(currentQ.id) },
-            onClear = { viewModel.clearScratchpad(currentQ.id) }
-        )
     }
 
     if (isSubmitted) {
@@ -1370,150 +1339,6 @@ private fun QuizOptionCard(
                         maxLines = 1,
                         softWrap = false,
                         fontSize = 11.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun InteractiveScratchpadCard(
-    questionId: String,
-    strokes: List<ScratchpadStroke>,
-    onAddStroke: (ScratchpadStroke) -> Unit,
-    onUndo: () -> Unit,
-    onClear: () -> Unit
-) {
-    val colors = SereneTheme.colors
-    var selectedColorHex by remember { mutableLongStateOf(0xFF4950AD) }
-    val currentPoints = remember { mutableStateListOf<Offset>() }
-
-    SereneCard(
-        cornerRadius = 22.dp,
-        borderColor = colors.primaryAccent.copy(alpha = 0.35f)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Outlined.Draw,
-                    contentDescription = null,
-                    tint = colors.primaryAccent,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "随手打草稿",
-                    color = colors.textPrimary,
-                    maxLines = 1,
-                    softWrap = false,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(0xFF4950AD, 0xFF216C4B, 0xFFC23934).forEach { hex ->
-                    Box(
-                        modifier = Modifier
-                            .size(22.dp)
-                            .clip(CircleShape)
-                            .background(Color(hex))
-                            .border(
-                                width = if (selectedColorHex == hex) 2.5.dp else 0.dp,
-                                color = colors.textPrimary,
-                                shape = CircleShape
-                            )
-                            .clickable { selectedColorHex = hex }
-                    )
-                }
-                IconButton(onClick = onUndo, modifier = Modifier.size(30.dp)) {
-                    Icon(Icons.Outlined.Undo, contentDescription = "撤销一笔", modifier = Modifier.size(18.dp))
-                }
-                IconButton(onClick = onClear, modifier = Modifier.size(30.dp)) {
-                    Icon(Icons.Outlined.DeleteSweep, contentDescription = "擦干净", modifier = Modifier.size(18.dp))
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(175.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(colors.subtleSurface.copy(alpha = 0.65f))
-                .border(1.dp, colors.borderStrong, RoundedCornerShape(16.dp))
-                .pointerInput(questionId, selectedColorHex) {
-                    detectDragGestures(
-                        onDragStart = { offset ->
-                            currentPoints.clear()
-                            currentPoints.add(offset)
-                        },
-                        onDrag = { change, _ ->
-                            change.consume()
-                            currentPoints.add(change.position)
-                        },
-                        onDragEnd = {
-                            if (currentPoints.size > 1) {
-                                onAddStroke(
-                                    ScratchpadStroke(
-                                        points = currentPoints.toList(),
-                                        colorHex = selectedColorHex
-                                    )
-                                )
-                            }
-                            currentPoints.clear()
-                        }
-                    )
-                }
-        ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val step = 28.dp.toPx()
-                var x = step
-                while (x < size.width) {
-                    var y = step
-                    while (y < size.height) {
-                        drawCircle(
-                            color = colors.textMuted.copy(alpha = 0.25f),
-                            radius = 1.3f,
-                            center = Offset(x, y)
-                        )
-                        y += step
-                    }
-                    x += step
-                }
-
-                strokes.forEach { stroke ->
-                    if (stroke.points.size > 1) {
-                        val path = Path().apply {
-                            moveTo(stroke.points.first().x, stroke.points.first().y)
-                            stroke.points.drop(1).forEach { pt -> lineTo(pt.x, pt.y) }
-                        }
-                        drawPath(
-                            path = path,
-                            color = Color(stroke.colorHex),
-                            style = Stroke(width = 6f, cap = StrokeCap.Round, join = StrokeJoin.Round)
-                        )
-                    }
-                }
-
-                if (currentPoints.size > 1) {
-                    val activePath = Path().apply {
-                        moveTo(currentPoints.first().x, currentPoints.first().y)
-                        currentPoints.drop(1).forEach { pt -> lineTo(pt.x, pt.y) }
-                    }
-                    drawPath(
-                        path = activePath,
-                        color = Color(selectedColorHex),
-                        style = Stroke(width = 6f, cap = StrokeCap.Round, join = StrokeJoin.Round)
                     )
                 }
             }

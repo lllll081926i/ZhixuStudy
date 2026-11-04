@@ -124,4 +124,33 @@ class SmartImportEngineTest {
         assertEquals("Km = 0.5 Kj", basicRows[0].values["答案"])
         assertEquals("交通流理论", basicRows[0].values["章节"])
     }
+
+    @Test
+    fun testEmbeddedBracketAnswerAndInlineOptions() {
+        val mapping = ColumnMappingConfig()
+        val rules = PreprocessRulesConfig(removeSerial = true)
+
+        // 测试从题干括号中剥离答案与内联选项提取
+        val rawRow = RawImportRow(
+            rowNumber = 1,
+            values = mapOf(
+                "题干" to "1. 铁路车站接发列车必须首先保证什么？（ A ） A. 行车安全 B. 装卸速度 C. 进路调整",
+                "题型" to "",
+                "选项A" to "",
+                "选项B" to "",
+                "选项C" to "",
+                "选项D" to "",
+                "答案" to "", // 空答案，期待引擎从题干括号中提取
+                "解析" to "安全第一"
+            )
+        )
+
+        val evaluated = SmartImportEngine.evaluateImportRows(listOf(rawRow), mapping, rules, emptyList())
+        assertEquals(1, evaluated.size)
+        val item = evaluated[0]
+        assertEquals("铁路车站接发列车必须首先保证什么？（   ）", item.stem)
+        assertEquals(listOf("A"), item.answer)
+        assertEquals("single", item.type)
+        assertEquals(3, item.options.size)
+    }
 }

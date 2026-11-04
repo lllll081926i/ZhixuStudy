@@ -112,16 +112,27 @@ fun ImportSourceScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri != null) {
-            val content = try {
-                context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() } ?: ""
-            } catch (e: Exception) {
-                ""
-            }
-            val fileName = uri.lastPathSegment?.substringAfterLast('/') ?: "导入题库.csv"
-            if (content.isNotBlank()) {
-                viewModel.loadImportedFileOrText(fileName, content, importState.targetBankName)
+            val fileName = uri.lastPathSegment?.substringAfterLast('/') ?: "导入题库.xlsx"
+            val isXlsx = fileName.endsWith(".xlsx", ignoreCase = true)
+            if (isXlsx) {
+                try {
+                    context.contentResolver.openInputStream(uri)?.use { stream ->
+                        viewModel.loadImportedXlsxStream(fileName, stream, importState.targetBankName)
+                    }
+                } catch (e: Exception) {
+                    viewModel.showToast("Excel 文件读取失败，请检查文件格式")
+                }
             } else {
-                viewModel.loadDemoImportData(fileName = fileName, navigateToStep2 = true)
+                val content = try {
+                    context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() } ?: ""
+                } catch (e: Exception) {
+                    ""
+                }
+                if (content.isNotBlank()) {
+                    viewModel.loadImportedFileOrText(fileName, content, importState.targetBankName)
+                } else {
+                    viewModel.loadDemoImportData(fileName = fileName, navigateToStep2 = true)
+                }
             }
         }
     }

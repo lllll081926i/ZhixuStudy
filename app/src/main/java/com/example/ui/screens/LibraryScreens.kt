@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -79,6 +80,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -546,6 +548,22 @@ fun BookDetailScreen(
             tabletSplitActive = tabletSplitActive,
             onToggleTabletSplit = { viewModel.setTabletSplitPreferred(!tabletSplitActive) },
             actions = {
+                val context = LocalContext.current
+                IconButton(onClick = {
+                    val exportText = viewModel.buildBankExportTsv(bank.name)
+                    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, "${bank.name} · 知序题库导出")
+                        putExtra(Intent.EXTRA_TEXT, exportText)
+                    }
+                    context.startActivity(Intent.createChooser(sendIntent, "分享题库到其他设备"))
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Share,
+                        contentDescription = "分享题库",
+                        tint = colors.primaryAccent
+                    )
+                }
                 IconButton(onClick = { showManageInline = !showManageInline }) {
                     Icon(
                         imageVector = Icons.Outlined.MoreVert,

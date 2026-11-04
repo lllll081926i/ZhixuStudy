@@ -71,12 +71,6 @@ enum class AppScreen(val title: String, val isPrimaryTab: Boolean = false) {
     AI_SERVICE("AI 辅助与模型设置")
 }
 
-data class ScratchpadStroke(
-    val points: List<Offset>,
-    val isEraser: Boolean = false,
-    val colorHex: Long = 0xFF4950AD
-)
-
 data class QuizConfigState(
     val bankName: String = "《铁路运输组织基础》",
     val mode: String = "顺序练习", // "顺序练习", "随机练习", "模拟考试", "背题模式"
@@ -95,8 +89,6 @@ data class ActiveQuizSession(
     val submittedMap: Map<String, Boolean> = emptyMap(), // questionId -> isSubmitted
     val elapsedSeconds: Int = 0,
     val showAnswerSheet: Boolean = false,
-    val showScratchpad: Boolean = false,
-    val scratchpadStrokes: Map<String, List<ScratchpadStroke>> = emptyMap(),
     val aiDeepExpandedMap: Map<String, Boolean> = emptyMap(),
     val generatedVariantMap: Map<String, QuestionEntity> = emptyMap()
 )
@@ -528,13 +520,23 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     fun markQuestionMastered(questionId: String) {
         viewModelScope.launch {
             val q = allQuestions.value.find { it.id == questionId } ?: return@launch
+            val sm2 = com.example.data.scheduler.Sm2Scheduler.calculate(
+                repetitions = q.repetitions + 1,
+                intervalDays = q.intervalDays,
+                easeFactor = q.easeFactor,
+                quality = com.example.data.scheduler.ReviewQuality.EASY
+            )
             val updated = q.copy(
                 wrongCount = 0,
-                masteryPercent = 96,
+                masteryPercent = 98,
+                repetitions = sm2.repetitions,
+                intervalDays = sm2.intervalDays,
+                easeFactor = sm2.easeFactor,
+                nextReviewTimestamp = sm2.nextReviewTimestamp,
                 lastPracticedLabel = "刚刚学会"
             )
             dao.updateQuestion(updated)
-            showToast("太棒了！这道题已标为学会")
+            showToast("已将复习调度至 ${sm2.intervalDays} 天后")
         }
     }
 
@@ -633,6 +635,40 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
             showToast("成功解析 $fileName，识别到 ${evaluated.size} 道候选题目")
+            navigateTo(AppScreen.IMPORT_MAPPING)
+        }
+    }
+
+    fun loadImportedXlsxStream(fileName: String, inputStream: java.io.InputStream, targetBank: String = _selectedBankName.value) {
+        viewModelScope.launch {
+            val currentQuestions = dao.getAllQuestionsOnce()
+            val (headers, rows) = SmartImportEngine.parseXlsxStream(inputStream)
+            val mapping = ColumnMappingConfig(
+                stemCol = headers.find { it.contains("题干") || it.contains("题目") } ?: headers.getOrNull(0) ?: "题干",
+                typeCol = headers.find { it.contains("题型") || it.contains("类型") } ?: headers.getOrNull(1) ?: "题型",
+                optionACol = headers.find { it.contains("选项A") || it.contains("A") } ?: headers.getOrNull(2) ?: "选项A",
+                optionBCol = headers.find { it.contains("选项B") || it.contains("B") } ?: headers.getOrNull(3) ?: "选项B",
+                optionCCol = headers.find { it.contains("选项C") || it.contains("C") } ?: headers.getOrNull(4) ?: "选项C",
+                optionDCol = headers.find { it.contains("选项D") || it.contains("D") } ?: headers.getOrNull(5) ?: "选项D",
+                answerCol = headers.find { it.contains("答案") } ?: headers.getOrNull(6) ?: "答案",
+                explanationCol = headers.find { it.contains("解析") } ?: headers.getOrNull(7) ?: "解析",
+                difficultyCol = headers.find { it.contains("难度") } ?: headers.getOrNull(8) ?: "难度",
+                chapterCol = headers.find { it.contains("章节") } ?: headers.getOrNull(9) ?: "章节"
+            )
+            val rules = _importState.value.rules
+            val evaluated = SmartImportEngine.evaluateImportRows(rows, mapping, rules, currentQuestions)
+            _importState.update {
+                it.copy(
+                    fileName = fileName,
+                    fileSizeLabel = "Excel (.xlsx) · ${rows.size} 行有效记录",
+                    targetBankName = targetBank,
+                    headers = headers,
+                    rawRows = rows,
+                    mapping = mapping,
+                    evaluatedItems = evaluated
+                )
+            }
+            showToast("成功解包 $fileName，识别到 ${evaluated.size} 道题目")
             navigateTo(AppScreen.IMPORT_MAPPING)
         }
     }
@@ -1023,15 +1059,30 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         viewModelScope.launch {
+            val quality = if (isCorrect) com.example.data.scheduler.ReviewQuality.GOOD else com.example.data.scheduler.ReviewQuality.AGAIN
+            val sm2 = com.example.data.scheduler.Sm2Scheduler.calculate(
+                repetitions = currentQ.repetitions,
+                intervalDays = currentQ.intervalDays,
+                easeFactor = currentQ.easeFactor,
+                quality = quality
+            )
             val updatedQ = if (isCorrect) {
                 currentQ.copy(
-                    masteryPercent = (currentQ.masteryPercent + 6).coerceAtMost(99),
+                    masteryPercent = (currentQ.masteryPercent + 8).coerceAtMost(99),
+                    repetitions = sm2.repetitions,
+                    intervalDays = sm2.intervalDays,
+                    easeFactor = sm2.easeFactor,
+                    nextReviewTimestamp = sm2.nextReviewTimestamp,
                     lastPracticedLabel = "刚刚"
                 )
             } else {
                 currentQ.copy(
                     wrongCount = currentQ.wrongCount + 1,
-                    masteryPercent = (currentQ.masteryPercent - 8).coerceAtLeast(25),
+                    masteryPercent = (currentQ.masteryPercent - 10).coerceAtLeast(20),
+                    repetitions = sm2.repetitions,
+                    intervalDays = sm2.intervalDays,
+                    easeFactor = sm2.easeFactor,
+                    nextReviewTimestamp = sm2.nextReviewTimestamp,
                     lastPracticedLabel = "刚刚",
                     lastWrongAnswer = userAns.joinToString(",")
                 )
@@ -1076,33 +1127,6 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun toggleScratchpad(show: Boolean? = null) {
-        _quizSession.update {
-            it.copy(showScratchpad = show ?: !it.showScratchpad)
-        }
-    }
-
-    fun addScratchpadStroke(questionId: String, stroke: ScratchpadStroke) {
-        _quizSession.update { session ->
-            val currentList = session.scratchpadStrokes[questionId] ?: emptyList()
-            session.copy(scratchpadStrokes = session.scratchpadStrokes + (questionId to (currentList + stroke)))
-        }
-    }
-
-    fun undoScratchpadStroke(questionId: String) {
-        _quizSession.update { session ->
-            val currentList = session.scratchpadStrokes[questionId] ?: emptyList()
-            if (currentList.isEmpty()) session
-            else session.copy(scratchpadStrokes = session.scratchpadStrokes + (questionId to currentList.dropLast(1)))
-        }
-    }
-
-    fun clearScratchpad(questionId: String) {
-        _quizSession.update { session ->
-            session.copy(scratchpadStrokes = session.scratchpadStrokes - questionId)
-        }
-    }
-
     fun toggleAiDeepExplain(questionId: String) {
         _quizSession.update { session ->
             val current = session.aiDeepExpandedMap[questionId] ?: false
@@ -1114,32 +1138,54 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun generateAiVariantQuestion(question: QuestionEntity) {
-        val variant = QuestionEntity(
-            id = "${question.id}_VAR",
-            bank = question.bank,
-            chapter = question.chapter,
-            section = "${question.section} · 举一反三",
-            type = "single",
-            difficulty = question.difficulty,
-            score = 2.0,
-            stem = "【举一反三练习】结合「${question.section}」的常见考法：如果遇到突发设备调整或作业条件变化，下面哪种做法最稳妥？",
-            optionsJson = listToJson(
-                listOf(
-                    "A. 先按安全规程确认行车条件，保证主线作业不冲突",
-                    "B. 不看现场限制条件，直接按最大负荷放行",
-                    "C. 跳过道岔锁闭检查，先发车再补手续",
-                    "D. 不核对行车凭证，只凭经验估计"
-                )
-            ),
-            answersJson = listToJson(listOf("A")),
-            explanation = "这道题顺着原题的思路换了个问法：只要记住「安全永远排在效率前面，手续凭证必须齐全」，就能轻松选出 A。"
-        )
-        _quizSession.update { session ->
-            session.copy(generatedVariantMap = session.generatedVariantMap + (question.id to variant))
-        }
+        val s = settings.value
+        val hasRealApiKey = s.aiApiKeyMasked.isNotBlank() && !s.aiApiKeyMasked.contains("••••")
         viewModelScope.launch {
-            prefsRepo.updateAiConfig(addTokens = 280)
-            showToast("已为你出一道同类练习题")
+            if (hasRealApiKey) {
+                showToast("正在通过 ${s.aiModelId} 衍生试题...")
+                val res = com.example.data.remote.AiApiClient.requestVariantQuestion(
+                    baseUrl = s.aiBaseUrl,
+                    apiKey = s.aiApiKeyMasked,
+                    modelId = s.aiModelId,
+                    question = question
+                )
+                if (res.isSuccess) {
+                    val variant = res.getOrThrow()
+                    _quizSession.update { session ->
+                        session.copy(generatedVariantMap = session.generatedVariantMap + (question.id to variant))
+                    }
+                    prefsRepo.updateAiConfig(addTokens = 380)
+                    showToast("AI 衍生题已就绪")
+                    return@launch
+                }
+            }
+
+            // Local fallback template
+            val variant = QuestionEntity(
+                id = "${question.id}_VAR",
+                bank = question.bank,
+                chapter = question.chapter,
+                section = "${question.section} · 举一反三",
+                type = "single",
+                difficulty = question.difficulty,
+                score = 2.0,
+                stem = "【衍生题】针对「${question.section}」考点：当现场作业条件发生变异时，下列何种处置符合规程？",
+                optionsJson = listToJson(
+                    listOf(
+                        "A. 严格依照规章核准行车凭证，确保进路绝不冲突",
+                        "B. 为抢抓周转效率，擅自临时解除设备联锁",
+                        "C. 简化道岔锁闭核验流程，先放行后补填记",
+                        "D. 仅凭经验口头联控，省略凭证交接"
+                    )
+                ),
+                answersJson = listToJson(listOf("A")),
+                explanation = "【核心要领】安全永远处于最高优先级，凭证手续必须齐备合规。"
+            )
+            _quizSession.update { session ->
+                session.copy(generatedVariantMap = session.generatedVariantMap + (question.id to variant))
+            }
+            prefsRepo.updateAiConfig(addTokens = 150)
+            showToast("已衍生一道同类考题")
         }
     }
 
@@ -1261,6 +1307,62 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Export / Backup & Restore JSON
+    fun buildBankExportTsv(bankName: String): String {
+        val list = allQuestions.value.filter { it.bank == bankName }
+        val sb = StringBuilder()
+        sb.append("#separator:tab\n")
+        sb.append("#html:false\n")
+        sb.append("#deck:${bankName.removeSurrounding("《", "》")}\n")
+        list.forEach { q ->
+            val front = if (q.options.isNotEmpty() && q.type != "judge") {
+                "${q.stem}\n${q.options.joinToString("\n")}"
+            } else {
+                q.stem
+            }
+            val back = if (q.explanation.isNotBlank()) {
+                "【参考答案】${q.answer.joinToString(", ")}\n【解析说明】${q.explanation}"
+            } else {
+                q.answer.joinToString(", ")
+            }
+            val tags = "${q.chapter} ${q.typeLabel}"
+            sb.append("${front.replace("\t", " ")}\t${back.replace("\t", " ")}\t$tags\n")
+        }
+        return sb.toString()
+    }
+
+    fun buildWrongBookExportText(): String {
+        val list = allQuestions.value.filter { it.wrongCount > 0 }
+        val sb = StringBuilder()
+        sb.append("知序 Study · 错题巩固打印集\n")
+        sb.append("导出时间：${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.CHINA).format(java.util.Date())}\n")
+        sb.append("待巩固错题共 ${list.size} 道\n")
+        sb.append("=========================================\n\n")
+
+        list.forEachIndexed { index, q ->
+            sb.append("${index + 1}. [${q.typeLabel}] ${q.stem}\n")
+            if (q.options.isNotEmpty() && q.type != "judge") {
+                q.options.forEach { opt -> sb.append("   $opt\n") }
+            }
+            sb.append("   [错题记录] 累计做错 ${q.wrongCount} 次 · 最近错选：${q.lastWrongAnswer.ifBlank { "未作答" }}\n\n")
+        }
+
+        sb.append("=========================================\n")
+        sb.append("【参考答案与解析附录】\n")
+        sb.append("=========================================\n\n")
+
+        list.forEachIndexed { index, q ->
+            sb.append("第 ${index + 1} 题答案：${q.answer.joinToString(", ")}\n")
+            if (q.explanation.isNotBlank()) {
+                sb.append("解析：${q.explanation}\n")
+            }
+            if (q.mnemonic.isNotBlank()) {
+                sb.append("记忆技巧：${q.mnemonic}\n")
+            }
+            sb.append("\n")
+        }
+        return sb.toString()
+    }
+
     fun buildFullBackupJson(): String {
         val root = JSONObject()
         root.put("app", "知序 Study")

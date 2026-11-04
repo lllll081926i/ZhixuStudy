@@ -37,6 +37,7 @@ import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material.icons.outlined.Psychology
+import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -69,6 +70,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -788,6 +790,21 @@ fun ReviewScreen(
                 title = "复习",
                 isTablet = isTablet,
                 actions = {
+                    val context = LocalContext.current
+                    IconButton(onClick = {
+                        val targets = if (displayedList.isNotEmpty()) displayedList else wrongList
+                        if (targets.isEmpty()) {
+                            viewModel.showToast("当前暂无错题可导出")
+                        } else {
+                            WrongBookPrintHelper.printWrongQuestions(context, targets)
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Print,
+                            contentDescription = "打印或导出PDF",
+                            tint = colors.primaryAccent
+                        )
+                    }
                     IconButton(onClick = { showSearchBar = !showSearchBar }) {
                         Icon(
                             imageVector = Icons.Outlined.Search,

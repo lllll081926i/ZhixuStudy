@@ -302,6 +302,32 @@ object SmartImportEngine {
     }
 
     /**
+     * Parses real binary .xlsx workbook stream into headers + rows without external dependencies.
+     */
+    fun parseXlsxStream(inputStream: java.io.InputStream): Pair<List<String>, List<RawImportRow>> {
+        return try {
+            val table = SimpleXlsxReader.parse(inputStream)
+            if (table.isEmpty()) return getDemoExcelRows()
+            val rawHeaders = table.first()
+            val headers = if (rawHeaders.all { it.isBlank() }) {
+                listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+            } else {
+                rawHeaders.mapIndexed { idx, h -> h.ifBlank { "列${idx + 1}" } }
+            }
+            val rows = table.drop(1).mapIndexed { rowIdx, rowList ->
+                val map = headers.mapIndexed { colIdx, h ->
+                    h to (rowList.getOrNull(colIdx) ?: "")
+                }.toMap()
+                RawImportRow(rowNumber = rowIdx + 1, values = map)
+            }.filter { row -> row.values.values.any { it.isNotBlank() } }
+
+            if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+        } catch (e: Exception) {
+            getDemoExcelRows()
+        }
+    }
+
+    /**
      * Parses pasted text, CSV, TSV, or JSON string into headers + RawImportRow list.
      */
     fun parseRawTextContent(fileName: String, content: String): Pair<List<String>, List<RawImportRow>> {
@@ -412,36 +438,63 @@ object SmartImportEngine {
         val serialRegex = try {
             Regex(rules.customSerialRegex)
         } catch (e: Exception) {
-            Regex("^\\s*\\d+[.、)\\s]+")
+            Regex("^\\s*(?:第?\\s*\\d+\\s*[题、.．):：\\]】]|\\([\\d一二三四五六七八九十]+\\)|（[\\d一二三四五六七八九十]+）|\\[\\d+\\]|【\\d+】|[一二三四五六七八九十]+[、.．]|Q\\d+[.、:：]|【(?:单选|多选|判断|填空|计算)[题项]?】)\\s*")
         }
         val delimiterRegex = try {
             Regex(rules.multiChoiceDelimiter)
         } catch (e: Exception) {
-            Regex("[,，、;；\\s]+")
+            Regex("[,，、;；/\\s]+")
         }
 
         return rows.mapNotNull { row ->
-            val rawStem = row.values[mapping.stemCol]?.trim() ?: ""
+            var rawStem = row.values[mapping.stemCol]?.trim() ?: ""
             if (rules.skipEmpty && rawStem.isEmpty()) return@mapNotNull null
 
-            val cleanStem = if (rules.removeSerial) {
+            // 1. Extract embedded answer from brackets like "( A )" or "（正确）" if rawAns is empty
+            var rawAns = row.values[mapping.answerCol]?.trim() ?: ""
+            val bracketAnsRegex = Regex("[（(]\\s*([A-Fa-f√×TF对错正确错误]+|[A-Fa-f,，、\\s]+)\\s*[)）]")
+            if (rawAns.isBlank()) {
+                val match = bracketAnsRegex.find(rawStem)
+                if (match != null) {
+                    rawAns = match.groupValues[1].trim()
+                    rawStem = rawStem.replaceRange(match.range, "（   ）")
+                }
+            }
+
+            var cleanStem = if (rules.removeSerial) {
                 rawStem.replace(serialRegex, "").trim()
             } else {
                 rawStem
             }
 
             val rawType = row.values[mapping.typeCol]?.trim() ?: ""
-            val rawAns = row.values[mapping.answerCol]?.trim() ?: ""
             val explanation = row.values[mapping.explanationCol]?.trim() ?: ""
             val difficulty = row.values[mapping.difficultyCol]?.trim().takeUnless { it.isNullOrEmpty() } ?: "中等"
             val chapter = row.values[mapping.chapterCol]?.trim().takeUnless { it.isNullOrEmpty() } ?: "第一章：车站工作组织"
 
-            // Build options list
+            // 2. Build options list & handle inline A/B/C/D if options columns are empty
+            var optA = row.values[mapping.optionACol]?.trim() ?: ""
+            var optB = row.values[mapping.optionBCol]?.trim() ?: ""
+            var optC = row.values[mapping.optionCCol]?.trim() ?: ""
+            var optD = row.values[mapping.optionDCol]?.trim() ?: ""
+
+            if (optA.isEmpty() && optB.isEmpty()) {
+                val inlineOptRegex = Regex("(?=[A-D][.、)\\s])")
+                val parts = cleanStem.split(inlineOptRegex).map { it.trim() }
+                if (parts.size >= 3 && parts[1].startsWith("A") && parts[2].startsWith("B")) {
+                    cleanStem = parts[0]
+                    optA = parts.getOrNull(1) ?: ""
+                    optB = parts.getOrNull(2) ?: ""
+                    optC = parts.getOrNull(3) ?: ""
+                    optD = parts.getOrNull(4) ?: ""
+                }
+            }
+
             val optCandidates = listOf(
-                "A" to (row.values[mapping.optionACol]?.trim() ?: ""),
-                "B" to (row.values[mapping.optionBCol]?.trim() ?: ""),
-                "C" to (row.values[mapping.optionCCol]?.trim() ?: ""),
-                "D" to (row.values[mapping.optionDCol]?.trim() ?: "")
+                "A" to optA,
+                "B" to optB,
+                "C" to optC,
+                "D" to optD
             )
             val nonEmptyOptions = optCandidates.filter { it.second.isNotEmpty() }.map { (letter, text) ->
                 val cleanOpt = text.replace(Regex("^[A-D][.、)\\s]+"), "").trim()

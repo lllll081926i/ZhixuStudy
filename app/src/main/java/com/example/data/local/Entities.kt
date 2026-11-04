@@ -40,6 +40,10 @@ data class QuestionEntity(
     val lastPracticedLabel: String = "2天前",
     val lastWrongAnswer: String = "",
     val auditStatus: String = "normal", // "normal", "conflict_resolved", "manual_verified"
+    val repetitions: Int = 0,
+    val intervalDays: Int = 1,
+    val easeFactor: Double = 2.5,
+    val nextReviewTimestamp: Long = 0L,
     val updatedAt: Long = System.currentTimeMillis()
 ) {
     val options: List<String>
