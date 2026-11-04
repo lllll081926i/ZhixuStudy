@@ -1779,8 +1779,8 @@ fun QuestionEditorScreen(
 ) {
     val colors = SereneTheme.colors
     val baseQ = initialQuestion ?: QuestionEntity(
-        id = "Q_NEW",
-        bank = "《铁路运输组织基础》",
+        id = "Q_${System.currentTimeMillis()}",
+        bank = viewModel.selectedBankName.value.ifBlank { "《铁路运输组织基础》" },
         chapter = "第一章：车站工作组织",
         type = "single",
         difficulty = "中等",
@@ -1830,7 +1830,7 @@ fun QuestionEditorScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = if (initialQuestion == null) "加一道新题" else "改这道题",
+            title = if (initialQuestion == null) "新建题目" else "编辑题目",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet,
             tabletSplitActive = tabletSplitActive,

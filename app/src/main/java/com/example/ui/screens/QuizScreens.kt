@@ -107,6 +107,7 @@ import com.example.data.local.PracticeRecordEntity
 import com.example.data.local.QuestionBankEntity
 import com.example.data.local.QuestionEntity
 import com.example.ui.components.CompletionVectorIllustration
+import com.example.ui.components.EmptyInboxIllustration
 import com.example.ui.components.MilestoneMedalIllustration
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
@@ -1627,7 +1628,7 @@ fun RecapScreen(
     val colors = SereneTheme.colors
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "回头看解析",
+            title = "答题复盘",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet
         )
@@ -1729,7 +1730,7 @@ fun HistoryScreen(
     val colors = SereneTheme.colors
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "做题记录",
+            title = "练习记录",
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet
         )
@@ -1744,6 +1745,29 @@ fun HistoryScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            if (records.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 50.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        EmptyInboxIllustration(size = 130.dp)
+                        Text(
+                            text = "暂无练习记录",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = colors.textPrimary
+                        )
+                        Text(
+                            text = "挑选一本题库开始你的第一组练习吧",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.textSecondary
+                        )
+                    }
+                }
+            }
             items(records, key = { it.id }) { rec ->
                 SereneCard(
                     cornerRadius = 22.dp,

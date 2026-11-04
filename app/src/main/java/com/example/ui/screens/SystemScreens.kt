@@ -2223,7 +2223,7 @@ fun AuditScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "检查重题和漏写的解析",
+            title = "题库体检",
             subtitle = null,
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet,
@@ -3053,15 +3053,30 @@ fun DataManagementScreen(
                 context.contentResolver.openOutputStream(uri)?.use { out ->
                     out.write(jsonPreview.toByteArray(Charsets.UTF_8))
                 }
-                viewModel.showToast("备份文件已经存好啦")
+                viewModel.showToast("已导出备份文件")
             } catch (_: Exception) {
+            }
+        }
+    }
+
+    val importBackupLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            try {
+                val jsonStr = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() } ?: ""
+                if (jsonStr.isNotBlank()) {
+                    viewModel.restoreFromBackupJson(jsonStr)
+                }
+            } catch (e: Exception) {
+                viewModel.showToast("备份文件读取失败")
             }
         }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "手机里的题库与备份",
+            title = "数据管理与备份",
             subtitle = null,
             onBack = { viewModel.navigateBack() }
         )
@@ -3125,7 +3140,7 @@ fun DataManagementScreen(
             item {
                 SereneCard {
                     Text(
-                        text = "打包备份出来（换手机也不怕丢）",
+                        text = "数据备份与导入恢复",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary,
@@ -3148,22 +3163,17 @@ fun DataManagementScreen(
                         ) {
                             Icon(imageVector = Icons.Outlined.CloudDownload, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("存一份备份文件", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                            Text("导出备份", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                         }
                         OutlinedButton(
-                            onClick = { showBackupJsonInline = !showBackupJsonInline },
+                            onClick = { importBackupLauncher.launch("application/json") },
                             shape = RoundedCornerShape(14.dp),
                             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(imageVector = Icons.Outlined.CloudUpload, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = if (showBackupJsonInline) "收起内容" else "看看备份内容",
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 1,
-                                softWrap = false
-                            )
+                            Text("从备份恢复", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                         }
                     }
 
