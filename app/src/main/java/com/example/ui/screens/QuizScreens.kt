@@ -17,6 +17,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -71,13 +73,18 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -106,6 +113,7 @@ import com.example.ui.components.SereneCard
 import com.example.ui.components.SereneFilterChipRow
 import com.example.ui.components.SereneFormulaCard
 import com.example.ui.components.SereneLinearProgress
+import com.example.ui.components.SereneMarkdownText
 import com.example.ui.components.SereneTopBar
 import com.example.ui.theme.SereneTheme
 import com.example.ui.viewmodel.ActiveQuizSession
@@ -341,6 +349,36 @@ fun QuizScreen(
     val minutes = (session.elapsedSeconds / 60).toString().padStart(2, '0')
     val seconds = (session.elapsedSeconds % 60).toString().padStart(2, '0')
     val excludedOptionsMap = remember { mutableStateMapOf<String, Set<String>>() }
+    var showExamDiagnoseDialog by remember { mutableStateOf(false) }
+
+    val unansweredIndices = remember(session.userSelections, questions) {
+        questions.mapIndexedNotNull { idx, q ->
+            val ans = session.userSelections[q.id]
+            if (ans.isNullOrEmpty() || ans.all { it.isBlank() }) idx else null
+        }
+    }
+
+    val pagerState = rememberPagerState(
+        initialPage = session.currentIndex.coerceIn(0, (questions.size - 1).coerceAtLeast(0)),
+        pageCount = { questions.size }
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(session.currentIndex) {
+        if (pagerState.currentPage != session.currentIndex && session.currentIndex in questions.indices) {
+            pagerState.animateScrollToPage(session.currentIndex)
+        }
+    }
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .collect { page ->
+                if (page != session.currentIndex && page in questions.indices) {
+                    viewModel.jumpToQuestion(page)
+                }
+            }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -530,22 +568,77 @@ fun QuizScreen(
                         }
                     }
 
-                    Column(
+                    HorizontalPager(
+                        state = pagerState,
                         modifier = Modifier
                             .weight(0.66f)
                             .fillMaxHeight()
-                            .verticalScroll(rememberScrollState()),
+                    ) { page ->
+                        val pageQ = questions.getOrNull(page) ?: return@HorizontalPager
+                        val pageSelected = session.userSelections[pageQ.id] ?: emptyList()
+                        val pageSubmitted = session.submittedMap[pageQ.id] == true
+                        val pageExcluded = excludedOptionsMap[pageQ.id] ?: emptySet()
+                        val pageToggleExclude: (String) -> Unit = { code ->
+                            val cur = excludedOptionsMap[pageQ.id] ?: emptySet()
+                            excludedOptionsMap[pageQ.id] = if (code in cur) cur - code else cur + code
+                        }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            QuizActiveQuestionContent(
+                                viewModel = viewModel,
+                                session = session,
+                                currentQ = pageQ,
+                                userSelected = pageSelected,
+                                excludedOptions = pageExcluded,
+                                onToggleExclude = pageToggleExclude,
+                                isSubmitted = pageSubmitted,
+                                isTabletGridOptions = true,
+                                onOptionClick = { code ->
+                                    if (hapticEnabled) {
+                                        localView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                                    }
+                                    viewModel.selectQuizOption(code)
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
+            } else {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) { page ->
+                    val pageQ = questions.getOrNull(page) ?: return@HorizontalPager
+                    val pageSelected = session.userSelections[pageQ.id] ?: emptyList()
+                    val pageSubmitted = session.submittedMap[pageQ.id] == true
+                    val pageExcluded = excludedOptionsMap[pageQ.id] ?: emptySet()
+                    val pageToggleExclude: (String) -> Unit = { code ->
+                        val cur = excludedOptionsMap[pageQ.id] ?: emptySet()
+                        excludedOptionsMap[pageQ.id] = if (code in cur) cur - code else cur + code
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         QuizActiveQuestionContent(
                             viewModel = viewModel,
                             session = session,
-                            currentQ = currentQ,
-                            userSelected = userSelected,
-                            excludedOptions = currentExcluded,
-                            onToggleExclude = toggleExclude,
-                            isSubmitted = isSubmitted,
-                            isTabletGridOptions = true,
+                            currentQ = pageQ,
+                            userSelected = pageSelected,
+                            excludedOptions = pageExcluded,
+                            onToggleExclude = pageToggleExclude,
+                            isSubmitted = pageSubmitted,
+                            isTabletGridOptions = false,
                             onOptionClick = { code ->
                                 if (hapticEnabled) {
                                     localView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -555,33 +648,6 @@ fun QuizScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    QuizActiveQuestionContent(
-                        viewModel = viewModel,
-                        session = session,
-                        currentQ = currentQ,
-                        userSelected = userSelected,
-                        excludedOptions = currentExcluded,
-                        onToggleExclude = toggleExclude,
-                        isSubmitted = isSubmitted,
-                        isTabletGridOptions = false,
-                        onOptionClick = { code ->
-                            if (hapticEnabled) {
-                                localView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            }
-                            viewModel.selectQuizOption(code)
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
@@ -628,7 +694,7 @@ fun QuizScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent),
                             modifier = Modifier.testTag("quiz_submit_current_btn")
                         ) {
-                            Text("选好了，看对错", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                            Text("提交作答", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(Icons.AutoMirrored.Outlined.Send, contentDescription = null, modifier = Modifier.size(15.dp))
                         }
@@ -639,21 +705,97 @@ fun QuizScreen(
                             contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                         ) {
-                            Text("接着做下一题 →", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                            Text("下一题 →", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                         }
                     } else {
                         Button(
-                            onClick = { viewModel.finishQuizSession() },
+                            onClick = {
+                                if (session.mode == "模拟考试" && unansweredIndices.isNotEmpty()) {
+                                    showExamDiagnoseDialog = true
+                                } else {
+                                    viewModel.finishQuizSession()
+                                }
+                            },
                             shape = RoundedCornerShape(50),
                             contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = colors.mintText),
                             modifier = Modifier.testTag("quiz_finish_btn")
                         ) {
-                            Text("做完了，看总分", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                            Text("交卷查看结果", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                         }
                     }
                 }
             }
+        }
+
+        if (showExamDiagnoseDialog) {
+            AlertDialog(
+                onDismissRequest = { showExamDiagnoseDialog = false },
+                title = {
+                    Text(
+                        text = "交卷诊断提醒",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = colors.textPrimary
+                    )
+                },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(
+                            text = "全卷共 ${questions.size} 题，尚有 ${unansweredIndices.size} 道题未作答：",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = colors.textPrimary
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            unansweredIndices.forEach { qIndex ->
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(colors.dangerBg)
+                                        .border(1.dp, colors.dangerText.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                                        .clickable {
+                                            showExamDiagnoseDialog = false
+                                            viewModel.jumpToQuestion(qIndex)
+                                        }
+                                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                                ) {
+                                    Text(
+                                        text = "第 ${qIndex + 1} 题",
+                                        color = colors.dangerText,
+                                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                                    )
+                                }
+                            }
+                        }
+                        Text(
+                            text = "点击未答题号可直接跳转补答，确认交卷将按照当前作答结算得分。",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.textSecondary
+                        )
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            showExamDiagnoseDialog = false
+                            viewModel.finishQuizSession()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colors.dangerText),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Text("执意交卷", maxLines = 1, softWrap = false)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showExamDiagnoseDialog = false }) {
+                        Text("继续答题", maxLines = 1, softWrap = false)
+                    }
+                }
+            )
         }
 
         if (session.showAnswerSheet) {
@@ -816,7 +958,7 @@ private fun QuizActiveQuestionContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
+        SereneMarkdownText(
             text = currentQ.stem,
             color = colors.textPrimary,
             style = MaterialTheme.typography.titleLarge.copy(
@@ -1315,7 +1457,7 @@ private fun QuizOptionCard(
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Text(
+            SereneMarkdownText(
                 text = cleanText,
                 color = colors.textPrimary,
                 style = MaterialTheme.typography.bodyLarge.copy(

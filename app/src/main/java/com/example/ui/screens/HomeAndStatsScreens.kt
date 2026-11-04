@@ -82,6 +82,7 @@ import com.example.data.local.QuestionEntity
 import com.example.data.local.UserSettingsState
 import com.example.ui.components.EmptyInboxIllustration
 import com.example.ui.components.ReviewCurveIllustration
+import com.example.ui.components.StudyHeatmapCard
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
 import com.example.ui.components.SereneFilterChipRow
@@ -1473,6 +1474,10 @@ fun StatsScreen(
                         }
                     }
                 }
+            }
+
+            item {
+                StudyHeatmapCard()
             }
 
             item {

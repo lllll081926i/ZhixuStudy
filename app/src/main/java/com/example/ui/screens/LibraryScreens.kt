@@ -66,8 +66,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -115,8 +118,8 @@ fun LibraryScreen(
     val filteredBanks = remember(banks, searchQuery) {
         if (searchQuery.isBlank()) banks
         else banks.filter {
-            it.name.contains(searchQuery, ignoreCase = true) ||
-                it.subtitle.contains(searchQuery, ignoreCase = true)
+            com.example.data.parser.PinyinMatcher.matches(it.name, searchQuery) ||
+                com.example.data.parser.PinyinMatcher.matches(it.subtitle, searchQuery)
         }
     }
 
@@ -1178,9 +1181,9 @@ fun QuestionListScreen(
         }
         if (searchQuery.isBlank()) byChip
         else byChip.filter {
-            it.stem.contains(searchQuery, ignoreCase = true) ||
-                it.explanation.contains(searchQuery, ignoreCase = true) ||
-                it.section.contains(searchQuery, ignoreCase = true)
+            com.example.data.parser.PinyinMatcher.matches(it.stem, searchQuery) ||
+                com.example.data.parser.PinyinMatcher.matches(it.explanation, searchQuery) ||
+                com.example.data.parser.PinyinMatcher.matches(it.section, searchQuery)
         }
     }
 
@@ -1346,18 +1349,65 @@ fun QuestionListScreen(
                     val isSelectedInBatch = q.id in batchSelectedIds
                     val isAnswerExpanded = expandedAnswerMap[q.id] == true
 
-                    SereneCard(
-                        cornerRadius = 22.dp,
-                        borderColor = if (isSelectedInBatch) colors.primaryAccent else colors.borderSubtle,
-                        onClick = {
-                            if (isBatchMode) {
-                                viewModel.toggleBatchSelection(q.id)
-                            } else {
-                                viewModel.openQuestionEditor(q)
+                    val dismissState = rememberSwipeToDismissBoxState(
+                        confirmValueChange = { value ->
+                            if (value == SwipeToDismissBoxValue.StartToEnd) {
+                                viewModel.toggleQuestionStar(q.id)
+                                false
+                            } else if (value == SwipeToDismissBoxValue.EndToStart) {
+                                viewModel.showToast("已删除题目 #${idx + 1}")
+                                false
+                            } else false
+                        }
+                    )
+
+                    SwipeToDismissBox(
+                        state = dismissState,
+                        enableDismissFromStartToEnd = !isBatchMode,
+                        enableDismissFromEndToStart = !isBatchMode,
+                        backgroundContent = {
+                            val dir = dismissState.dismissDirection
+                            val bgCol = when (dir) {
+                                SwipeToDismissBoxValue.StartToEnd -> colors.amberBg
+                                SwipeToDismissBoxValue.EndToStart -> colors.dangerBg
+                                else -> Color.Transparent
                             }
-                        },
-                        modifier = Modifier.testTag("question_item_card_${q.id}")
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(22.dp))
+                                    .background(bgCol)
+                                    .padding(horizontal = 20.dp),
+                                contentAlignment = if (dir == SwipeToDismissBoxValue.StartToEnd) Alignment.CenterStart else Alignment.CenterEnd
+                            ) {
+                                if (dir == SwipeToDismissBoxValue.StartToEnd) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Star,
+                                        contentDescription = "收藏",
+                                        tint = colors.amberText
+                                    )
+                                } else if (dir == SwipeToDismissBoxValue.EndToStart) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.DeleteOutline,
+                                        contentDescription = "删除",
+                                        tint = colors.dangerText
+                                    )
+                                }
+                            }
+                        }
                     ) {
+                        SereneCard(
+                            cornerRadius = 22.dp,
+                            borderColor = if (isSelectedInBatch) colors.primaryAccent else colors.borderSubtle,
+                            onClick = {
+                                if (isBatchMode) {
+                                    viewModel.toggleBatchSelection(q.id)
+                                } else {
+                                    viewModel.openQuestionEditor(q)
+                                }
+                            },
+                            modifier = Modifier.testTag("question_item_card_${q.id}")
+                        ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -1616,6 +1666,7 @@ fun QuestionListScreen(
                     }
                 }
             }
+        }
         }
 
         // Bottom Floating Batch Action Bar
