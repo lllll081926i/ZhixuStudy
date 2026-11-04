@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "generator": "ZhiXu Study synthetic fixture",
+    "description": "仅供测试，不是真实题库"
+  },
+  "banks": [
+    {
+      "id": "bank-rail-basics",
+      "name": "铁路运输组织（合成示例）"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q001",
+      "revision": 1,
+      "bankIds": [
+        "bank-rail-basics"
+      ],
+      "type": "SINGLE",
+      "stem": "列车运行图主要用于描述什么？",
+      "options": [
+        {
+          "id": "q001-o-a",
+          "order": 0,
+          "text": "列车在区间及车站的运行时刻"
+        },
+        {
+          "id": "q001-o-b",
+          "order": 1,
+          "text": "车票销售价格"
+        },
+        {
+          "id": "q001-o-c",
+          "order": 2,
+          "text": "机车维护费用"
+        }
+      ],
+      "correctOptionIds": [
+        "q001-o-a"
+      ],
+      "explanation": "运行图表达列车在区间运行及车站到发等时空关系。",
+      "difficulty": 2,
+      "tags": [
+        "列车运行图"
+      ],
+      "source": {
+        "kind": "synthetic",
+        "fileName": "questions.example.json"
+      }
+    },
+    {
+      "id": "q002",
+      "revision": 1,
+      "bankIds": [
+        "bank-rail-basics"
+      ],
+      "type": "MULTIPLE",
+      "stem": "关于铁路运输组织，下列哪些属于合理的基础安排？",
+      "options": [
+        {
+          "id": "q002-o-a",
+          "order": 0,
+          "text": "编排列车运行图"
+        },
+        {
+          "id": "q002-o-b",
+          "order": 1,
+          "text": "安排车流组织"
+        },
+        {
+          "id": "q002-o-c",
+          "order": 2,
+          "text": "忽略运输能力约束"
+        },
+        {
+          "id": "q002-o-d",
+          "order": 3,
+          "text": "组织车站作业"
+        }
+      ],
+      "correctOptionIds": [
+        "q002-o-a",
+        "q002-o-b",
+        "q002-o-d"
+      ],
+      "explanation": "合成题，仅验证多选题数据模型及判分。",
+      "difficulty": 3,
+      "tags": [
+        "运输组织"
+      ],
+      "source": {
+        "kind": "synthetic",
+        "fileName": "questions.example.json"
+      }
+    },
+    {
+      "id": "q003",
+      "revision": 1,
+      "bankIds": [
+        "bank-rail-basics"
+      ],
+      "type": "TRUE_FALSE",
+      "stem": "判断：选择题的答案必须指向存在的选项。",
+      "options": [
+        {
+          "id": "q003-true",
+          "order": 0,
+          "text": "正确"
+        },
+        {
+          "id": "q003-false",
+          "order": 1,
+          "text": "错误"
+        }
+      ],
+      "correctOptionIds": [
+        "q003-true"
+      ],
+      "explanation": "用于验证答案引用一致性。",
+      "difficulty": 1,
+      "tags": [
+        "校验"
+      ],
+      "source": {
+        "kind": "synthetic",
+        "fileName": "questions.example.json"
+      }
+    }
+  ]
+}

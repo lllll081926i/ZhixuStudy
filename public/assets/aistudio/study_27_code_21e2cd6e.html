@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study · 极速判断题作答工作台</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#00016d",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#52443d",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-container": "#fff8f5",
+            "tertiary": "#67574f",
+            "primary-container": "#6269c8",
+            "surface-container-low": "#f3f2ff",
+            "primary-fixed-dim": "#bec2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-primary-fixed-variant": "#353c99",
+            "outline-variant": "#c7c5d4",
+            "peach-text": "#8F4829",
+            "secondary": "#5c5d71",
+            "on-tertiary": "#ffffff",
+            "primary": "#4950ad",
+            "error-container": "#ffdad6",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#161b2d",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "secondary-container": "#e1e0f8",
+            "error": "#ba1a1a",
+            "surface-dim": "#d6d8f2",
+            "tertiary-container": "#806f67",
+            "inverse-primary": "#bec2ff",
+            "secondary-fixed": "#e1e0f8",
+            "surface-container-high": "#e4e7ff",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-secondary-container": "#626377",
+            "on-background": "#161b2d",
+            "mint-accent": "#E6F3EB",
+            "on-surface-variant": "#464652",
+            "on-primary-container": "#fbf7ff",
+            "outline": "#767683",
+            "on-secondary-fixed-variant": "#444558",
+            "surface-container": "#ececff",
+            "on-primary": "#ffffff",
+            "mint-text": "#216C4B",
+            "background": "#F6F7FB",
+            "inverse-surface": "#2b2f43",
+            "inverse-on-surface": "#efefff",
+            "tertiary-fixed": "#f5ded4",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dee1fb",
+            "surface": "#FFFFFF",
+            "primary-fixed": "#e0e0ff",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#4e55b2"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-background text-on-surface antialiased overflow-hidden font-body-md text-body-md select-none">
+<!-- Tablet Adaptive Outer Wrapper -->
+<div class="flex h-full w-full">
+<!-- 1. LEFT NAVIGATION RAIL (Tablet Standard Spec) -->
+<aside class="w-20 bg-surface flex flex-col items-center py-6 border-r border-surface-container shrink-0 justify-between z-30">
+<div class="flex flex-col items-center gap-8 w-full">
+<!-- Brand Logo / Headline -->
+<div class="flex items-center justify-center w-12 h-12 rounded-xl bg-surface-container-low text-primary">
+<span class="material-symbols-outlined text-title-lg" data-icon="school">school</span>
+</div>
+<!-- Rail Destinations -->
+<nav class="flex flex-col gap-5 items-center w-full px-2">
+<!-- Active: 学习 (School) -->
+<button class="flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-full px-4 py-2 w-16 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-title-md" data-icon="school" data-weight="fill" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-sm text-label-sm font-semibold">学习</span>
+</button>
+<!-- Inactive: 题库 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-full px-4 py-2 w-16 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-title-md" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-label-sm">题库</span>
+</button>
+<!-- Inactive: 复习 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-full px-4 py-2 w-16 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-title-md" data-icon="replay">replay</span>
+<span class="font-label-sm text-label-sm">复习</span>
+</button>
+<!-- Inactive: 统计 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-full px-4 py-2 w-16 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-title-md" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-sm text-label-sm">统计</span>
+</button>
+</nav>
+</div>
+<!-- User Avatar / Quick Setting -->
+<div class="flex flex-col items-center gap-3">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-title-sm" data-icon="tune">tune</span>
+</button>
+</div>
+</aside>
+<!-- 2. LIST PANE (Questions Drawer / ListDetailPaneScaffold Left) -->
+<section class="w-72 bg-surface-bright border-r border-surface-container flex flex-col shrink-0">
+<!-- Section Header -->
+<div class="p-4 flex items-center justify-between border-b border-surface-container">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">铁道规程强化营</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">专项速刷 · 判断题组</p>
+</div>
+<span class="bg-surface-container px-2 py-0.5 rounded-full font-label-sm text-label-sm text-primary font-semibold">20 题</span>
+</div>
+<!-- Question Mini-List -->
+<div class="flex-1 overflow-y-auto p-3 space-y-2">
+<div class="p-3 bg-surface rounded-xl border border-surface-container flex items-center justify-between opacity-85">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text font-label-sm text-label-sm flex items-center justify-center font-bold">✓</span>
+<span class="font-body-sm text-body-sm font-medium text-on-surface">#05 自动闭塞制式</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">0.8s</span>
+</div>
+<div class="p-3 bg-surface rounded-xl border border-surface-container flex items-center justify-between opacity-85">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text font-label-sm text-label-sm flex items-center justify-center font-bold">✓</span>
+<span class="font-body-sm text-body-sm font-medium text-on-surface">#06 列车进路锁闭</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">1.2s</span>
+</div>
+<div class="p-3 bg-surface rounded-xl border border-surface-container flex items-center justify-between opacity-85">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text font-label-sm text-label-sm flex items-center justify-center font-bold">✓</span>
+<span class="font-body-sm text-body-sm font-medium text-on-surface">#07 车站调车信号</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">1.5s</span>
+</div>
+<!-- Focused Current Question #08 -->
+<div class="p-3 bg-secondary-container/60 rounded-xl border-2 border-primary shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-error-container text-error font-label-sm text-label-sm flex items-center justify-center font-bold">✕</span>
+<div>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">#08 信号灯色含义</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold">判断题 · 简单</span>
+</div>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+</div>
+<div class="p-3 bg-surface rounded-xl border border-surface-container flex items-center justify-between text-outline">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center">09</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">#09 接触网分相绝缘</span>
+</div>
+<span class="font-label-sm text-label-sm">待作答</span>
+</div>
+<div class="p-3 bg-surface rounded-xl border border-surface-container flex items-center justify-between text-outline">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex items-center justify-center">10</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">#10 调度命令受令权限</span>
+</div>
+<span class="font-label-sm text-label-sm">待作答</span>
+</div>
+</div>
+<!-- Quick Session Statistics -->
+<div class="p-3 bg-surface border-t border-surface-container flex justify-around text-center">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">已完成</p>
+<p class="font-title-md text-title-md font-bold text-on-surface">8/20</p>
+</div>
+<div class="w-px h-8 bg-surface-container"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">平均配速</p>
+<p class="font-title-md text-title-md font-bold text-primary">1.4s</p>
+</div>
+</div>
+</section>
+<!-- 3. CENTER PRIMARY WORKSPACE (Tablet Ergonomic True/False Arena) -->
+<main class="flex-1 flex flex-col bg-background overflow-y-auto">
+<!-- Top Utility / Context Bar -->
+<header class="h-16 px-8 flex items-center justify-between bg-surface border-b border-surface-container shrink-0">
+<div class="flex items-center gap-3">
+<button class="p-2 -ml-2 text-on-surface-variant hover:text-on-surface rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-title-lg" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">知序 Study · 极速判断</span>
+<div class="h-4 w-px bg-surface-container mx-1"></div>
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-primary font-label-md text-label-md font-semibold">
+            判断题 · 分值 1.0
+          </span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Live Timer Capsule -->
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-primary text-title-sm" data-icon="timer">timer</span>
+<span class="font-label-lg text-label-lg font-bold text-primary tabular-nums">00:02.14</span>
+</div>
+<!-- Progress Indicator -->
+<div class="flex items-center gap-3">
+<span class="font-label-md text-label-md font-semibold text-on-surface-variant">题目进度</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tabular-nums">08 <span class="font-body-sm text-body-sm text-outline">/ 20</span></span>
+</div>
+</div>
+</header>
+<!-- Center Study Canvas with Ergonomic Spacing -->
+<div class="flex-1 max-w-4xl w-full mx-auto p-8 flex flex-col justify-start gap-6">
+<!-- Question Stem Card -->
+<article class="bg-surface rounded-2xl p-6 border border-surface-container shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">第 08 题</span>
+<span class="font-label-sm text-label-sm text-outline">单选题式是非判定</span>
+</div>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-peach-text bg-tertiary-fixed/40 px-2 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-label-sm" data-icon="warning">warning</span>
+              考点高频易错
+            </span>
+</div>
+<p class="font-headline-sm text-headline-sm font-semibold text-on-surface leading-relaxed tracking-normal">
+            《铁路技术管理规程》中明确规定：在自动闭塞区间，当进站信号机显示一个黄色灯光时，准许列车经道岔<span class="underline decoration-error decoration-2 underline-offset-4 font-bold text-primary">直向位置</span>进入站内准备停车。
+          </p>
+</article>
+<!-- Ergonomic True / False Split Action Area (Specialized for Tablet Dual-Hand Thumb Reach) -->
+<div class="grid grid-cols-2 gap-5 w-full">
+<!-- Option 1: 正确 (True / √) - Standard Correct Answer Revealed -->
+<div class="relative bg-mint-accent/50 border-2 border-mint-text/60 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-[160px] cursor-pointer transition-all duration-150 hover:bg-mint-accent shadow-sm active:scale-[0.98]">
+<div class="absolute top-3 left-4 flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-mint-accent text-mint-text font-label-sm text-label-sm font-bold shadow-xs">
+<span class="material-symbols-outlined text-label-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              标准正确答案
+            </div>
+<div class="w-16 h-16 rounded-full bg-white flex items-center justify-center text-mint-text shadow-sm mt-3">
+<span class="material-symbols-outlined text-headline-lg font-bold" data-icon="check">check</span>
+</div>
+<div class="text-center">
+<h3 class="font-headline-sm text-headline-sm font-bold text-mint-text">正确 (True)</h3>
+<p class="font-label-sm text-label-sm text-mint-text/80 mt-0.5">命题真实符合技术规程</p>
+</div>
+</div>
+<!-- Option 2: 错误 (False / ×) - Selected by User (Incorrect State with Visual Alert) -->
+<div class="relative bg-error-container/40 border-2 border-error rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-[160px] shadow-sm ring-4 ring-error/10">
+<div class="absolute top-3 right-4 flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error text-white font-label-sm text-label-sm font-bold shadow-xs">
+<span class="material-symbols-outlined text-label-sm" data-icon="cancel" data-weight="fill" style="font-variation-settings: 'FILL' 1;">cancel</span>
+              你的选择：回答错误！
+            </div>
+<div class="w-16 h-16 rounded-full bg-error text-white flex items-center justify-center shadow-md mt-3">
+<span class="material-symbols-outlined text-headline-lg font-bold" data-icon="close">close</span>
+</div>
+<div class="text-center">
+<h3 class="font-headline-sm text-headline-sm font-bold text-error">错误 (False)</h3>
+<p class="font-label-sm text-label-sm text-error/90 mt-0.5 font-medium">回答错误 · 判定偏差</p>
+</div>
+</div>
+</div>
+<!-- Immediate Instant Diagnostic & Review Accordion Box -->
+<section class="bg-surface rounded-2xl p-6 border border-surface-container space-y-4 shadow-sm animate-fadeIn">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container">
+<div class="flex items-center gap-2 text-error font-title-md text-title-md font-bold">
+<span class="material-symbols-outlined text-title-lg" data-icon="error_outline">error_outline</span>
+              错题即时诊断与防踩坑小结
+            </div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-peach-text/10 text-peach-text font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-label-sm" data-icon="history">history</span>
+                历史第 2 次答错该考点
+              </span>
+<span class="px-2.5 py-1 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-semibold">
+                已自动归入明日艾宾浩斯强化
+              </span>
+</div>
+</div>
+<!-- Analysis Detail Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+<div class="p-4 rounded-xl bg-surface-bright border border-surface-container">
+<h4 class="font-title-sm text-title-sm font-bold text-on-surface mb-2 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                核心概念辨析（直向 vs 侧向）
+              </h4>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                题目陈述为<span class="font-semibold text-mint-text">【正确】</span>。进站信号机显示<span class="font-bold text-on-surface">一个黄色灯光</span>时，正代表列车经道岔<span class="font-semibold text-primary">直向位置</span>进站准备停车；若经道岔<span class="font-semibold text-peach-text">侧向位置</span>进站，则必须显示<span class="font-bold text-on-surface">双黄色灯光</span>。
+              </p>
+</div>
+<!-- Official Regulation Citation Callout -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-primary-fixed">
+<h4 class="font-title-sm text-title-sm font-bold text-primary mb-2 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-title-sm" data-icon="menu_book">menu_book</span>
+                《技规》第415条原条文引用
+              </h4>
+<blockquote class="font-body-sm text-body-sm text-on-surface-variant italic border-l-2 border-primary pl-3 py-0.5">
+                “进站信号机显示一个黄色灯光——准许列车经道岔直向位置，进入站内正线准备停车。”
+              </blockquote>
+<div class="mt-3 flex items-center justify-between font-label-sm text-label-sm text-primary">
+<span>置信度评分：0.98</span>
+<button class="hover:underline flex items-center gap-0.5">
+                  查看完整条文图例
+                  <span class="material-symbols-outlined text-label-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- 4. RIGHT ASSISTANT PANE (Live Answer Grid & Controller) -->
+<aside class="w-80 bg-surface border-l border-surface-container flex flex-col shrink-0">
+<!-- Accuracy Gauge / Streak Capsule -->
+<div class="p-6 border-b border-surface-container">
+<div class="flex items-center justify-between mb-4">
+<span class="font-title-md text-title-md font-bold text-on-surface">答题状态看板</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">即时统计</span>
+</div>
+<!-- Metric Cards Bento Grid -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="p-3 rounded-xl bg-surface-bright border border-surface-container text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">当前准确率</span>
+<span class="font-headline-md text-headline-md font-bold text-primary tabular-nums">75%</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-bright border border-surface-container text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">答题分布</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface tabular-nums">
+<span class="text-mint-text">6</span><span class="text-outline text-title-sm font-normal"> / </span><span class="text-error">2</span>
+</span>
+</div>
+</div>
+<!-- Continuous Correct Momentum Bar -->
+<div class="bg-surface-bright rounded-xl p-3 border border-surface-container">
+<div class="flex justify-between items-center text-label-sm font-label-sm mb-1.5">
+<span class="text-on-surface-variant font-medium">当前最高连对</span>
+<span class="text-primary font-bold">5 题连胜</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+<!-- Live Answer Sheet Matrix (20 Questions) -->
+<div class="flex-1 p-6 overflow-y-auto">
+<div class="flex items-center justify-between mb-3">
+<span class="font-title-sm text-title-sm font-bold text-on-surface">答题卡即时分布</span>
+<div class="flex items-center gap-3 font-label-sm text-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-mint-text"></span>正确</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-error"></span>错误</span>
+</div>
+</div>
+<!-- Matrix 4x5 Grid -->
+<div class="grid grid-cols-5 gap-2.5">
+<!-- 1-5 -->
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">1</div>
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">2</div>
+<div class="h-10 rounded-xl bg-error-container text-error font-label-md text-label-md font-bold flex items-center justify-center">3</div>
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">4</div>
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">5</div>
+<!-- 6-10 -->
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">6</div>
+<div class="h-10 rounded-xl bg-mint-accent text-mint-text font-label-md text-label-md font-bold flex items-center justify-center">7</div>
+<!-- Current #08 Error Marker -->
+<div class="h-10 rounded-xl bg-error text-white font-label-md text-label-md font-bold flex items-center justify-center ring-2 ring-error ring-offset-2">8</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">9</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">10</div>
+<!-- 11-15 -->
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">11</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">12</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">13</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">14</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">15</div>
+<!-- 16-20 -->
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">16</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">17</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">18</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">19</div>
+<div class="h-10 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-label-md font-medium flex items-center justify-center">20</div>
+</div>
+<!-- Spacing Note -->
+<p class="font-label-sm text-label-sm text-outline mt-4 text-center">
+          点击题号可随时跳转复查
+        </p>
+</div>
+<!-- Action Footer (Primary Workflow Buttons) -->
+<div class="p-6 bg-surface-bright border-t border-surface-container flex flex-col gap-3">
+<!-- Re-attempt current question -->
+<button class="w-full h-12 rounded-full bg-secondary-container text-primary font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors active:scale-98">
+<span class="material-symbols-outlined text-title-md" data-icon="refresh">refresh</span>
+          重新作答本题
+        </button>
+<div class="grid grid-cols-2 gap-3">
+<!-- Previous Button -->
+<button class="h-12 rounded-full border border-surface-container bg-surface text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-1 hover:bg-surface-container transition-colors active:scale-98">
+<span class="material-symbols-outlined text-title-md" data-icon="arrow_back_ios">arrow_back_ios</span>
+            上一题
+          </button>
+<!-- Next Button (Primary Action) -->
+<button class="h-12 rounded-full bg-primary-container text-on-primary-container font-label-lg text-label-lg flex items-center justify-center gap-1 hover:bg-primary transition-colors shadow-sm active:scale-98">
+            下一题
+            <span class="material-symbols-outlined text-title-md" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

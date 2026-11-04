@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">知序 Study</string>
+    <string name="app_subtitle">宁静专注的智能刷题与题库工作台</string>
+    <string name="tab_home">学习</string>
+    <string name="tab_library">题库</string>
+    <string name="tab_review">复习</string>
+    <string name="tab_stats">统计</string>
+    <string name="action_start_practice">开始刷题</string>
+    <string name="action_wrong_review">错题复习</string>
+    <string name="action_import_bank">导入题库</string>
+    <string name="action_history">历史记录</string>
+    <string name="action_back">返回</string>
+    <string name="action_search">搜索</string>
+    <string name="action_settings">设置</string>
+    <string name="action_save">保存</string>
+    <string name="action_cancel">取消</string>
+</resources>

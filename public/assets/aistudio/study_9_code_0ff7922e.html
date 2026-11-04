@@ -1,0 +1,303 @@
+<!DOCTYPE html><html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>知序 Study - 刷题作答</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#e1e0f8",
+            "primary-fixed-dim": "#bec2ff",
+            "on-error-container": "#93000a",
+            "mint-accent": "#E6F3EB",
+            "on-primary-container": "#fbf7ff",
+            "primary": "#4950ad",
+            "on-secondary-fixed-variant": "#444558",
+            "tertiary-container": "#806f67",
+            "primary-container": "#6269c8",
+            "surface-container-high": "#e4e7ff",
+            "on-surface-variant": "#464652",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#f5ded4",
+            "inverse-surface": "#2b2f43",
+            "on-primary-fixed-variant": "#353c99",
+            "surface-variant": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#251913",
+            "surface-tint": "#4e55b2",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#161b2d",
+            "error": "#ba1a1a",
+            "mint-text": "#216C4B",
+            "background": "#F6F7FB",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c7c5d4",
+            "peach-text": "#8F4829",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "primary-fixed": "#e0e0ff",
+            "surface": "#FFFFFF",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#bec2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-secondary-container": "#626377",
+            "on-primary-fixed": "#00016d",
+            "on-tertiary-container": "#fff8f5",
+            "on-error": "#ffffff",
+            "secondary-container": "#e1e0f8",
+            "surface-container-highest": "#dee1fb",
+            "tertiary": "#67574f",
+            "secondary": "#5c5d71",
+            "outline": "#767683",
+            "surface-dim": "#d6d8f2",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-fixed-dim": "#c5c4dc",
+            "inverse-on-surface": "#efefff",
+            "surface-container-low": "#f3f2ff",
+            "on-background": "#161b2d",
+            "surface-container": "#ececff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface h-full flex flex-col antialiased selection:bg-secondary-fixed selection:text-primary">
+<!-- Top App Bar (Task Flow Mode: Back button + Title + Actions) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface border-b-0 shadow-none">
+<div class="flex items-center gap-3">
+<button aria-label="返回上一级" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">第 6 / 20 题</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">主观题练习</span>
+</div>
+</div>
+<!-- Right Action Items: Answer Sheet & Bookmark -->
+<div class="flex items-center gap-1.5">
+<button aria-label="查看答题卡" class="h-9 px-3 rounded-full flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-primary active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-label-md text-label-md">答题卡</span>
+</button>
+<button aria-label="收藏本题" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all duration-150" id="bookmarkBtn" type="button">
+<span class="material-symbols-outlined text-[22px]" id="bookmarkIcon">bookmark_border</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-4 pt-20 pb-28 flex flex-col gap-4">
+<!-- Metadata Pill Row: Category, Type, Difficulty, Timer -->
+<section class="flex items-center justify-between flex-wrap gap-2 pt-1">
+<div class="flex items-center flex-wrap gap-2">
+<!-- Module Tag -->
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-fixed text-primary font-label-md text-label-md font-medium">
+<span class="material-symbols-outlined text-[15px]">directions_subway</span>
+          车站作业规程
+        </span>
+<!-- Question Type Tag -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md">
+          填空题&nbsp;</span>
+<!-- Difficulty Pill -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFE8DE] text-peach-text font-label-md text-label-md font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#8F4829]"></span>
+          难度：困难
+        </span>
+</div>
+<!-- Real-time Exam Timer -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+<span class="font-title-sm text-title-sm tracking-wide text-on-surface" id="timerDisplay">03:44</span>
+</div>
+</section>
+<!-- Stem Card (Tier 1 Surface: Pristine Neutral, 1dp Border, No heavy drop shadow) -->
+<article class="bg-surface rounded-2xl border border-[#E3E5EE] p-5 sm:p-6 transition-all">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-surface-container">
+<span class="font-label-lg text-label-lg text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+          题干要求
+        </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">分值：10 分</span>
+</div>
+<!-- Question Stem with explicit styled gap slots -->
+<p class="font-body-lg text-body-lg text-on-surface leading-loose tracking-normal text-justify">
+        在铁路分界站接发列车作业中，列车在区间运行过程中发生非正常停车时，司机应首先使用无线列调向
+        <span class="inline-flex items-baseline mx-1.5 px-3 py-0.5 rounded-lg bg-surface-container text-primary font-title-sm text-title-sm border-b-2 border-primary">
+          [ 空位 1 ]
+        </span>
+        报告，并在停车后
+        <span class="inline-flex items-baseline mx-1.5 px-3 py-0.5 rounded-lg bg-surface-container text-primary font-title-sm text-title-sm border-b-2 border-primary">
+          [ 空位 2 ]
+        </span>
+        分钟内做好防护措施。
+      </p>
+</article>
+<!-- Interaction Answer Workspace (Initial Empty State) -->
+<section class="bg-surface rounded-2xl border border-[#E3E5EE] p-5 sm:p-6 flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h2 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="">填写答题区域</span>
+<span class="font-label-sm text-label-sm font-normal text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">未作答</span>
+</h2>
+<!-- Auxiliary Tools: Speech-to-text / Handwriting Draft -->
+<div class="flex items-center gap-1.5">
+<button class="h-8 px-2.5 rounded-full inline-flex items-center gap-1 text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-all" title="语音转文字输入" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">mic</span>
+<span class="hidden sm:inline">语音输入</span>
+</button>
+<button class="h-8 px-2.5 rounded-full inline-flex items-center gap-1 text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-all" title="手写识别与草稿草图" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">draw</span>
+<span class="hidden sm:inline">草稿板</span>
+</button>
+</div>
+</div>
+<!-- Blank 1 Input Field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-2" for="slot1">
+<span class="w-5 h-5 rounded-full bg-secondary-fixed text-primary font-title-sm text-title-sm flex items-center justify-center text-[12px]">1</span>
+          空位 1 答案
+        </label>
+<div class="relative rounded-xl border border-[#E3E5EE] focus-within:border-primary-container focus-within:ring-2 focus-within:ring-surface-container-high transition-all bg-surface">
+<input autocomplete="off" class="w-full px-4 py-3 rounded-xl bg-transparent border-0 font-body-md text-body-md text-on-surface placeholder:text-outline focus:ring-0" id="slot1" name="slot1" placeholder="请输入空位 1 答案（例如：列车调度员）" type="text">
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant px-1">请填写关键岗位名称或规范称呼</span>
+</div>
+<!-- Blank 2 Input Field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-2" for="slot2">
+<span class="w-5 h-5 rounded-full bg-secondary-fixed text-primary font-title-sm text-title-sm flex items-center justify-center text-[12px]">2</span>
+          空位 2 答案
+        </label>
+<div class="relative rounded-xl border border-[#E3E5EE] focus-within:border-primary-container focus-within:ring-2 focus-within:ring-surface-container-high transition-all bg-surface">
+<input autocomplete="off" class="w-full px-4 py-3 rounded-xl bg-transparent border-0 font-body-md text-body-md text-on-surface placeholder:text-outline focus:ring-0" id="slot2" name="slot2" placeholder="请输入空位 2 答案（例如数字或时限）" type="text">
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant px-1">请输入标准阿拉伯数字或中文时间数值</span>
+</div>
+</section>
+<!-- Rule & Guidance Notice Card (Strictly without answers or explanations) -->
+
+</main>
+<!-- Sticky Bottom Task Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-40 bg-surface border-t-0 shadow-[0_-4px_16px_rgba(22,27,45,0.04)] px-4 py-3 sm:py-3.5">
+<div class="max-w-3xl mx-auto flex items-center justify-between gap-3">
+<!-- Previous Question Button -->
+<button class="h-12 px-6 rounded-full inline-flex items-center justify-center gap-1.5 bg-secondary-container text-primary font-title-sm text-title-sm hover:bg-surface-container-high active:scale-95 transition-all duration-150 min-w-[110px]" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+<span class="">上一题</span>
+</button>
+<!-- Action Cluster: Jump / Submit -->
+<div class="flex items-center gap-2">
+<button class="h-12 px-8 rounded-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary font-title-sm text-title-sm shadow-[0_6px_16px_0_rgba(98,105,200,0.28)] hover:opacity-95 active:scale-95 transition-all duration-150" id="submitAnswerBtn" type="button">
+<span class="">提交答案</span>
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+</div>
+</div>
+</footer>
+<script>
+    // Micro-interactions: Favorite / Bookmark Toggle
+    const bookmarkBtn = document.getElementById('bookmarkBtn');
+    const bookmarkIcon = document.getElementById('bookmarkIcon');
+    let isBookmarked = false;
+
+    bookmarkBtn.addEventListener('click', () => {
+      isBookmarked = !isBookmarked;
+      if (isBookmarked) {
+        bookmarkIcon.textContent = 'bookmark';
+        bookmarkIcon.style.fontVariationSettings = "'FILL' 1";
+        bookmarkIcon.classList.add('text-primary');
+      } else {
+        bookmarkIcon.textContent = 'bookmark_border';
+        bookmarkIcon.style.fontVariationSettings = "'FILL' 0";
+        bookmarkIcon.classList.remove('text-primary');
+      }
+    });
+
+    // Real-time ticking stopwatch mock
+    let secondsElapsed = 165;
+    const timerDisplay = document.getElementById('timerDisplay');
+    setInterval(() => {
+      secondsElapsed++;
+      const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+      const secs = String(secondsElapsed % 60).padStart(2, '0');
+      timerDisplay.textContent = `${mins}:${secs}`;
+    }, 1000);
+
+    // Dynamic Focus styling when input has content
+    const inputs = [document.getElementById('slot1'), document.getElementById('slot2')];
+    inputs.forEach(input => {
+      input.addEventListener('input', (e) => {
+        const parent = e.target.parentElement;
+        if (e.target.value.trim().length > 0) {
+          parent.classList.add('border-primary');
+        } else {
+          parent.classList.remove('border-primary');
+        }
+      });
+    });
+  </script>
+
+
+</body></html>

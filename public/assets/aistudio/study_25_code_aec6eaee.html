@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study - 多选题作答工作台</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#00016d",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#52443d",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-container": "#fff8f5",
+            "tertiary": "#67574f",
+            "primary-container": "#6269c8",
+            "surface-container-low": "#f3f2ff",
+            "primary-fixed-dim": "#bec2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-primary-fixed-variant": "#353c99",
+            "outline-variant": "#c7c5d4",
+            "peach-text": "#8F4829",
+            "secondary": "#5c5d71",
+            "on-tertiary": "#ffffff",
+            "primary": "#4950ad",
+            "error-container": "#ffdad6",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#161b2d",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "secondary-container": "#e1e0f8",
+            "error": "#ba1a1a",
+            "surface-dim": "#d6d8f2",
+            "tertiary-container": "#806f67",
+            "inverse-primary": "#bec2ff",
+            "secondary-fixed": "#e1e0f8",
+            "surface-container-high": "#e4e7ff",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-secondary-container": "#626377",
+            "on-background": "#161b2d",
+            "mint-accent": "#E6F3EB",
+            "on-surface-variant": "#464652",
+            "on-primary-container": "#fbf7ff",
+            "outline": "#767683",
+            "on-secondary-fixed-variant": "#444558",
+            "surface-container": "#ececff",
+            "on-primary": "#ffffff",
+            "mint-text": "#216C4B",
+            "background": "#F6F7FB",
+            "inverse-surface": "#2b2f43",
+            "inverse-on-surface": "#efefff",
+            "tertiary-fixed": "#f5ded4",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dee1fb",
+            "surface": "#FFFFFF",
+            "primary-fixed": "#e0e0ff",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#4e55b2"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #dee1fb;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #bec2ff;
+    }
+  </style>
+</head>
+<body class="h-full bg-background text-on-surface antialiased overflow-hidden flex flex-col font-body-md text-body-md selection:bg-secondary-container selection:text-primary">
+<!-- Top bar (docked full-width top from Shared Components JSON logic) -->
+<header class="bg-surface flex-shrink-0 flex justify-between items-center px-4 h-16 shadow-none border-b border-surface-container-high z-30">
+<div class="flex items-center gap-3">
+<button aria-label="返回上一级" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container active:scale-95 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex items-center gap-2">
+<span class="font-title-lg text-title-lg font-bold tracking-tight text-on-surface">知序 Study</span>
+<span class="bg-surface-container text-primary px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold">平板大屏工作台</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded-full">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-primary font-semibold">正在作答 · 自动保存就绪</span>
+</div>
+<button aria-label="搜索" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container active:scale-95 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button aria-label="全屏聚焦" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container active:scale-95 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">fullscreen</span>
+</button>
+</div>
+</header>
+<!-- Main Multi-Pane Workbench Frame -->
+<div class="flex-1 flex overflow-hidden">
+<!-- 1. Navigation Rail (Adaptive Tablet Layout) -->
+<aside class="w-20 bg-surface flex flex-col items-center py-4 justify-between border-r border-surface-container-high flex-shrink-0 z-20">
+<div class="flex flex-col items-center gap-6 w-full">
+<!-- Brand Icon Anchor -->
+<div class="w-11 h-11 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<!-- Four Nav Destinations from JSON: 学习, 题库 (active), 复习, 统计 -->
+<nav aria-label="侧边栏主导航" class="flex flex-col items-center gap-3 w-full px-2">
+<button class="w-full flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container py-2 rounded-xl transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">school</span>
+<span class="font-label-sm text-label-sm">学习</span>
+</button>
+<!-- Active: 题库 -->
+<button class="w-full flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-2xl py-2 transition-all active:scale-95">
+<div class="w-9 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] fill-icon">auto_stories</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold">题库</span>
+</button>
+<button class="w-full flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container py-2 rounded-xl transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">replay</span>
+<span class="font-label-sm text-label-sm">复习</span>
+</button>
+<button class="w-full flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container py-2 rounded-xl transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">bar_chart</span>
+<span class="font-label-sm text-label-sm">统计</span>
+</button>
+</nav>
+</div>
+<!-- Rail Footer -->
+<div class="flex flex-col items-center gap-3 w-full">
+<button aria-label="帮助" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-all">
+<span class="material-symbols-outlined text-[22px]">help_outline</span>
+</button>
+<button aria-label="设置" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-all">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+</div>
+</aside>
+<!-- 2. List Pane: Question Navigation & Chapter Outline (260px) -->
+<section class="w-64 bg-surface border-r border-surface-container-high flex flex-col flex-shrink-0">
+<!-- Chapter Info Header -->
+<div class="p-4 border-b border-surface-container-high bg-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-secondary block mb-1">当前测试章节</span>
+<h2 class="font-title-md text-title-md font-bold text-on-surface leading-tight">车站工作组织与区间能力</h2>
+<div class="flex items-center justify-between mt-2.5 font-label-sm text-label-sm text-on-surface-variant">
+<span>进度 5 / 20 题</span>
+<span class="text-primary font-semibold">25% 完成</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full mt-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-1/4 transition-all duration-300"></div>
+</div>
+</div>
+<!-- Question List Items -->
+<div class="flex-1 overflow-y-auto p-3 space-y-2">
+<!-- Question Item 1: Completed -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-mint-accent text-mint-text font-title-sm text-title-sm flex items-center justify-center font-bold">1</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">单选题</p>
+<p class="font-label-sm text-label-sm text-secondary">已作答 · 得分满额</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-mint-text text-[18px] fill-icon">check_circle</span>
+</button>
+<!-- Question Item 2: Completed -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-mint-accent text-mint-text font-title-sm text-title-sm flex items-center justify-center font-bold">2</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">单选题</p>
+<p class="font-label-sm text-label-sm text-secondary">已作答</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-mint-text text-[18px] fill-icon">check_circle</span>
+</button>
+<!-- Question Item 3: Completed -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-mint-accent text-mint-text font-title-sm text-title-sm flex items-center justify-center font-bold">3</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">判断题</p>
+<p class="font-label-sm text-label-sm text-secondary">已作答</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-mint-text text-[18px] fill-icon">check_circle</span>
+</button>
+<!-- Question Item 4: Completed -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-mint-accent text-mint-text font-title-sm text-title-sm flex items-center justify-center font-bold">4</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">多选题</p>
+<p class="font-label-sm text-label-sm text-secondary">已作答</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-mint-text text-[18px] fill-icon">check_circle</span>
+</button>
+<!-- Question Item 5: CURRENT ACTIVE (多选题勾选态) -->
+<div class="w-full text-left p-3 rounded-xl bg-secondary-container border border-primary/30 flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-primary text-on-primary font-title-sm text-title-sm flex items-center justify-center font-bold shadow-xs">5</span>
+<div>
+<div class="flex items-center gap-1.5">
+<p class="font-title-sm text-title-sm font-bold text-primary">#05 多选题</p>
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+</div>
+<p class="font-label-sm text-label-sm text-primary/80 font-medium">当前正在作答 (已选2项)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">edit_note</span>
+</div>
+<!-- Question Item 6: Pending -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between opacity-80">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-surface-container text-on-surface-variant font-title-sm text-title-sm flex items-center justify-center font-bold">6</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">多选题</p>
+<p class="font-label-sm text-label-sm text-secondary">未作答 · 难度高</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[18px]">radio_button_unchecked</span>
+</button>
+<!-- Question Item 7: Pending -->
+<button class="w-full text-left p-3 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-transparent flex items-center justify-between opacity-80">
+<div class="flex items-center gap-3">
+<span class="w-7 h-7 rounded-lg bg-surface-container text-on-surface-variant font-title-sm text-title-sm flex items-center justify-center font-bold">7</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">综合论述题</p>
+<p class="font-label-sm text-label-sm text-secondary">未作答</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[18px]">radio_button_unchecked</span>
+</button>
+</div>
+<!-- Quick List Footer -->
+<div class="p-3 border-t border-surface-container-high bg-surface-container-lowest flex items-center justify-between font-label-sm text-label-sm text-secondary">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-mint-text"></span>已答 4 题</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-primary"></span>在做 1 题</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>未答 15 题</span>
+</div>
+</section>
+<!-- 3. Detail Pane: Main Question Answering Area (Center) -->
+<main class="flex-1 flex flex-col bg-background overflow-y-auto">
+<!-- Detail Header Toolbar -->
+<div class="px-8 py-4 bg-surface border-b border-surface-container-high flex items-center justify-between flex-wrap gap-4">
+<!-- Badges & Scoring Guidance -->
+<div class="flex items-center gap-2.5 flex-wrap">
+<div class="bg-primary text-on-primary px-3.5 py-1.5 rounded-full font-label-md text-label-md font-semibold flex items-center gap-1.5 shadow-xs">
+<span class="material-symbols-outlined text-[16px]">check_box</span>
+<span>多选题 · 选2个及以上 · 少选得部分分 · 分值 3.0</span>
+</div>
+<div class="bg-surface-container-high text-on-secondary-fixed-variant px-3 py-1.5 rounded-full font-label-md text-label-md font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-peach-text">warning</span>
+<span>难度：困难</span>
+</div>
+<div class="bg-surface-container text-primary px-3 py-1.5 rounded-full font-label-md text-label-md font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>已用时 01:15</span>
+</div>
+</div>
+<!-- Auxiliary Action Tools (Font scale, Formula preview, Split view) -->
+<div class="flex items-center gap-1.5 bg-surface-container-low p-1 rounded-full border border-surface-container-high">
+<button class="px-2.5 py-1 rounded-full bg-surface text-primary font-label-sm text-label-sm font-semibold shadow-xs hover:bg-surface-bright transition-all">
+            100%
+          </button>
+<button class="px-2.5 py-1 rounded-full text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all">
+            120%
+          </button>
+<div class="w-px h-4 bg-outline-variant mx-1"></div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface transition-all" title="公式推导预览">
+<span class="material-symbols-outlined text-[18px]">functions</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface transition-all" title="分栏视图切换">
+<span class="material-symbols-outlined text-[18px]">vertical_split</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface transition-all" title="标记题目">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+</div>
+<!-- Question Content Canvas -->
+<div class="p-8 max-w-5xl mx-auto w-full space-y-6 flex-1 flex flex-col justify-between">
+<div class="space-y-6">
+<!-- Question Stem Card (Tier 1 Surface Neutral) -->
+<div class="bg-surface rounded-2xl p-6 border border-surface-container-high shadow-xs">
+<div class="flex items-start gap-3">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">05.</span>
+<div class="space-y-3">
+<p class="font-title-lg text-title-lg text-on-surface leading-relaxed font-semibold">
+                  在现代微处理器体系结构与铁路调度指令系统的流水线冲突（Pipeline Hazard）处理中，下列哪些措施属于乱序执行与旁路转发的有效解决机制？
+                </p>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">
+                  提示：请结合相关指令依赖检测、重排序缓冲区（ROB）、操作数前递（Forwarding / Bypassing）以及保留站（Reservation Station）原理进行多项判断选择。
+                </p>
+</div>
+</div>
+</div>
+<!-- Options Grid (2x2 Tablet Large Screen Responsive Bento Matrix) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Option A: SELECTED (已勾选) -->
+<label class="group relative flex items-start gap-4 p-5 rounded-2xl bg-[#E8E7FF] border-2 border-primary cursor-pointer transition-all duration-150 active:scale-[0.99] shadow-xs">
+<input aria-label="选项A" checked="" class="sr-only" type="checkbox"/>
+<!-- Custom Checkbox Indicator -->
+<div class="w-6 h-6 rounded-lg bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-[18px] font-bold">check</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md font-bold text-primary">A</span>
+<span class="font-label-sm text-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">已勾选</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+                  在执行阶段（EX）输出与后续指令译码/执行输入端之间构建直连旁路，实现操作数前递（Operand Forwarding），以消除 RAW 结构数据冒险。
+                </p>
+</div>
+</label>
+<!-- Option B: SELECTED (已勾选) -->
+<label class="group relative flex items-start gap-4 p-5 rounded-2xl bg-[#E8E7FF] border-2 border-primary cursor-pointer transition-all duration-150 active:scale-[0.99] shadow-xs">
+<input aria-label="选项B" checked="" class="sr-only" type="checkbox"/>
+<!-- Custom Checkbox Indicator -->
+<div class="w-6 h-6 rounded-lg bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+<span class="material-symbols-outlined text-[18px] font-bold">check</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md font-bold text-primary">B</span>
+<span class="font-label-sm text-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">已勾选</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+                  引入重排序缓冲区（Reorder Buffer, ROB）保证乱序分派指令的顺序提交（In-order Commit），精准捕获调度异常与分支预测回滚。
+                </p>
+</div>
+</label>
+<!-- Option C: UNCHECKED (未勾选态) -->
+<label class="group relative flex items-start gap-4 p-5 rounded-2xl bg-surface border border-surface-container-high hover:border-outline-variant hover:bg-surface-bright cursor-pointer transition-all duration-150 active:scale-[0.99]">
+<input aria-label="选项C" class="sr-only" type="checkbox"/>
+<!-- Custom Checkbox Indicator -->
+<div class="w-6 h-6 rounded-lg border-2 border-outline text-transparent group-hover:border-primary flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md font-bold text-on-surface">C</span>
+<span class="font-label-sm text-label-sm bg-surface-container text-secondary px-2 py-0.5 rounded-full">未勾选</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                  强制在每个互锁周期间隔插入纯硬件空操作（NOP 气泡）并冻结 PC 计数器，作为核心乱序执行吞吐优化的主要手段。
+                </p>
+</div>
+</label>
+<!-- Option D: UNCHECKED (未勾选态) -->
+<label class="group relative flex items-start gap-4 p-5 rounded-2xl bg-surface border border-surface-container-high hover:border-outline-variant hover:bg-surface-bright cursor-pointer transition-all duration-150 active:scale-[0.99]">
+<input aria-label="选项D" class="sr-only" type="checkbox"/>
+<!-- Custom Checkbox Indicator -->
+<div class="w-6 h-6 rounded-lg border-2 border-outline text-transparent group-hover:border-primary flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md font-bold text-on-surface">D</span>
+<span class="font-label-sm text-label-sm bg-surface-container text-secondary px-2 py-0.5 rounded-full">未勾选</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                  采用 Tomasulo 动态调度算法与寄存器重命名技术，消除由名相关引起的 WAR（写后读）与 WAW（写后写）伪数据冲突。
+                </p>
+</div>
+</label>
+</div>
+<!-- Dynamic Selection State Notice Banner -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-surface-container-high">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[22px]">info</span>
+<div>
+<span class="font-title-sm text-title-sm font-semibold text-primary">已勾选 2 项 (A、B)</span>
+<span class="font-body-sm text-body-sm text-secondary ml-2">本题为多选题，至少选择 2 项；少选得 1.5 分，错选/多选不得分。</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-peach-text bg-[#FFE8DE] px-3 py-1 rounded-full font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span>建议核对选项 D 逻辑</span>
+</div>
+</div>
+</div>
+<!-- Detail Footer: Actions & Status Pills -->
+<div class="pt-6 border-t border-surface-container-high flex items-center justify-between flex-wrap gap-4 mt-8">
+<!-- Helpful Study Tips Capsule -->
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-surface-container-high text-secondary">
+<span class="material-symbols-outlined text-[18px] text-primary">tips_and_updates</span>
+<span class="font-label-md text-label-md">智能答题提示：多选题需仔细甄别“全选陷阱”，注意区分 Tomasulo 重命名与 NOP 停顿机制。</span>
+</div>
+<!-- Submission & Navigation Controls -->
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-full border border-surface-container-high text-on-surface hover:bg-surface-container transition-all font-label-lg text-label-lg active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">clear_all</span>
+<span>重置选项</span>
+</button>
+<!-- Primary Submit Button for Current Question -->
+<button class="px-7 py-3 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold hover:bg-primary transition-all active:scale-95 flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+<span>确认提交本题</span>
+<kbd class="ml-1 bg-white/20 px-2 py-0.5 rounded text-[11px] font-mono tracking-tighter">⌘ + Enter</kbd>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- 4. Right Side Drawer: Sheet & Interactive Scratchpad (320px) -->
+<aside class="w-80 bg-surface border-l border-surface-container-high flex flex-col flex-shrink-0">
+<!-- Drawer Header -->
+<div class="p-4 border-b border-surface-container-high flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">grid_view</span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">答题进度板</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-primary font-semibold px-2.5 py-1 rounded-full">5 / 20 题</span>
+</div>
+<!-- Quick Matrix Answer Sheet (20 questions) -->
+<div class="p-4 border-b border-surface-container-high">
+<p class="font-label-sm text-label-sm text-secondary mb-3 flex items-center justify-between">
+<span>题目矩阵索引</span>
+<span class="text-primary">点击可直接跳转</span>
+</p>
+<div class="grid grid-cols-5 gap-2 text-center">
+<!-- 1-4 completed -->
+<button class="h-9 rounded-xl bg-mint-accent text-mint-text font-title-sm text-title-sm font-bold flex items-center justify-center hover:opacity-90">1</button>
+<button class="h-9 rounded-xl bg-mint-accent text-mint-text font-title-sm text-title-sm font-bold flex items-center justify-center hover:opacity-90">2</button>
+<button class="h-9 rounded-xl bg-mint-accent text-mint-text font-title-sm text-title-sm font-bold flex items-center justify-center hover:opacity-90">3</button>
+<button class="h-9 rounded-xl bg-mint-accent text-mint-text font-title-sm text-title-sm font-bold flex items-center justify-center hover:opacity-90">4</button>
+<!-- 5 CURRENT WITH PULSING WAVE -->
+<button class="h-9 rounded-xl bg-primary text-on-primary font-title-sm text-title-sm font-bold flex items-center justify-center relative shadow-xs ring-2 ring-primary/30">
+            5
+            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-peach-text border-2 border-surface animate-ping"></span>
+</button>
+<!-- 6-20 pending -->
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">6</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">7</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">8</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">9</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">10</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">11</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">12</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">13</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">14</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">15</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">16</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">17</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">18</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">19</button>
+<button class="h-9 rounded-xl bg-surface-container text-on-surface-variant font-title-sm text-title-sm font-medium flex items-center justify-center hover:bg-surface-container-high">20</button>
+</div>
+</div>
+<!-- Live Scratchpad (演练草稿板 - 绑定当前第5题) -->
+<div class="flex-1 flex flex-col p-4 overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">draw</span>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">随堂草稿演算簿</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text"></span>自动云保存
+          </span>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-3 flex flex-col border border-surface-container-high">
+<!-- Scratchpad Mini Toolbar -->
+<div class="flex items-center justify-between pb-2 border-b border-surface-container mb-2">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 rounded hover:bg-surface text-primary" title="画笔/打字"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+<button class="p-1 rounded hover:bg-surface" title="公式标签"><span class="material-symbols-outlined text-[16px]">calculate</span></button>
+<button class="p-1 rounded hover:bg-surface" title="撤销"><span class="material-symbols-outlined text-[16px]">undo</span></button>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">已绑定 #05 题</span>
+</div>
+<!-- Scratchpad Note Content -->
+<textarea class="flex-1 w-full bg-transparent resize-none border-none p-0 focus:ring-0 font-body-sm text-body-sm text-on-surface placeholder:text-outline leading-relaxed" placeholder="输入手写或打字演算要点：如 RAW 旁路转发链路延迟，Tomasulo 重命名对 WAR 消除效应...">• RAW (Read After Write) = 数据真相关 -&gt; 需 Forwarding 前递旁路
+• WAR / WAW = 名相关 -&gt; Tomasulo 寄存器重命名消解
+• NOP 属于流水线停顿暂停，非乱序执行高效机制 (故剔除 C 选项)
+• 选项 D 属于典型乱序机制，需重新衡量勾选！</textarea>
+</div>
+</div>
+<!-- Navigation & Premature Exam Submission Action Buttons -->
+<div class="p-4 border-t border-surface-container-high bg-surface-container-lowest space-y-2.5">
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 px-3 rounded-full border border-surface-container-high hover:bg-surface-container text-on-surface font-label-md text-label-md font-semibold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+<span>上一题</span>
+</button>
+<button class="py-2.5 px-3 rounded-full bg-secondary-container hover:bg-surface-container-high text-primary font-label-md text-label-md font-semibold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+<span>下一题</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<button class="w-full py-2.5 rounded-full border border-error/30 text-error hover:bg-error-container/30 transition-all font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 active:scale-95">
+<span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+<span>一键提前交卷</span>
+</button>
+</div>
+</aside>
+</div>
+<!-- Client Interaction Script for Interactive Options Toggling -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Toggle checkboxes interaction to simulate active state updates
+      const labels = document.querySelectorAll('label:has(input[type="checkbox"])');
+      labels.forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        label.addEventListener('click', (e) => {
+          if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+          }
+        });
+      });
+    });
+  </script>
+</body></html>

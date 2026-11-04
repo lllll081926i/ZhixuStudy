@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>知序 Study - 复习中心</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline-variant": "#E3E5EE",
+            "error": "#ba1a1a",
+            "primary-fixed-dim": "#bec2ff",
+            "on-secondary-fixed-variant": "#444558",
+            "surface-dim": "#d6d8f2",
+            "secondary-fixed": "#e1e0f8",
+            "tertiary-container": "#806f67",
+            "outline": "#767683",
+            "error-container": "#ffdad6",
+            "surface-container-low": "#f3f2ff",
+            "primary-fixed": "#e0e0ff",
+            "tertiary": "#67574f",
+            "mint-text": "#216C4B",
+            "peach-text": "#8F4829",
+            "on-background": "#161b2d",
+            "secondary-container": "#e1e0f8",
+            "surface-container": "#ececff",
+            "on-error-container": "#93000a",
+            "on-surface": "#161b2d",
+            "on-error": "#ffffff",
+            "surface-tint": "#4e55b2",
+            "on-tertiary-container": "#fff8f5",
+            "on-secondary-container": "#626377",
+            "mint-accent": "#E6F3EB",
+            "surface": "#FFFFFF",
+            "on-primary-container": "#fbf7ff",
+            "tertiary-fixed": "#f5ded4",
+            "surface-bright": "#fbf8ff",
+            "on-secondary-fixed": "#191a2b",
+            "background": "#F6F7FB",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "primary": "#4950ad",
+            "inverse-primary": "#bec2ff",
+            "surface-container-high": "#e4e7ff",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "surface-container-highest": "#dee1fb",
+            "primary-container": "#6269c8",
+            "on-primary-fixed": "#00016d",
+            "on-surface-variant": "#464652",
+            "inverse-on-surface": "#efefff",
+            "secondary": "#5c5d71",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-fixed-variant": "#52443d",
+            "inverse-surface": "#2b2f43",
+            "on-primary-fixed-variant": "#353c99",
+            "surface-variant": "#dee1fb",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "title-sm": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "display-md": ["45px", {"lineHeight": "52px", "fontWeight": "700"}],
+            "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+            "display-lg": ["57px", {"lineHeight": "64px", "fontWeight": "700"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-md": ["15px", {"lineHeight": "22px", "fontWeight": "400"}],
+            "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+            "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "600"}],
+            "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased flex justify-center min-h-screen">
+<!-- Mobile Container Scaffold -->
+<div class="w-full max-w-md bg-background min-h-screen flex flex-col relative pb-44">
+<!-- 1. Top App Bar (Shared Component Anchor) -->
+<header class="fixed top-0 left-0 w-full max-w-md mx-auto z-40 bg-surface flex justify-between items-center px-4 h-16 transition-all duration-150">
+<div class="flex items-center gap-3">
+<button aria-label="返回" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container active:scale-95 transition-all text-on-surface">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="text-title-lg font-title-lg text-on-surface tracking-tight">复习</h1>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="搜索" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container active:scale-95 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</button>
+<button aria-label="复习计划" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container active:scale-95 transition-all text-primary">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-4 pt-20 flex flex-col gap-5">
+<!-- 2. Warm Motivational Status Banner -->
+<section class="w-full rounded-2xl bg-gradient-to-br from-tertiary-fixed to-surface-bright border border-outline-variant p-4 relative overflow-hidden flex items-center justify-between shadow-sm">
+<div class="flex-1 z-10 pr-2">
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface/80 border border-outline-variant/60 mb-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-peach-text"></span>
+<span class="text-label-sm font-label-sm text-peach-text tracking-wide">艾宾浩斯记忆周期</span>
+</div>
+<h2 class="text-title-md font-title-md text-on-surface">温故，而知新</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">今日建议温习 8 道待巩固题目</p>
+<button class="inline-flex items-center gap-1 text-label-md font-label-md text-primary font-medium mt-2 active:scale-95 transition-transform">
+<span class="">调整计划</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+<div class="absolute inset-0 rounded-2xl bg-surface/60 backdrop-blur-sm border border-white/50"></div>
+<span class="material-symbols-outlined text-primary text-[36px] relative z-10" style="font-variation-settings: &quot;FILL&quot; 1;">menu_book</span>
+</div>
+</section>
+<!-- 3. Four-Quadrant Metric Grid Cards -->
+<section class="grid grid-cols-4 gap-2 bg-surface rounded-2xl p-3 border border-outline-variant shadow-sm">
+  <div class="flex flex-col items-center justify-center py-1 hover:bg-surface-container-low rounded-xl transition-all cursor-pointer">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-peach-text"></span>
+      <span class="text-[11px] font-label-sm text-on-surface-variant">待复习</span>
+    </div>
+    <span class="text-headline-md font-headline-md text-peach-text font-bold leading-none">8</span>
+    <span class="text-[10px] text-on-surface-variant mt-1">题待学</span>
+  </div>
+  <div class="flex flex-col items-center justify-center py-1 border-l border-outline-variant/60 hover:bg-surface-container-low rounded-xl transition-all cursor-pointer">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="px-1 rounded bg-error-container text-error text-[10px] font-bold leading-tight">高频</span>
+      <span class="text-[11px] font-label-sm text-on-surface-variant">错题本</span>
+    </div>
+    <span class="text-headline-md font-headline-md text-error font-bold leading-none">18</span>
+    <span class="text-[10px] text-on-surface-variant mt-1">历史收录</span>
+  </div>
+  <div class="flex flex-col items-center justify-center py-1 border-l border-outline-variant/60 hover:bg-surface-container-low rounded-xl transition-all cursor-pointer">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+      <span class="text-[11px] font-label-sm text-on-surface-variant">收藏题</span>
+    </div>
+    <span class="text-headline-md font-headline-md text-primary font-bold leading-none">12</span>
+    <span class="text-[10px] text-on-surface-variant mt-1">精选重点</span>
+  </div>
+  <div class="flex flex-col items-center justify-center py-1 border-l border-outline-variant/60 hover:bg-surface-container-low rounded-xl transition-all cursor-pointer">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="material-symbols-outlined text-[14px] text-secondary">psychology</span>
+      <span class="text-[11px] font-label-sm text-on-surface-variant">疑难题</span>
+    </div>
+    <span class="text-headline-md font-headline-md text-on-surface font-bold leading-none">6</span>
+    <span class="text-[10px] text-on-surface-variant mt-1">多频错误</span>
+  </div>
+</section>
+<!-- 4. Horizontal Tab Pills -->
+<section class="flex items-center gap-2 overflow-x-auto py-1 no-scrollbar">
+<button class="h-8 px-4 rounded-full bg-primary-container text-on-primary-container text-label-md font-label-md whitespace-nowrap active:scale-95 transition-all">
+          今日待复习
+        </button>
+<button class="h-8 px-4 rounded-full bg-surface border border-outline-variant text-on-surface-variant hover:bg-surface-container text-label-md font-label-md whitespace-nowrap active:scale-95 transition-all">
+          高频错题
+        </button>
+<button class="h-8 px-4 rounded-full bg-surface border border-outline-variant text-on-surface-variant hover:bg-surface-container text-label-md font-label-md whitespace-nowrap active:scale-95 transition-all">
+          近期收藏
+        </button>
+</section>
+<!-- 5. Question Stream List -->
+<section class="flex flex-col gap-3">
+<!-- Question Item Card 1 -->
+<article class="bg-surface rounded-2xl p-4 border border-outline-variant flex flex-col gap-3 transition-colors hover:border-primary/40">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm">高等数学</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm">泰勒展开式</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error text-label-sm font-label-sm font-medium shrink-0">
+              错 3 次
+            </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface line-clamp-2">
+            函数 f(x) = ln(1+x) 在 x=0 处的 3 阶皮亚诺余项泰勒展开式中，x³ 的系数与佩亚诺余项收敛阶数为？
+          </p>
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span class="text-body-sm font-body-sm text-outline">上次复习：2 天前</span>
+<button class="h-8 px-3.5 rounded-full bg-secondary-container text-primary text-label-md font-label-md flex items-center gap-1 active:scale-95 transition-all">
+<span class="">立即复习</span>
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</button>
+</div>
+</article>
+<!-- Question Item Card 2 -->
+<article class="bg-surface rounded-2xl p-4 border border-outline-variant flex flex-col gap-3 transition-colors hover:border-primary/40">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm">线性代数</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm">特征值与特征向量</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-peach-text text-label-sm font-label-sm font-medium shrink-0">
+              错 2 次
+            </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface line-clamp-2">
+            设矩阵 A 为 3 阶实对称矩阵，已知其有两个重特征值 λ₁ = λ₂ = 2，求对应无关特征向量的正交基构造方法。
+          </p>
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span class="text-body-sm font-body-sm text-outline">上次复习：昨日</span>
+<button class="h-8 px-3.5 rounded-full bg-secondary-container text-primary text-label-md font-label-md flex items-center gap-1 active:scale-95 transition-all">
+<span class="">立即复习</span>
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</button>
+</div>
+</article>
+<!-- Question Item Card 3 -->
+<article class="bg-surface rounded-2xl p-4 border border-outline-variant flex flex-col gap-3 transition-colors hover:border-primary/40">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm">概率论</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm">泊松分布</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-peach-text text-label-sm font-label-sm font-medium shrink-0">
+              错 1 次
+            </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface line-clamp-2">
+            假设某服务窗口到达客流服从参数为 λ 的泊松过程，计算在时间间隔 [0, t] 内恰有 k 位顾客到达的后验条件概率。
+          </p>
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span class="text-body-sm font-body-sm text-outline">上次复习：3 天前</span>
+<button class="h-8 px-3.5 rounded-full bg-secondary-container text-primary text-label-md font-label-md flex items-center gap-1 active:scale-95 transition-all">
+<span class="">立即复习</span>
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+<!-- 6. Bottom Sticky Quick Action Bar -->
+<div class="fixed bottom-20 left-0 w-full max-w-md mx-auto px-4 z-40 pointer-events-none">
+<div class="pointer-events-auto bg-surface/90 backdrop-blur-md p-2 rounded-2xl border border-outline-variant/80 shadow-lg shadow-on-surface/5">
+<button class="w-full h-12 bg-primary-container text-on-primary-container rounded-full text-label-lg font-label-lg font-semibold flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-md">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">replay</span>
+<span class="">开始今日错题复习 (8题)</span>
+</button>
+</div>
+</div>
+<!-- 7. Bottom Navigation Bar (Shared Component Anchor) -->
+<!-- Destination Rule applies: Active tab is "复习" based on semantic identity -->
+<nav class="fixed bottom-0 left-0 w-full max-w-md mx-auto z-50 flex justify-around items-center h-20 px-2 pb-safe bg-surface transition-all duration-150">
+<!-- Item 1: 学习 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1 hover:bg-surface-container active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">school</span>
+<span class="text-label-md font-label-md">学习</span>
+</a>
+<!-- Item 2: 题库 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1 hover:bg-surface-container active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">auto_stories</span>
+<span class="text-label-md font-label-md">题库</span>
+</a>
+<!-- Item 3: 复习 (ACTIVE) -->
+<a class="flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-full px-5 py-1 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: &quot;FILL&quot; 1;">replay</span>
+<span class="text-label-md font-label-md font-semibold">复习</span>
+</a>
+<!-- Item 4: 统计 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1 hover:bg-surface-container active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">bar_chart</span>
+<span class="text-label-md font-label-md">统计</span>
+</a>
+</nav>
+</div>
+
+
+</body></html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study · 设置中心</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#d8c2b9",
+            "secondary-container": "#e1e0f8",
+            "inverse-surface": "#2b2f43",
+            "surface-container-low": "#f3f2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-surface": "#161b2d",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-container": "#fff8f5",
+            "secondary-fixed-dim": "#c5c4dc",
+            "secondary-fixed": "#e1e0f8",
+            "surface": "#FFFFFF",
+            "secondary": "#5c5d71",
+            "surface-container-highest": "#dee1fb",
+            "on-primary-fixed-variant": "#353c99",
+            "on-secondary-container": "#626377",
+            "on-secondary-fixed-variant": "#444558",
+            "surface-dim": "#d6d8f2",
+            "inverse-on-surface": "#efefff",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "surface-tint": "#4e55b2",
+            "outline": "#767683",
+            "error": "#ba1a1a",
+            "primary-container": "#6269c8",
+            "surface-variant": "#dee1fb",
+            "on-tertiary-fixed-variant": "#52443d",
+            "primary-fixed-dim": "#bec2ff",
+            "on-surface-variant": "#7C8298",
+            "tertiary-fixed": "#f5ded4",
+            "inverse-primary": "#bec2ff",
+            "primary": "#4950ad",
+            "surface-container": "#ececff",
+            "on-tertiary": "#ffffff",
+            "mint-text": "#216C4B",
+            "on-background": "#161b2d",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c7c5d4",
+            "on-error-container": "#93000a",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#00016d",
+            "mint-accent": "#E6F3EB",
+            "tertiary-container": "#806f67",
+            "on-primary-container": "#fbf7ff",
+            "primary-fixed": "#e0e0ff",
+            "surface-bright": "#fbf8ff",
+            "peach-text": "#8F4829",
+            "surface-container-high": "#e4e7ff",
+            "on-error": "#ffffff",
+            "background": "#F6F7FB",
+            "tertiary": "#67574f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md select-none">
+<!-- Top App Bar (Task-focused secondary flow with back button, no bottom bar needed) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface shadow-none transition-colors">
+<div class="flex items-center gap-2">
+<button aria-label="返回" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container active:scale-95 transition-all text-on-surface">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-on-surface tracking-tight font-bold ml-1">设置</h1>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="搜索设置" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container active:scale-95 transition-all text-on-surface">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-4 pt-20 pb-12 flex flex-col gap-6">
+<!-- Category 1: 界面与个性化 -->
+<section class="flex flex-col gap-2">
+<div class="px-3 pt-2">
+<h2 class="font-label-lg text-label-lg text-primary tracking-wide">界面与个性化</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-[#E3E5EE] divide-y divide-[#E3E5EE] overflow-hidden">
+<!-- Item 1.1 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#appearance">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">外观与主题</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">跟随系统 · 柔和紫蓝</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 1.2 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#typography">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="format_size">format_size</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">排版与正文字号</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">标准 (100%)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 1.3 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#haptics">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="vibration">vibration</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">音效与触感反馈</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">微震感已开启</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Category 2: 刷题与做题习惯 -->
+<section class="flex flex-col gap-2">
+<div class="px-3 pt-2">
+<h2 class="font-label-lg text-label-lg text-primary tracking-wide">刷题与做题习惯</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-[#E3E5EE] divide-y divide-[#E3E5EE] overflow-hidden">
+<!-- Item 2.1 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#practice-flow">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">答题流程与判定</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">3 项开启</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 2.2 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#review-algorithm">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">记忆周期与复习模式</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">智能推荐</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 2.3 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#gestures">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="swipe">swipe</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">快捷手势与答题卡</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">经典抽屉</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Category 3: AI 辅助与智能模型 (Subtle Badge Highlight) -->
+<section class="flex flex-col gap-2">
+<div class="px-3 pt-2 flex items-center gap-2">
+<h2 class="font-label-lg text-label-lg text-primary tracking-wide">AI 辅助与智能模型</h2>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container text-primary">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+          智序 2.0
+        </span>
+</div>
+<div class="bg-surface rounded-2xl border border-[#E3E5EE] divide-y divide-[#E3E5EE] overflow-hidden">
+<!-- Item 3.1 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#ai-api">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">模型服务与 API 配置</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">未连接 · 支持本地私有 Key</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 3.2 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#ai-explain">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">智能解析与深度答疑</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">标准模式</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 3.3 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#ai-generate">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">智能出题与题库诊断</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">按需调用</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Category 4: 数据、同步与备份 -->
+<section class="flex flex-col gap-2">
+<div class="px-3 pt-2">
+<h2 class="font-label-lg text-label-lg text-primary tracking-wide">数据、同步与备份</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-[#E3E5EE] divide-y divide-[#E3E5EE] overflow-hidden">
+<!-- Item 4.1 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#storage">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="folder_zip">folder_zip</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">本地题库与离线存储</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">占用 12.8 MB</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 4.2 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#rules-health">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">导入规则与题库体检</span>
+<span class="font-body-sm text-body-sm text-mint-text truncate mt-0.5">体检良好</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Category 5: 学习目标与提醒 -->
+<section class="flex flex-col gap-2">
+<div class="px-3 pt-2">
+<h2 class="font-label-lg text-label-lg text-primary tracking-wide">学习目标与提醒</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-[#E3E5EE] divide-y divide-[#E3E5EE] overflow-hidden">
+<!-- Item 5.1 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#reminder">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="alarm">alarm</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">每日计划与推送提醒</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">每日 20 题</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Item 5.2 -->
+<a class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low active:bg-surface-container transition-colors text-left group" href="#dnd">
+<div class="flex items-center gap-3.5 min-w-0 pr-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="do_not_disturb_on">do_not_disturb_on</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">学习习惯与免打扰</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">未开启</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant shrink-0 group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Footer Note -->
+<div class="py-6 text-center">
+<span class="font-label-md text-label-md text-on-surface-variant/80 tracking-wide">
+        知序 Study · v1.2.0 (Build 2026)
+      </span>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>知序 Study - 多选题作答</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#e1e0f8",
+            "primary-fixed-dim": "#bec2ff",
+            "on-error-container": "#93000a",
+            "mint-accent": "#E6F3EB",
+            "on-primary-container": "#fbf7ff",
+            "primary": "#4950ad",
+            "on-secondary-fixed-variant": "#444558",
+            "tertiary-container": "#806f67",
+            "primary-container": "#6269c8",
+            "surface-container-high": "#e4e7ff",
+            "on-surface-variant": "#464652",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#f5ded4",
+            "inverse-surface": "#2b2f43",
+            "on-primary-fixed-variant": "#353c99",
+            "surface-variant": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#251913",
+            "surface-tint": "#4e55b2",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#161b2d",
+            "error": "#ba1a1a",
+            "mint-text": "#216C4B",
+            "background": "#F6F7FB",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c7c5d4",
+            "peach-text": "#8F4829",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "primary-fixed": "#e0e0ff",
+            "surface": "#FFFFFF",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#bec2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-secondary-container": "#626377",
+            "on-primary-fixed": "#00016d",
+            "on-tertiary-container": "#fff8f5",
+            "on-error": "#ffffff",
+            "secondary-container": "#e1e0f8",
+            "surface-container-highest": "#dee1fb",
+            "tertiary": "#67574f",
+            "secondary": "#5c5d71",
+            "outline": "#767683",
+            "surface-dim": "#d6d8f2",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-fixed-dim": "#c5c4dc",
+            "inverse-on-surface": "#efefff",
+            "surface-container-low": "#f3f2ff",
+            "on-background": "#161b2d",
+            "surface-container": "#ececff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-secondary-container">
+<!-- Top Progress Bar (Pinned Under System Bar) -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface">
+<!-- Question Progress Bar 4/20 = 20% -->
+<div class="w-full h-1 bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-r-full transition-all duration-300" style="width: 20%;"></div>
+</div>
+<!-- Top Navigation Anchor (TopAppBar Executed per Shared Components) -->
+<div class="w-full flex justify-between items-center px-4 h-14 bg-surface text-primary select-none">
+<!-- Leading: Return / Back button -->
+<button aria-label="返回上一页" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<!-- Center Title: Progress Counter -->
+<div class="flex items-center gap-1.5">
+<span class="text-title-md font-title-md text-on-surface">第 4</span>
+<span class="text-body-md font-body-md text-outline">/ 20 题</span>
+</div>
+<!-- Trailing Action Group: Answer Sheet & Bookmark -->
+<div class="flex items-center gap-1">
+<!-- Answer Sheet Quick Drawer Trigger -->
+<button aria-label="查看答题卡" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+</button>
+<!-- Bookmark / Favorite -->
+<button aria-label="收藏题目" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Focus Learning Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-4 pt-20 pb-28 flex flex-col gap-4">
+<!-- Meta Information Header / Chips Bar -->
+<section class="flex flex-wrap items-center justify-between gap-2.5 pt-2">
+<div class="flex flex-wrap items-center gap-2">
+<!-- Chapter Category Chip -->
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-label-md font-label-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="menu_book">menu_book</span>
+<span class="">列车运行图编制</span>
+</div>
+<!-- Question Type Pill (Multiple Choice - Pick at least 2) -->
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-primary text-label-md font-label-md">
+<span class="material-symbols-outlined text-[15px]" data-icon="checklist">checklist</span>
+<span class="">多选题</span>
+</div>
+<!-- Difficulty Pill -->
+<div class="px-2 py-0.5 rounded-lg bg-surface border border-outline-variant/60 text-secondary text-label-sm font-label-sm">
+          难度 · 中等
+        </div>
+</div>
+<!-- Real-time Exam Timer -->
+<div class="flex items-center gap-1 text-outline text-label-md font-label-md ml-auto">
+<span class="material-symbols-outlined text-[16px]" data-icon="timer">timer</span>
+<span class="tracking-wider">01:42</span>
+</div>
+</section>
+<!-- Question Stem Card -->
+<section class="bg-surface rounded-xl p-5 border border-outline-variant/40">
+<h1 class="text-title-lg font-title-lg text-on-surface leading-relaxed">
+        列车运行图能够清晰反映并规定下列哪些行车要素与时空关系？
+      </h1>
+<p class="text-body-sm font-body-sm text-outline mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]" data-icon="info">info</span>
+        请仔细辨析各选项，全对得分，少选/多选/错选均不得分
+      </p>
+</section>
+<!-- Multiple-choice Specific Guidance Notice (Empty Initial State Callout) -->
+<section class="rounded-xl bg-surface-container-low border border-primary-fixed-dim/50 p-3.5 flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]" data-icon="lightbulb">lightbulb</span>
+</div>
+<div class="flex-1">
+<h2 class="text-title-sm font-title-sm text-on-surface">多选作答提醒</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5 leading-snug">
+          本题为多选题，需勾选2个及以上符合题意的选项，全部选对得分，多选、少选或错选均不得分。选定后点击下方提交。
+        </p>
+</div>
+</section>
+<!-- Unanswered Option Cards Group (Pure initial unselected state) -->
+<section aria-label="选项列表" class="flex flex-col gap-3">
+<!-- Option A -->
+<div class="group relative flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant/40 hover:border-primary-fixed-dim transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 flex-1 pr-3">
+<!-- Option Alphabet Identifier -->
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface font-title-md text-title-md flex items-center justify-center shrink-0">
+            A
+          </div>
+<span class="text-body-md font-body-md text-on-surface leading-normal">
+            各次列车在各区间和站内的运行及停站时刻
+          </span>
+</div>
+<!-- Unchecked Square Checkbox for Multi-select -->
+<div class="w-5 h-5 rounded-md border-2 border-outline-variant flex items-center justify-center shrink-0 bg-surface">
+<!-- Empty by design (initial state) -->
+</div>
+</div>
+<!-- Option B -->
+<div class="group relative flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant/40 hover:border-primary-fixed-dim transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 flex-1 pr-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface font-title-md text-title-md flex items-center justify-center shrink-0">
+            B
+          </div>
+<span class="text-body-md font-body-md text-on-surface leading-normal">
+            区间同方向列车追踪运行的间隔时间
+          </span>
+</div>
+<div class="w-5 h-5 rounded-md border-2 border-outline-variant flex items-center justify-center shrink-0 bg-surface">
+<!-- Empty checkbox -->
+</div>
+</div>
+<!-- Option C -->
+<div class="group relative flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant/40 hover:border-primary-fixed-dim transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 flex-1 pr-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface font-title-md text-title-md flex items-center justify-center shrink-0">
+            C
+          </div>
+<span class="text-body-md font-body-md text-on-surface leading-normal">
+            车站会让、越行及进路占用与交会关系
+          </span>
+</div>
+<div class="w-5 h-5 rounded-md border-2 border-outline-variant flex items-center justify-center shrink-0 bg-surface">
+<!-- Empty checkbox -->
+</div>
+</div>
+<!-- Option D -->
+<div class="group relative flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant/40 hover:border-primary-fixed-dim transition-all cursor-pointer">
+<div class="flex items-center gap-3.5 flex-1 pr-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface font-title-md text-title-md flex items-center justify-center shrink-0">
+            D
+          </div>
+<span class="text-body-md font-body-md text-on-surface leading-normal">
+            机车车辆周转以及乘务员换班作业节点
+          </span>
+</div>
+<div class="w-5 h-5 rounded-md border-2 border-outline-variant flex items-center justify-center shrink-0 bg-surface">
+<!-- Empty checkbox -->
+</div>
+</div>
+</section>
+<!-- Auxiliary Note -->
+<div class="text-center py-2">
+
+</div>
+</main>
+<!-- Bottom Pinned Action Bar (Task Flow Focused - Standard Bottom Navigation Suppressed) -->
+<footer class="fixed bottom-0 left-0 w-full z-40 bg-surface py-3 px-4 shadow-[0_-4px_16px_rgba(22,27,45,0.04)]">
+<div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
+<!-- Previous Question Button -->
+<button class="h-12 px-5 rounded-full border border-outline-variant text-on-surface font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+<span class="">上一题</span>
+</button>
+<!-- Center Status Helper (Mobile Hidden / Tablet Visible) -->
+<div class="hidden sm:flex items-center gap-1 text-label-md font-label-md text-outline">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">待勾选至少 2 项</span>
+</div>
+<!-- Submit Button (Disabled / Waiting state because unselected) -->
+<button class="flex-1 sm:flex-initial sm:min-w-[180px] h-12 px-6 rounded-full bg-surface-container-high text-outline cursor-not-allowed font-title-sm text-title-sm flex items-center justify-center gap-2 select-none" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+<span class="">提交答案</span>
+</button>
+</div>
+</footer>
+
+
+</body></html>

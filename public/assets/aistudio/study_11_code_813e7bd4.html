@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>设置 - 知序 Study</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#444558",
+            "surface-variant": "#dee1fb",
+            "mint-text": "#216C4B",
+            "on-error-container": "#93000a",
+            "surface-container": "#ececff",
+            "on-primary-fixed": "#00016d",
+            "background": "#F6F7FB",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#efefff",
+            "inverse-surface": "#2b2f43",
+            "on-surface-variant": "#7C8298",
+            "mint-accent": "#E6F3EB",
+            "on-error": "#ffffff",
+            "surface": "#FFFFFF",
+            "surface-container-high": "#e4e7ff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-container": "#e1e0f8",
+            "secondary-fixed": "#e1e0f8",
+            "inverse-primary": "#bec2ff",
+            "on-secondary-container": "#626377",
+            "outline": "#767683",
+            "tertiary-container": "#806f67",
+            "tertiary": "#67574f",
+            "surface-bright": "#fbf8ff",
+            "error": "#ba1a1a",
+            "primary": "#4950ad",
+            "on-primary-fixed-variant": "#353c99",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-tertiary-container": "#fff8f5",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "surface-container-low": "#f3f2ff",
+            "primary-fixed": "#e0e0ff",
+            "surface-container-highest": "#dee1fb",
+            "outline-variant": "#E3E5EE",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#161b2d",
+            "on-secondary-fixed": "#191a2b",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#4e55b2",
+            "on-tertiary-fixed": "#251913",
+            "peach-text": "#8F4829",
+            "secondary": "#5c5d71",
+            "on-background": "#161b2d",
+            "primary-container": "#6269c8",
+            "tertiary-fixed": "#f5ded4",
+            "surface-dim": "#d6d8f2",
+            "on-primary-container": "#fbf7ff",
+            "primary-fixed-dim": "#bec2ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-xl": "2rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen pb-12 selection:bg-secondary-container">
+<!-- TopAppBar (M3 Native Anchor: Navigation is focused task/subpage, BottomNavBar correctly suppressed) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-16 bg-surface/90 backdrop-blur-md transition-colors">
+<div class="flex items-center gap-3">
+<button aria-label="返回" class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container active:scale-95 transition-all duration-150" onclick="window.history.back()">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="text-title-lg font-title-lg text-on-surface font-semibold tracking-tight">设置</h1>
+</div>
+</header>
+<!-- Main Scrollable Canvas -->
+<main class="pt-20 px-4 max-w-2xl mx-auto space-y-6">
+<!-- 01. 界面与外观 (Appearance) -->
+<section class="space-y-2">
+<div class="px-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">palette</span>
+<h2 class="text-label-lg font-label-lg text-primary tracking-wide">界面与外观</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-outline-variant overflow-hidden shadow-[0_2px_8px_rgba(22,27,45,0.02)]">
+<!-- 深色模式 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">深色模式</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">跟随系统自动切换</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="text-label-md font-label-md text-primary font-medium">跟随系统</span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 动态配色开关 (Material You Switch ON) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">Material You 动态配色</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">提取壁纸主题色，生成柔和色彩</span>
+</div>
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</label>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 字号大小调节 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">字号大小</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">调节题目解析与正文字体显示</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="text-label-md font-label-md text-on-surface-variant">标准 (100%)</span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 02. 刷题与习惯 (Practice Habits) -->
+<section class="space-y-2">
+<div class="px-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+<h2 class="text-label-lg font-label-lg text-primary tracking-wide">刷题与习惯</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-outline-variant overflow-hidden shadow-[0_2px_8px_rgba(22,27,45,0.02)]">
+<!-- 即时显示答案 (ON) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">即时显示解析</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">选定答案后立即呈现正确答案及考点剖析</span>
+</div>
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</label>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 随机打乱选项 (ON) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">随机打乱选项顺序</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">A / B / C / D 随机排布，防止记忆题干位置</span>
+</div>
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</label>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 答对自动跳转 (OFF) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">答对自动跳转下一题</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">正确作答后无需手动滑动，直接进入下题</span>
+</div>
+<input class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px]"></div>
+</div>
+</label>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 触感反馈 (ON) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">触感反馈</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">作答与卡片翻动提供细腻的微震震感</span>
+</div>
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</label>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 做题音效 (OFF) -->
+<label class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">做题提示音效</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">作答正确或错误时的声音提示</span>
+</div>
+<input class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200 shrink-0">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px]"></div>
+</div>
+</label>
+</div>
+</section>
+<!-- 03. 学习与计划提醒 (Plan & Reminder) -->
+<section class="space-y-2">
+<div class="px-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">alarm</span>
+<h2 class="text-label-lg font-label-lg text-primary tracking-wide">学习与计划提醒</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-outline-variant overflow-hidden shadow-[0_2px_8px_rgba(22,27,45,0.02)]">
+<!-- 每日做题目标提醒 (Switch ON + 时间) -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors">
+<div class="flex flex-col gap-0.5 pr-4">
+<span class="text-title-sm font-title-sm text-on-surface">每日学习推送提醒</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">每天 20:30 定时触发温习通知</span>
+</div>
+<label class="relative cursor-pointer shrink-0">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="relative w-[52px] h-[32px] bg-outline-variant peer-checked:bg-primary-container rounded-full transition-colors duration-200">
+<div class="absolute top-[4px] left-[4px] w-[24px] h-[24px] bg-surface rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[20px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</label>
+</div>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 每日目标题数快捷设定 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">每日目标题量</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">量化每日练习节奏</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-md font-label-md bg-secondary-container text-primary font-medium">
+              20 题 / 天
+            </span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 04. 数据与存储 (Data & Storage) -->
+<section class="space-y-2">
+<div class="px-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">database</span>
+<h2 class="text-label-lg font-label-lg text-primary tracking-wide">数据与存储</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-outline-variant overflow-hidden shadow-[0_2px_8px_rgba(22,27,45,0.02)]">
+<!-- 本地题库管理 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">本地题库与备份</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">4 个题库 · 1,280 道题</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 题库体检与去重审查 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">题库体检与重复审查</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">查验破损解析与高度相似题目</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-md font-label-md bg-mint-accent text-mint-text font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text"></span>
+              良好
+            </span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 清除做题缓存 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer active:bg-surface-container" id="clear-cache-item">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">清除离线练习缓存</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">释放临时试题解析渲染数据</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-label-md font-label-md text-on-surface-variant" id="cache-size">12.8 MB</span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 05. 关于知序 (About) -->
+<section class="space-y-2">
+<div class="px-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">info</span>
+<h2 class="text-label-lg font-label-lg text-primary tracking-wide">关于</h2>
+</div>
+<div class="bg-surface rounded-2xl border border-outline-variant overflow-hidden shadow-[0_2px_8px_rgba(22,27,45,0.02)]">
+<!-- 当前版本 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors">
+<div class="flex flex-col gap-0.5">
+<span class="text-title-sm font-title-sm text-on-surface">知序 Study</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">专注秩序刷题与知识自省</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant font-mono">v1.2.0</span>
+</div>
+<div class="h-[1px] bg-outline-variant/60 ml-4 mr-0"></div>
+<!-- 检查更新 -->
+<div class="flex items-center justify-between px-4 py-3.5 hover:bg-surface-container-low transition-colors cursor-pointer active:bg-surface-container" id="check-update-item">
+<span class="text-title-sm font-title-sm text-on-surface">检查新版本</span>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="text-label-md font-label-md text-on-surface-variant" id="update-status">已是最新版本</span>
+<span class="material-symbols-outlined text-[20px] text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 纯粹轻巧的底部标语与版权，保证移动端沉浸感 -->
+<div class="pt-6 pb-4 text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant tracking-wider">
+        知序 STUDY · CALM &amp; METICULOUS
+      </p>
+</div>
+</main>
+<script>
+    // 交互微动画：清理缓存操作
+    const clearCacheItem = document.getElementById('clear-cache-item');
+    const cacheSizeEl = document.getElementById('cache-size');
+    if (clearCacheItem && cacheSizeEl) {
+      clearCacheItem.addEventListener('click', () => {
+        if (cacheSizeEl.textContent !== '0 KB') {
+          cacheSizeEl.textContent = '清理中...';
+          setTimeout(() => {
+            cacheSizeEl.textContent = '0 KB';
+            cacheSizeEl.classList.add('text-mint-text');
+          }, 450);
+        }
+      });
+    }
+
+    // 交互微动画：检查版本
+    const checkUpdateItem = document.getElementById('check-update-item');
+    const updateStatusEl = document.getElementById('update-status');
+    if (checkUpdateItem && updateStatusEl) {
+      checkUpdateItem.addEventListener('click', () => {
+        updateStatusEl.textContent = '正在检查...';
+        setTimeout(() => {
+          updateStatusEl.textContent = '已是最新版本 (v1.2.0)';
+        }, 500);
+      });
+    }
+  </script>
+</body></html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7fc">
+  <title>知序 · 原生 Android 刷题应用交互原型</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="studio">
+    <aside class="side-panel" id="sidePanel"></aside>
+    <div class="device-wrap">
+      <div class="device">
+        <div class="status-bar"><span>9:41</span><span class="status-signals"><svg viewBox="0 0 24 14" width="46" height="14" aria-hidden="true"><path d="M1 8 L5 4 L9 8 M11 4 L11 12 M15 2 L15 12 M19 1 L19 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><rect x="21" y="4" width="3" height="7" rx="1" fill="currentColor"/></svg></span></div>
+        <div class="app-root" id="app" aria-live="polite"></div>
+        <div class="nav-gesture"><div></div></div>
+      </div>
+    </div>
+    <aside class="right-panel">
+      <div class="brand-eyebrow">PRODUCT / DESIGN PREVIEW</div>
+      <h1>知序 <span>Study</span></h1>
+      <p>轻插画 × Material 3</p>
+      <div class="note"><b>可点击的设计原型</b><p>左侧可以跳转全部 20 个页面。手机端可使用应用内导航。</p></div>
+      <div class="note"><b>重点体验</b><p>题库 → 导入题目 → 字段映射和规则 → 审查和去重 → 完成导入。</p></div>
+      <div class="note caution"><b>数据边界</b><p>Excel / Word / PDF 仅演示识别流程；CSV、TSV、TXT 和 JSON 可尝试在浏览器中读取简单真实文件。最终 Android 应用需实现独立的 Kotlin 文件解析器。</p></div>
+    </aside>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

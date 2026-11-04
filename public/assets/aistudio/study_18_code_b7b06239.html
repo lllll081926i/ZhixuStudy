@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study - 全库体检与答案冲突对比审查工作台</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#444558",
+            "outline": "#767683",
+            "tertiary": "#67574f",
+            "on-primary-fixed-variant": "#353c99",
+            "outline-variant": "#c7c5d4",
+            "secondary-container": "#e1e0f8",
+            "on-secondary-fixed": "#191a2b",
+            "tertiary-fixed": "#f5ded4",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "inverse-primary": "#bec2ff",
+            "surface-bright": "#fbf8ff",
+            "on-surface-variant": "#464652",
+            "surface-container": "#ececff",
+            "on-error": "#ffffff",
+            "secondary-fixed-dim": "#c5c4dc",
+            "primary": "#4950ad",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#251913",
+            "primary-container": "#6269c8",
+            "tertiary-container": "#806f67",
+            "surface-variant": "#dee1fb",
+            "error": "#ba1a1a",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#e4e7ff",
+            "peach-text": "#8F4829",
+            "secondary": "#5c5d71",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "on-primary-fixed": "#00016d",
+            "on-background": "#161b2d",
+            "on-primary-container": "#fbf7ff",
+            "background": "#F6F7FB",
+            "surface-container-highest": "#dee1fb",
+            "surface-dim": "#d6d8f2",
+            "surface-container-low": "#f3f2ff",
+            "inverse-on-surface": "#efefff",
+            "inverse-surface": "#2b2f43",
+            "mint-text": "#216C4B",
+            "surface-tint": "#4e55b2",
+            "on-tertiary-container": "#fff8f5",
+            "surface": "#FFFFFF",
+            "primary-fixed-dim": "#bec2ff",
+            "primary-fixed": "#e0e0ff",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-fixed": "#e1e0f8",
+            "mint-accent": "#E6F3EB",
+            "on-surface": "#161b2d",
+            "on-secondary-container": "#626377"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "display-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen flex flex-col md:flex-row overflow-x-hidden selection:bg-secondary-container selection:text-primary">
+<!-- Tablet / Desktop Adaptive Navigation Rail (md:flex) -->
+<aside class="hidden md:flex flex-col items-center justify-between w-20 bg-surface py-6 border-r border-[#E3E5EE] shrink-0 z-40 h-screen sticky top-0">
+<div class="flex flex-col items-center gap-8 w-full">
+<div class="flex flex-col items-center">
+<span class="text-title-lg font-title-lg text-primary tracking-tight font-bold">知序</span>
+<span class="text-label-sm font-label-sm text-secondary">Study</span>
+</div>
+<!-- Navigation Destinations (Maps exact labels & icons from JSON) -->
+<nav class="flex flex-col items-center gap-3 w-full px-2">
+<!-- 学习 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-xl w-full py-2.5 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-2xl">school</span>
+<span class="text-label-md font-label-md">学习</span>
+</button>
+<!-- 题库 (Active Context for Audit) -->
+<button class="flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-2xl w-full py-2.5 transition-all duration-150 shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="text-label-md font-label-md font-semibold">题库</span>
+</button>
+<!-- 复习 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-xl w-full py-2.5 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-2xl">replay</span>
+<span class="text-label-md font-label-md">复习</span>
+</button>
+<!-- 统计 -->
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-xl w-full py-2.5 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-2xl">bar_chart</span>
+<span class="text-label-md font-label-md">统计</span>
+</button>
+</nav>
+</div>
+<!-- Bottom utility controls in rail -->
+<div class="flex flex-col items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-all" title="全屏体检设置">
+<span class="material-symbols-outlined text-xl">tune</span>
+</button>
+<div class="w-9 h-9 rounded-full bg-surface-variant text-primary flex items-center justify-center font-title-sm text-sm border border-outline-variant/40">
+        ZX
+      </div>
+</div>
+</aside>
+<!-- Mobile TopAppBar (from Shared Components JSON) -->
+<header class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface">
+<div class="flex items-center gap-2">
+<button class="p-2 text-primary hover:bg-surface-container rounded-full active:scale-95 transition-all">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="text-title-lg font-title-lg text-on-surface font-bold">知序 Study</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace Canvas -->
+<main class="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 pb-24 md:pb-8 px-4 md:px-8 max-w-7xl mx-auto w-full">
+<!-- Top Context Header & Actions (Desktop / Tablet view) -->
+<div class="pt-6 pb-5 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<button class="hidden md:flex p-2 text-on-surface-variant hover:bg-surface-container rounded-full active:scale-95 transition-all border border-[#E3E5EE] bg-surface">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+</button>
+<div>
+<div class="flex items-center gap-2.5">
+<h1 class="text-headline-sm font-headline-sm text-on-surface font-bold">题库体检与冲突审查</h1>
+<span class="bg-[#FFE8DE] text-peach-text text-label-md font-label-md px-2.5 py-0.5 rounded-full font-medium">高优先级对账</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">多源教材与模拟题导入交叉验证，检测到 1 处答案分歧与 3 处冗余数据</p>
+</div>
+</div>
+<!-- Action Group -->
+<div class="flex items-center gap-2.5">
+<button class="h-10 px-4 rounded-full border border-[#E3E5EE] bg-surface text-on-surface font-label-lg text-label-lg hover:bg-surface-container active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-lg">download_done</span>
+<span>导出审查报告</span>
+</button>
+<button class="h-10 px-5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-lg">fact_check</span>
+<span>批量执行对账</span>
+</button>
+</div>
+</div>
+<!-- Health Index Dashboard Strip -->
+<section class="mb-6 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+<!-- Card 1: Overall Health -->
+<div class="bg-surface rounded-2xl p-4 border border-[#E3E5EE] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">全库题目健康度</span>
+<div class="flex items-baseline gap-1.5">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">92%</span>
+<span class="text-label-sm font-label-sm text-mint-text font-semibold flex items-center">
+<span class="material-symbols-outlined text-xs">arrow_upward</span>+3.4%
+            </span>
+</div>
+</div>
+</div>
+<!-- Card 2: Answer Conflicts -->
+<div class="bg-surface rounded-2xl p-4 border border-[#FFE8DE] bg-gradient-to-r from-surface to-[#FFF7F4] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-[#FFE8DE] text-peach-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">答案分歧冲突</span>
+<div class="flex items-baseline gap-1.5">
+<span class="text-headline-md font-headline-md font-bold text-peach-text">1</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">组待裁决</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Duplicates -->
+<div class="bg-surface rounded-2xl p-4 border border-[#E3E5EE] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">difference</span>
+</div>
+<div>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">完全重复项</span>
+<div class="flex items-baseline gap-1.5">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">3</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">组可合并</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Missing Explanations -->
+<div class="bg-surface rounded-2xl p-4 border border-[#E3E5EE] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">help_outline</span>
+</div>
+<div>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">缺失详细解析</span>
+<div class="flex items-baseline gap-1.5">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">2</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">题需补齐</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Side-by-Side Dual Source Audit Card -->
+<section class="bg-surface rounded-2xl border border-[#E3E5EE] shadow-sm mb-6 overflow-hidden">
+<!-- Conflict Overview Banner -->
+<div class="bg-surface-container-low px-5 py-3.5 border-b border-[#E3E5EE] flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-[#E55934] animate-pulse"></span>
+<span class="text-title-sm font-title-sm text-on-surface">冲突项 #01：行车闭塞调度安全防护边界</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-surface border border-[#E3E5EE] text-on-surface-variant">专业科目 / 综合试卷</span>
+</div>
+<!-- Conflict Metric Badge -->
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-on-surface-variant">检测结论：</span>
+<span class="bg-[#FFE8DE] text-peach-text text-label-md font-label-md font-bold px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">swap_horiz</span>
+            答案键值不一致 (A vs B)
+          </span>
+</div>
+</div>
+<!-- Two-Column Comparison Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-[#E3E5EE]">
+<!-- Source A (Left Column: Canonical Standard) -->
+<div class="p-5 md:p-6 flex flex-col justify-between bg-surface">
+<div>
+<!-- Source Tag Header -->
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-mint-text bg-mint-accent text-label-md font-label-md font-bold px-2.5 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+                  来源 A：已有权威标准
+                </span>
+<span class="text-label-md font-label-md text-on-surface-variant font-medium">《铁路运输组织基础》第4版</span>
+</div>
+<span class="text-label-sm font-label-sm text-mint-text font-semibold">置信度 99.8%</span>
+</div>
+<!-- Question Stem -->
+<div class="mb-5">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider block mb-1">题干定义 (ID: CN-RW-2024-082)</span>
+<p class="text-body-lg font-body-lg text-on-surface font-semibold leading-relaxed">
+                在自动闭塞区间，遇出站信号机故障且引导信号不能开放时，列车发车的正规凭证及速度限制要求是什么？
+              </p>
+</div>
+<!-- Options Stack -->
+<div class="space-y-2.5 mb-5">
+<!-- Option A (Standard Answer) -->
+<div class="p-3.5 rounded-xl border-2 border-mint-text/40 bg-mint-accent/40 flex items-start gap-3">
+<span class="w-6 h-6 rounded-full bg-mint-text text-white text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">A</span>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface font-medium">路票，首架通过信号机前速度不得超过 20km/h 并随时准备停车</p>
+<span class="inline-flex items-center gap-1 text-mint-text text-label-sm font-label-sm font-bold mt-1">
+<span class="material-symbols-outlined text-xs">check_circle</span> 系统核准标准答案
+                  </span>
+</div>
+</div>
+<!-- Option B -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-75">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">B</span>
+<p class="text-body-md font-body-md text-on-surface">绿色许可证，按正常信号显示进入区间且速度不受特定限制</p>
+</div>
+<!-- Option C -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-75">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">C</span>
+<p class="text-body-md font-body-md text-on-surface">调度命令单，出站后即恢复设计最高线路时速</p>
+</div>
+<!-- Option D -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-75">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">D</span>
+<p class="text-body-md font-body-md text-on-surface">口头准许，在监控装置退后模式下低速慢行通过</p>
+</div>
+</div>
+<!-- Analysis Box -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-[#E3E5EE]">
+<span class="text-label-sm font-label-sm text-primary font-bold flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-sm">menu_book</span> 标准官方解析
+              </span>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+                依据《技规》普速部分第 321 条规定：自动闭塞区间出站信号机停用且引导不能开放时，改用电话闭塞法行车，发车凭证为「路票」，且首趟列车需严格限速在 20km/h 范围内防范挤岔风险。
+              </p>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#E3E5EE] flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>最后核准人：国家级安全教研室</span>
+<span>2024-03-10 入库</span>
+</div>
+</div>
+<!-- Source B (Right Column: Candidate with Conflict) -->
+<div class="p-5 md:p-6 flex flex-col justify-between bg-[#FBF8FF]/50">
+<div>
+<!-- Source Tag Header -->
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-peach-text bg-[#FFE8DE] text-label-md font-label-md font-bold px-2.5 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">notification_important</span>
+                  来源 B：待审查题库
+                </span>
+<span class="text-label-md font-label-md text-on-surface-variant font-medium">《模拟测试题集》2024春季模考</span>
+</div>
+<span class="text-label-sm font-label-sm text-error font-semibold">校验发现冲突</span>
+</div>
+<!-- Question Stem -->
+<div class="mb-5">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider block mb-1">题干定义 (ID: SIM-2024-TMP-401)</span>
+<p class="text-body-lg font-body-lg text-on-surface font-semibold leading-relaxed">
+                在自动闭塞区间，遇出站信号机故障且引导信号不能开放时，列车发车的正规凭证及速度限制要求是什么？
+              </p>
+</div>
+<!-- Options Stack with Conflict Highlighting -->
+<div class="space-y-2.5 mb-5">
+<!-- Option A (Standard elsewhere) -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-80">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">A</span>
+<p class="text-body-md font-body-md text-on-surface">路票，首架通过信号机前速度不得超过 20km/h 并随时准备停车</p>
+</div>
+<!-- Option B (Marked Conflicting Answer) -->
+<div class="p-3.5 rounded-xl border-2 border-error/50 bg-error-container/20 flex items-start gap-3">
+<span class="w-6 h-6 rounded-full bg-error text-white text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">B</span>
+<div class="flex-1">
+<p class="text-body-md font-body-md text-on-surface font-medium">绿色许可证，按正常信号显示进入区间且速度不受特定限制</p>
+<span class="inline-flex items-center gap-1 text-error text-label-sm font-label-sm font-bold mt-1">
+<span class="material-symbols-outlined text-xs">close</span> 该来源设定为答案（疑似错题记录）
+                  </span>
+</div>
+</div>
+<!-- Option C -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-75">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">C</span>
+<p class="text-body-md font-body-md text-on-surface">调度命令单，出站后即恢复设计最高线路时速</p>
+</div>
+<!-- Option D -->
+<div class="p-3.5 rounded-xl border border-[#E3E5EE] bg-surface flex items-start gap-3 opacity-75">
+<span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm flex items-center justify-center font-bold shrink-0 mt-0.5">D</span>
+<p class="text-body-md font-body-md text-on-surface">口头准许，在监控装置退后模式下低速慢行通过</p>
+</div>
+</div>
+<!-- Candidate Explanation Box -->
+<div class="p-4 rounded-xl bg-[#FFF9F6] border border-[#FFE8DE]">
+<span class="text-label-sm font-label-sm text-peach-text font-bold flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-sm">warning</span> 来源说明 (标注分歧)
+              </span>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+                原题注记：“依据模拟大纲第5节，非正常行车若存在绿色许可证则优先采用”，经算法比对与国家标准《铁路运输规程》冲突，判定为题目答案键值录入错误。
+              </p>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#E3E5EE] flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>导入批次：2024-10-18 题库包</span>
+<span class="text-error font-medium">状态：等待裁决覆写</span>
+</div>
+</div>
+</div>
+<!-- Action Footer for Conflict Resolution -->
+<div class="px-6 py-4 bg-surface-container-low border-t border-[#E3E5EE] flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-base">info</span>
+<span>执行操作后，系统将自动更新相关模拟试卷与学生答题记录归属。</span>
+</div>
+<div class="flex items-center gap-3">
+<!-- 就地编辑 -->
+<button class="h-10 px-4 rounded-full border border-[#E3E5EE] bg-surface text-on-surface font-label-lg text-label-lg hover:bg-surface-container active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base">edit</span>
+<span>就地编辑选项与答案</span>
+</button>
+<!-- 保留两题各自独立 -->
+<button class="h-10 px-4 rounded-full bg-secondary-container text-primary font-label-lg text-label-lg hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base">call_split</span>
+<span>保留两题各自独立</span>
+</button>
+<!-- 以已有标准为准覆写 (Primary Action) -->
+<button class="h-10 px-5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base">published_with_changes</span>
+<span>以已有标准(来源A)为准覆写</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Duplicate Questions Detection Section -->
+<section class="bg-surface rounded-2xl border border-[#E3E5EE] p-5 md:p-6 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2.5">
+<h2 class="text-title-lg font-title-lg text-on-surface font-bold">完全重复题目队列</h2>
+<span class="bg-secondary-container text-primary text-label-md font-label-md px-2.5 py-0.5 rounded-full font-semibold">3 组待归并</span>
+</div>
+<button class="text-primary text-label-lg font-label-lg font-semibold hover:underline flex items-center gap-1">
+<span>一键全部去重合并</span>
+<span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+<!-- Compact Repeated Items Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Duplicate Item 1 -->
+<div class="p-4 rounded-xl border border-[#E3E5EE] bg-surface-container-lowest flex flex-col justify-between hover:border-primary/50 transition-all">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm text-mint-text font-bold bg-mint-accent px-2 py-0.5 rounded">相似度 100%</span>
+<span class="text-label-sm font-label-sm text-outline">单选题</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-medium line-clamp-2 mb-2">
+              客货共线铁路线路，列车通过速度大于 120km/h 且不大于 160km/h 时，两相邻线路中心线间最小距离为？
+            </p>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-2 mb-4">
+<span>答案：4200mm</span>
+<span>·</span>
+<span>命中 2 个题库副本</span>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#E3E5EE]/60">
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-surface border border-[#E3E5EE] text-on-surface text-label-md font-label-md hover:bg-surface-container active:scale-95 transition-all text-center">
+              对比差异
+            </button>
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-secondary-container text-primary text-label-md font-label-md hover:bg-surface-container-high active:scale-95 transition-all text-center font-semibold">
+              快速合并
+            </button>
+</div>
+</div>
+<!-- Duplicate Item 2 -->
+<div class="p-4 rounded-xl border border-[#E3E5EE] bg-surface-container-lowest flex flex-col justify-between hover:border-primary/50 transition-all">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm text-mint-text font-bold bg-mint-accent px-2 py-0.5 rounded">相似度 100%</span>
+<span class="text-label-sm font-label-sm text-outline">判断题</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-medium line-clamp-2 mb-2">
+              机车信号机显示一个半黄半闪光灯光时，要求列车限速运行，表示前方进路已预告开通侧线。
+            </p>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-2 mb-4">
+<span>答案：正确</span>
+<span>·</span>
+<span>来自：《信号显示规程》</span>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#E3E5EE]/60">
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-surface border border-[#E3E5EE] text-on-surface text-label-md font-label-md hover:bg-surface-container active:scale-95 transition-all text-center">
+              对比差异
+            </button>
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-secondary-container text-primary text-label-md font-label-md hover:bg-surface-container-high active:scale-95 transition-all text-center font-semibold">
+              快速合并
+            </button>
+</div>
+</div>
+<!-- Duplicate Item 3 -->
+<div class="p-4 rounded-xl border border-[#E3E5EE] bg-surface-container-lowest flex flex-col justify-between hover:border-primary/50 transition-all">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm text-mint-text font-bold bg-mint-accent px-2 py-0.5 rounded">相似度 98.6%</span>
+<span class="text-label-sm font-label-sm text-outline">多选题</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-medium line-clamp-2 mb-2">
+              行车安全保护区内严禁从事下列哪些行为？（多选：钻探、动土、高空抛物等）
+            </p>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-2 mb-4">
+<span>答案：ABCD</span>
+<span>·</span>
+<span>表述仅标点微调</span>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#E3E5EE]/60">
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-surface border border-[#E3E5EE] text-on-surface text-label-md font-label-md hover:bg-surface-container active:scale-95 transition-all text-center">
+              对比差异
+            </button>
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-secondary-container text-primary text-label-md font-label-md hover:bg-surface-container-high active:scale-95 transition-all text-center font-semibold">
+              快速合并
+            </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Bottom Navigation (JSON Anchor: hidden on tablet md:hidden) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-2 bg-surface">
+<!-- 学习 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1" href="#learn">
+<span class="material-symbols-outlined text-2xl">school</span>
+<span class="text-label-md font-label-md">学习</span>
+</a>
+<!-- 题库 (Active Navigation State from JSON) -->
+<a class="flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-full px-5 py-1" href="#bank">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="text-label-md font-label-md font-semibold">题库</span>
+</a>
+<!-- 复习 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1" href="#review">
+<span class="material-symbols-outlined text-2xl">replay</span>
+<span class="text-label-md font-label-md">复习</span>
+</a>
+<!-- 统计 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-5 py-1" href="#stats">
+<span class="material-symbols-outlined text-2xl">bar_chart</span>
+<span class="text-label-md font-label-md">统计</span>
+</a>
+</nav>
+<!-- Toast Notification Template for Interactive Feedback -->
+<div class="fixed bottom-6 right-6 bg-inverse-surface text-inverse-on-surface px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none z-50 text-body-sm" id="toast">
+<span class="material-symbols-outlined text-inverse-primary text-xl" id="toast-icon">check_circle</span>
+<span id="toast-text">操作已记录并生效</span>
+</div>
+<script>
+    // Lightweight micro-interaction for Workbench actions
+    function showToast(message, icon = 'check_circle') {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      const toastIcon = document.getElementById('toast-icon');
+      
+      toastText.textContent = message;
+      toastIcon.textContent = icon;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const text = btn.innerText.trim();
+        if (text.includes('覆写')) {
+          showToast('已以权威来源(A)为基准覆写待审题库', 'published_with_changes');
+        } else if (text.includes('保留两题')) {
+          showToast('已分立两题条目，各自绑定独立教材版本', 'call_split');
+        } else if (text.includes('就地编辑')) {
+          showToast('已载入快捷编辑器', 'edit');
+        } else if (text.includes('合并')) {
+          showToast('已合并重复题目项，保留主索引', 'merge');
+        } else if (text.includes('批量执行')) {
+          showToast('全库批量对账队列已提交后台执行', 'fact_check');
+        }
+      });
+    });
+  </script>
+</body></html>

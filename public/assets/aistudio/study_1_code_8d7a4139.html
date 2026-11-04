@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study - 学习</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#4950ad",
+            "on-background": "#161b2d",
+            "on-primary": "#ffffff",
+            "surface-dim": "#d6d8f2",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#E3E5EE",
+            "surface-bright": "#fbf8ff",
+            "on-surface-variant": "#7C8298",
+            "surface-variant": "#dee1fb",
+            "mint-accent": "#E6F3EB",
+            "inverse-primary": "#bec2ff",
+            "primary-container": "#6269c8",
+            "secondary-container": "#e1e0f8",
+            "on-secondary-container": "#626377",
+            "inverse-on-surface": "#efefff",
+            "secondary": "#5c5d71",
+            "outline": "#767683",
+            "inverse-surface": "#2b2f43",
+            "on-primary-fixed": "#00016d",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "surface-container-high": "#e4e7ff",
+            "on-secondary-fixed-variant": "#444558",
+            "surface": "#FFFFFF",
+            "secondary-fixed-dim": "#c5c4dc",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#fbf7ff",
+            "on-surface": "#161b2d",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#67574f",
+            "tertiary-fixed": "#f5ded4",
+            "on-tertiary-container": "#fff8f5",
+            "on-secondary-fixed": "#191a2b",
+            "primary-fixed-dim": "#bec2ff",
+            "mint-text": "#216C4B",
+            "peach-text": "#8F4829",
+            "background": "#F6F7FB",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-fixed": "#e1e0f8",
+            "primary-fixed": "#e0e0ff",
+            "surface-container": "#ececff",
+            "surface-container-low": "#f3f2ff",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#353c99",
+            "surface-container-highest": "#dee1fb",
+            "tertiary-container": "#806f67",
+            "surface-tint": "#4e55b2"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "display-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-full flex flex-col font-body-md text-body-md select-none">
+<!-- TopAppBar (Based on Shared Components JSON) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface dark:bg-inverse-surface">
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="text-title-lg font-title-lg text-on-surface dark:text-inverse-on-surface tracking-tight font-bold">知序 Study</span>
+<span class="text-label-md font-label-md text-on-surface-variant">一个小目标，一点点进步</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="搜索" class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-primary text-[22px]">search</span>
+</button>
+<button aria-label="设置" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container (Responsive Padding & Max-Width) -->
+<main class="flex-1 w-full max-w-2xl mx-auto pt-20 pb-28 px-4 flex flex-col gap-5">
+<!-- 1. 欢迎 Hero Banner -->
+<section class="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-surface-container-low via-surface to-tertiary-fixed/30 border border-outline-variant p-5 transition-all">
+<div class="relative z-10 flex flex-col justify-between h-full max-w-[68%]">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-mint-accent text-mint-text text-label-sm font-label-sm w-fit mb-2.5">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text animate-pulse"></span>
+          专注节奏 · 晨间打卡
+        </div>
+<h1 class="text-headline-sm font-headline-sm text-on-surface tracking-tight leading-snug">每天一点，<br/>积少成多</h1>
+<p class="text-label-md font-label-md text-on-surface-variant mt-1.5 leading-relaxed">把复杂的知识，变成清晰的进步</p>
+<div class="pt-4">
+<button class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-lg font-label-lg px-5 py-2.5 rounded-full hover:opacity-95 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+<span>继续学习</span>
+</button>
+</div>
+</div>
+<!-- Vector/Geometric Soft Illustration Asset -->
+<div class="absolute right-0 bottom-0 top-0 w-2/5 flex items-end justify-center pointer-events-none pr-3 pb-2">
+<div class="relative w-28 h-28">
+<div class="absolute inset-0 rounded-full bg-secondary-container/40 blur-lg transform translate-x-2 translate-y-2"></div>
+<svg class="w-full h-full relative z-10 drop-shadow-sm" fill="none" viewbox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="60" fill="#EDEFFF" r="48"></circle>
+<path d="M42 78C42 66.9543 50.9543 58 62 58H78V82C78 86.4183 74.4183 90 70 90H54C47.3726 90 42 84.6274 42 78Z" fill="#6269C8" fill-opacity="0.9"></path>
+<rect fill="#FBF8FF" height="42" rx="8" stroke="#4950AD" stroke-width="2.5" width="34" x="52" y="32"></rect>
+<path d="M60 44H76M60 52H72M60 60H68" stroke="#7C8298" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="86" cy="40" fill="#E6F3EB" r="10"></circle>
+<path d="M82 40L85 43L91 37" stroke="#216C4B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<circle cx="38" cy="44" fill="#F5DED4" r="6"></circle>
+</svg>
+</div>
+</div>
+</section>
+<!-- 2. 今日计划卡片 -->
+<section class="bg-surface rounded-[16px] border border-outline-variant p-4">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">track_changes</span>
+</div>
+<div>
+<h2 class="text-title-sm font-title-sm text-on-surface">今日计划进度</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">目标 20 题 / 天</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-headline-sm font-headline-sm text-primary">
+            12 <span class="text-title-sm font-title-sm text-on-surface-variant font-normal">/ 20</span>
+</div>
+</div>
+</div>
+<!-- Linear Progress Bar -->
+<div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden p-[1px]">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500 ease-out" style="width: 60%;"></div>
+</div>
+<div class="flex items-center justify-between mt-3 pt-2.5 border-t border-outline-variant/60 text-label-md font-label-md text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary">replay</span>
+<span>待复习 8 题</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline-variant mx-1"></span>
+<span class="text-mint-text font-medium">还有一点点就完成今日目标</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-medium cursor-pointer hover:underline">调整目标</span>
+</div>
+</section>
+<!-- 3. 快速开始 2x2 网格磁贴 (Bento-styled Ergonomic Grid) -->
+<section>
+<div class="flex items-center justify-between mb-3 px-0.5">
+<h2 class="text-title-md font-title-md text-on-surface font-semibold">快速学习通道</h2>
+<span class="text-label-md font-label-md text-on-surface-variant">高频动作</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- 磁贴 1: 开始刷题 -->
+<button class="bg-surface hover:bg-surface-container-low transition-all border border-outline-variant p-4 rounded-[16px] flex flex-col text-left active:scale-[0.98] group">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-primary flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">quiz</span>
+</div>
+<div class="text-title-sm font-title-sm text-on-surface font-semibold">开始刷题</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-0.5 leading-snug">顺序 · 随机 · 章节演练</p>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-primary font-medium">
+<span>即刻开启</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</button>
+<!-- 磁贴 2: 错题复习 -->
+<button class="bg-surface hover:bg-surface-container-low transition-all border border-outline-variant p-4 rounded-[16px] flex flex-col text-left active:scale-[0.98] group">
+<div class="flex items-center justify-between w-full mb-3">
+<div class="w-10 h-10 rounded-xl bg-error-container/50 text-error flex items-center justify-center group-hover:bg-error group-hover:text-on-error transition-colors">
+<span class="material-symbols-outlined text-[22px]">history_edu</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm font-semibold">8 题待练</span>
+</div>
+<div class="text-title-sm font-title-sm text-on-surface font-semibold">错题复习</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-0.5 leading-snug">根据记忆曲线智能推送</p>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-error font-medium">
+<span>开始攻克</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</button>
+<!-- 磁贴 3: 导入题库 -->
+<button class="bg-surface hover:bg-surface-container-low transition-all border border-outline-variant p-4 rounded-[16px] flex flex-col text-left active:scale-[0.98] group">
+<div class="w-10 h-10 rounded-xl bg-mint-accent text-mint-text flex items-center justify-center mb-3 group-hover:bg-mint-text group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">upload_file</span>
+</div>
+<div class="text-title-sm font-title-sm text-on-surface font-semibold">导入题库</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-0.5 leading-snug">智能识别 TXT/Excel/PDF</p>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-mint-text font-medium">
+<span>格式自适应</span>
+<span class="material-symbols-outlined text-[14px]">add</span>
+</div>
+</button>
+<!-- 磁贴 4: 历史记录 -->
+<button class="bg-surface hover:bg-surface-container-low transition-all border border-outline-variant p-4 rounded-[16px] flex flex-col text-left active:scale-[0.98] group">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center mb-3 group-hover:bg-secondary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">restore</span>
+</div>
+<div class="text-title-sm font-title-sm text-on-surface font-semibold">历史记录</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-0.5 leading-snug">回顾做题足迹与解析</p>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-secondary font-medium">
+<span>查看归档</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- 4. 最近使用题库卡片 -->
+<section class="bg-surface rounded-[16px] border border-outline-variant p-4 transition-all hover:border-primary-container/60">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-primary text-label-sm font-label-sm font-medium">最近在学</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">上次学至：第 63 题</span>
+</div>
+<button class="text-primary hover:text-on-primary-fixed-variant text-label-md font-label-md font-semibold flex items-center gap-0.5">
+<span>换一本</span>
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+</button>
+</div>
+<div class="flex items-start gap-3.5">
+<!-- 题库封面微缩拟物块 -->
+<div class="w-12 h-16 rounded-lg bg-gradient-to-b from-primary-container to-primary text-on-primary flex flex-col items-center justify-between p-1.5 shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span class="text-[9px] font-bold text-center leading-tight tracking-tighter opacity-90">铁道</span>
+</div>
+<!-- 题库核心信息 -->
+<div class="flex-1 min-w-0">
+<h3 class="text-title-md font-title-md text-on-surface font-semibold truncate">《铁路运输组织基础》</h3>
+<p class="text-label-md font-label-md text-on-surface-variant mt-0.5 truncate">车站工作 · 车流组织 · 运行图编制</p>
+<div class="flex items-center gap-3 mt-2 text-label-sm font-label-sm text-on-surface-variant">
+<span>总计 186 题</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>已掌握 63 题</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="text-primary font-medium">34%</span>
+</div>
+<!-- 进度微条 -->
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden mt-2">
+<div class="h-full bg-primary rounded-full" style="width: 34%;"></div>
+</div>
+</div>
+</div>
+<!-- 快速跳转按钮 -->
+<div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center justify-end gap-2">
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container-low text-label-md font-label-md transition-all active:scale-95">
+          查看章节
+        </button>
+<button class="px-4 py-1.5 rounded-full bg-secondary-container text-primary hover:bg-primary-container hover:text-on-primary text-label-md font-label-md font-semibold transition-all active:scale-95 flex items-center gap-1">
+<span>继续做题</span>
+<span class="material-symbols-outlined text-[16px]">navigate_next</span>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Components JSON Implementation) -->
+<!-- Context Mapping: Current page is "学习 (Home)" -> 1st index is ACTIVE -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe bg-surface dark:bg-inverse-surface shadow-none border-t-0">
+<!-- 1. 学习 (Active) -->
+<a class="flex flex-col items-center justify-center gap-1 bg-secondary-container dark:bg-primary-container text-primary dark:text-on-primary-container rounded-full px-5 py-1 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-label-md font-label-md font-semibold">学习</span>
+</a>
+<!-- 2. 题库 (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-surface-variant px-5 py-1 hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">auto_stories</span>
+<span class="text-label-md font-label-md">题库</span>
+</a>
+<!-- 3. 复习 (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-surface-variant px-5 py-1 hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">replay</span>
+<span class="text-label-md font-label-md">复习</span>
+</a>
+<!-- 4. 统计 (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-surface-variant px-5 py-1 hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">bar_chart</span>
+<span class="text-label-md font-label-md">统计</span>
+</a>
+</nav>
+</body></html>

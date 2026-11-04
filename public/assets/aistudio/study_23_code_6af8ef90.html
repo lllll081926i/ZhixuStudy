@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知序 Study - 智能导入审查与字段映射全景工作台</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#67574f",
+            "error-container": "#ffdad6",
+            "background": "#F6F7FB",
+            "on-error-container": "#93000a",
+            "mint-text": "#216C4B",
+            "surface-container": "#ececff",
+            "surface": "#FFFFFF",
+            "secondary-fixed": "#e1e0f8",
+            "on-primary-fixed-variant": "#353c99",
+            "secondary-container": "#e1e0f8",
+            "surface-container-highest": "#dee1fb",
+            "outline": "#767683",
+            "surface-container-low": "#f3f2ff",
+            "surface-container-high": "#e4e7ff",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#626377",
+            "surface-bright": "#fbf8ff",
+            "on-surface-variant": "#464652",
+            "secondary": "#5c5d71",
+            "peach-text": "#8F4829",
+            "on-secondary": "#ffffff",
+            "primary-container": "#6269c8",
+            "inverse-surface": "#2b2f43",
+            "on-tertiary-fixed": "#251913",
+            "surface-tint": "#4e55b2",
+            "on-primary-fixed": "#00016d",
+            "outline-variant": "#E3E5EE",
+            "tertiary-container": "#806f67",
+            "on-tertiary-container": "#fff8f5",
+            "surface-variant": "#dee1fb",
+            "surface-dim": "#d6d8f2",
+            "on-secondary-fixed-variant": "#444558",
+            "inverse-on-surface": "#efefff",
+            "inverse-primary": "#bec2ff",
+            "primary-fixed": "#e0e0ff",
+            "primary-fixed-dim": "#bec2ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed": "#191a2b",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-tertiary-fixed-variant": "#52443d",
+            "on-primary-container": "#fbf7ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#161b2d",
+            "on-surface": "#161b2d",
+            "primary": "#4950ad",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#f5ded4",
+            "mint-accent": "#E6F3EB",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed-dim": "#d8c2b9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #DEE1FB;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #767683;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface h-full flex overflow-hidden antialiased select-none font-body-md text-body-md">
+<!-- ================= ADAPTIVE NAVIGATION RAIL (Tablet & Foldable ≥600dp) ================= -->
+<aside class="w-20 bg-surface flex flex-col items-center py-5 shrink-0 z-40 justify-between shadow-[1px_0_0_0_#E3E5EE]">
+<div class="flex flex-col items-center gap-7 w-full">
+<!-- App Brand Symbol -->
+<div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-primary font-bold shadow-sm ring-1 ring-outline-variant/50">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<!-- Navigation Destinations (Consistent with shared items: 学习, 题库, 复习, 统计) -->
+<nav class="flex flex-col items-center gap-4 w-full px-2">
+<!-- 学习 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-2xl p-2 w-full transition-all group" href="javascript:void(0)">
+<span class="material-symbols-outlined group-hover:text-primary">school</span>
+<span class="font-label-sm text-label-sm">学习</span>
+</a>
+<!-- 题库 (Active Navigation: Current Workspace Sub-Destination) -->
+<a class="flex flex-col items-center justify-center gap-1 bg-secondary-container text-primary rounded-2xl p-2 w-full transition-all group font-title-sm" href="javascript:void(0)">
+<div class="w-10 h-7 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold">题库</span>
+</a>
+<!-- 复习 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-2xl p-2 w-full transition-all group" href="javascript:void(0)">
+<span class="material-symbols-outlined group-hover:text-primary">replay</span>
+<span class="font-label-sm text-label-sm">复习</span>
+</a>
+<!-- 统计 -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container rounded-2xl p-2 w-full transition-all group" href="javascript:void(0)">
+<span class="material-symbols-outlined group-hover:text-primary">bar_chart</span>
+<span class="font-label-sm text-label-sm">统计</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Utility Pin -->
+<div class="flex flex-col items-center gap-3">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors" title="工作区设置">
+<span class="material-symbols-outlined">tune</span>
+</button>
+<div class="w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary font-bold text-xs">
+        ZX
+      </div>
+</div>
+</aside>
+<!-- ================= MAIN WORKSPACE CANVAS ================= -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+<!-- Top Workflow Stepper & Global Command Header -->
+<header class="bg-surface shrink-0 z-30 px-6 py-3 flex items-center justify-between shadow-[0_1px_0_0_#E3E5EE]">
+<div class="flex items-center gap-4">
+<button class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-container text-on-surface-variant transition-colors" title="返回题库">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-title-lg text-title-lg text-on-surface font-bold tracking-tight">智能导入审查与字段映射</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm border border-outline-variant/60">
+<span class="material-symbols-outlined text-[14px]">tune</span> 批量校验模式
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">对账 Excel 结构化试题库，精准辨析差异项并对齐教学知识体系</p>
+</div>
+</div>
+<!-- 4-Step Process Bar (宽屏四步流合并视图) -->
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/70 gap-3">
+<!-- Step 1 (Done) -->
+<div class="flex items-center gap-2 text-mint-text">
+<span class="w-5 h-5 rounded-full bg-mint-accent flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-md text-label-md font-medium">01 选择文件</span>
+</div>
+<span class="w-4 h-[1.5px] bg-outline-variant"></span>
+<!-- Step 2 (Done) -->
+<div class="flex items-center gap-2 text-mint-text">
+<span class="w-5 h-5 rounded-full bg-mint-accent flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-md text-label-md font-medium">02 识别与字段映射</span>
+</div>
+<span class="w-4 h-[1.5px] bg-primary"></span>
+<!-- Step 3 (Active) -->
+<div class="flex items-center gap-2 text-primary">
+<span class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[11px] shadow-sm">
+            03
+          </span>
+<span class="font-label-md text-label-md font-bold">预览与审查</span>
+</div>
+<span class="w-4 h-[1.5px] bg-outline-variant"></span>
+<!-- Step 4 (Upcoming) -->
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-medium text-[11px]">
+            04
+          </span>
+<span class="font-label-md text-label-md">导入完成</span>
+</div>
+</div>
+<!-- Quick Action Utility Icons -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-on-surface-variant hover:bg-surface-container font-label-md text-label-md transition-all">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>规则指引</span>
+</button>
+<button class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-surface-container text-on-surface-variant transition-colors" title="快速全屏视图">
+<span class="material-symbols-outlined text-[20px]">fullscreen</span>
+</button>
+</div>
+</header>
+<!-- ================= DUAL-PANE SPLIT WORKBENCH ================= -->
+<main class="flex-1 flex overflow-hidden">
+<!-- ================= LEFT VIEWPORT: 380px 文件源与规则配置侧栏 ================= -->
+<aside class="w-[380px] bg-surface flex flex-col shrink-0 overflow-y-auto custom-scrollbar border-r border-outline-variant">
+<div class="p-5 flex flex-col gap-6">
+<!-- 1. Source Document Card -->
+<div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">解析源文件</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-mint-accent text-mint-text font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text"></span>
+                已挂载
+              </span>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-primary shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">table_chart</span>
+</div>
+<div class="min-w-0 flex-1">
+<div class="font-title-sm text-title-sm text-on-surface truncate font-bold" title="2026铁路运输模拟题.xlsx">
+                  2026铁路运输模拟题.xlsx
+                </div>
+<div class="flex items-center gap-2 mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>84 行数据</span>
+<span>•</span>
+<span>1.42 MB</span>
+<span>•</span>
+<span>Sheet1</span>
+</div>
+</div>
+</div>
+<!-- Parameters Grid -->
+<div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-outline-variant/70">
+<div class="bg-surface px-3 py-2 rounded-xl border border-outline-variant">
+<div class="text-on-surface-variant font-label-sm text-label-sm">当前工作表</div>
+<div class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between mt-0.5">
+<span>Sheet1 (默认)</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="bg-surface px-3 py-2 rounded-xl border border-outline-variant">
+<div class="text-on-surface-variant font-label-sm text-label-sm">有效起始数据行</div>
+<div class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between mt-0.5">
+<span>第 2 行 (表头第1行)</span>
+<span class="material-symbols-outlined text-[16px] text-mint-text">verified</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. Field Mapping Checklist (All Checked Green) -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm font-bold text-on-surface">字段智能映射清单</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-semibold">5 / 5</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:underline">重新检测</button>
+</div>
+<div class="space-y-2 bg-surface p-2.5 rounded-2xl border border-outline-variant">
+<!-- Item 1 -->
+<div class="flex items-center justify-between px-3 py-2 rounded-xl bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">题干</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">题目内容</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-bold">100% 匹配</span>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between px-3 py-2 rounded-xl bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">题型</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">题目类型</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-bold">标准枚举</span>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center justify-between px-3 py-2 rounded-xl bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">选项</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">选项 A ~ D</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-bold">自动拆分</span>
+</div>
+<!-- Item 4 -->
+<div class="flex items-center justify-between px-3 py-2 rounded-xl bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">答案</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">参考答案</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-bold">清洗字母</span>
+</div>
+<!-- Item 5 -->
+<div class="flex items-center justify-between px-3 py-2 rounded-xl bg-surface-container-low/50">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-mint-accent text-mint-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">解析</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">解析说明</span>
+</div>
+<span class="font-label-sm text-label-sm text-mint-text font-bold">Markdown 格式</span>
+</div>
+</div>
+</div>
+<!-- 3. Pre-Processing Rule Toggles -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="font-title-sm text-title-sm font-bold text-on-surface">预处理规则开关矩阵</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 项生效</span>
+</div>
+<div class="space-y-2.5">
+<!-- Switch Item 1 -->
+<label class="flex items-center justify-between p-3 rounded-2xl bg-surface hover:bg-surface-container-low border border-outline-variant cursor-pointer transition-colors">
+<div>
+<div class="font-title-sm text-title-sm text-on-surface font-medium">去除题首序号</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">例如自动清除 "1."、"12、" 或 "(1)"</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</label>
+<!-- Switch Item 2 -->
+<label class="flex items-center justify-between p-3 rounded-2xl bg-surface hover:bg-surface-container-low border border-outline-variant cursor-pointer transition-colors">
+<div>
+<div class="font-title-sm text-title-sm text-on-surface font-medium">答案大写标准化</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">强制转换 a/b/c 为标准 A/B/C</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</label>
+<!-- Switch Item 3 -->
+<label class="flex items-center justify-between p-3 rounded-2xl bg-surface hover:bg-surface-container-low border border-outline-variant cursor-pointer transition-colors">
+<div>
+<div class="font-title-sm text-title-sm text-on-surface font-medium">多选题自动推断</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">根据多字母答案智能赋予定型标签</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</label>
+<!-- Switch Item 4 -->
+<label class="flex items-center justify-between p-3 rounded-2xl bg-surface hover:bg-surface-container-low border border-outline-variant cursor-pointer transition-colors">
+<div>
+<div class="font-title-sm text-title-sm text-on-surface font-medium">合并异常断行与空白符</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">清除题干中 Excel 单元格内非必要软换行</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- 4. Global Deduplication Strategy Select -->
+<div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant mb-4">
+<label class="block font-title-sm text-title-sm font-bold text-on-surface mb-1.5" for="dedup-policy">
+              全局去重与冲突判定策略
+            </label>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3">当遇到题库中相似度 ≥95% 的已存在原题时触发</p>
+<div class="relative">
+<select class="w-full bg-surface border border-outline-variant rounded-xl py-2.5 px-3 pr-10 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer" id="dedup-policy">
+<option selected="" value="replace">人工审查判定 (推荐：发生冲突进入待审查池)</option>
+<option value="skip">跳过重复题目 (保留已有版本不变)</option>
+<option value="overwrite">直接替换旧题 (全部更新为导入 Excel 内容)</option>
+<option value="fork">保留新旧两个版本 (打上“版本B”副本标记)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none">unfold_more</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ================= RIGHT VIEWPORT: 待审查题目队列与双源差异比对 ================= -->
+<section class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden relative">
+<!-- Top Overview Metric KPI Row -->
+<div class="p-6 pb-2 shrink-0">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+<!-- Metric 1 -->
+<div class="bg-surface p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">总识别解析</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">84</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">道</span>
+</div>
+<div class="font-label-sm text-label-sm text-primary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">checklist</span>
+                100% 格式读取成功
+              </div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">可直接无损入库</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-mint-text">76</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">道</span>
+</div>
+<div class="font-label-sm text-label-sm text-mint-text mt-2 flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+                无需干预 (占比 90.5%)
+              </div>
+</div>
+<!-- Metric 3 (Critical Alert) -->
+<div class="bg-surface p-4 rounded-2xl border border-error-container shadow-sm flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-peach-text font-bold">参考答案冲突</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-error">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">道</span>
+</div>
+<div class="font-label-sm text-label-sm text-error mt-2 flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                必须人工裁定
+              </div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">与题库完全重复</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-secondary">4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">道</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+                默认策略过滤
+              </div>
+</div>
+<!-- Metric 5 -->
+<div class="bg-surface p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">字段校验异常</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">道</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning_amber</span>
+                缺失解析/选项不齐
+              </div>
+</div>
+</div>
+<!-- Queue Segment Filter Tabs -->
+<div class="flex items-center justify-between mt-5 border-b border-outline-variant">
+<div class="flex items-center gap-1">
+<button class="px-4 py-2.5 font-title-sm text-title-sm text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">
+                全部题目 (84)
+              </button>
+<button class="px-4 py-2.5 font-title-sm text-title-sm text-primary font-bold border-b-2 border-primary flex items-center gap-2">
+<span>待修正与冲突审查</span>
+<span class="w-5 h-5 rounded-full bg-error text-on-error font-label-sm text-label-sm flex items-center justify-center font-bold">2</span>
+</button>
+<button class="px-4 py-2.5 font-title-sm text-title-sm text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">
+                重复冲突题 (6)
+              </button>
+<button class="px-4 py-2.5 font-title-sm text-title-sm text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">
+                可直接导入 (76)
+              </button>
+</div>
+<div class="flex items-center gap-2 pb-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-[18px] text-outline">search</span>
+<input class="pl-8 pr-3 py-1 bg-surface border border-outline-variant rounded-full text-body-sm font-body-sm w-48 focus:w-64 transition-all focus:outline-none focus:border-primary" placeholder="快速筛选题干关键字..." type="text"/>
+</div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Scrollable Cards Canvas Area (Bottom Padded for Fixed Bar) -->
+<div class="flex-1 overflow-y-auto p-6 pt-3 pb-28 custom-scrollbar space-y-5">
+<!-- Notice Banner -->
+<div class="bg-surface-container-high/60 border border-outline-variant/90 rounded-2xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[24px]">difference</span>
+<div>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">当前正在审查：第 1 / 2 题差异对账项</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm block">请核对题库现存历史题目与本次待导入 Excel 试题在【参考答案】与【知识解析】维度的歧义</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-full bg-surface border border-outline-variant font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors">上一个冲突</button>
+<button class="px-3 py-1.5 rounded-full bg-surface border border-outline-variant font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors">下一个冲突</button>
+</div>
+</div>
+<!-- ================= CORE COMPONENT: HIGH-FIDELITY DUAL-SOURCE COMPARISON CARD ================= -->
+<div class="bg-surface rounded-2xl border border-outline-variant shadow-sm overflow-hidden">
+<!-- Card Header Meta Strip -->
+<div class="px-6 py-4 bg-surface-container-low/60 border-b border-outline-variant flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-primary font-bold flex items-center justify-center text-sm">
+                  #38
+                </span>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-surface font-label-md text-label-md font-bold text-primary border border-outline-variant">
+                  单项选择题
+                </span>
+<span class="font-label-md text-label-md text-on-surface-variant">
+                  源文件定位: 行 39 (Sheet1!A39:F39)
+                </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFE8DE] text-peach-text font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                  答案歧义冲突 (原答: B / 新答: C)
+                </span>
+</div>
+<!-- Quick Decision Status Indicator -->
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">当前处理决策:</span>
+<span class="px-2.5 py-1 rounded-lg bg-surface-container font-title-sm text-title-sm font-bold text-primary border border-outline-variant/60">
+                  待人工定夺
+                </span>
+</div>
+</div>
+<!-- Card Body: Asymmetrical Dual Viewport Comparison -->
+<div class="p-6">
+<!-- Topic Title Statement (Unified or matched) -->
+<div class="mb-5 pb-4 border-b border-outline-variant">
+<div class="text-on-surface-variant font-label-sm text-label-sm uppercase mb-1">比对题干内容 (语义相似度: 99.4%)</div>
+<div class="font-title-md text-title-md font-bold text-on-surface leading-relaxed">
+                  根据《铁路机车运用安全规程》第 142 条规定，当列车运行在遇突发极端暴雨导致路基积水超过轨面时，区间司机首要操作程序应当为？
+                </div>
+</div>
+<!-- Grid: Left (Existing in DB) vs Right (New Incoming from Excel) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- LEFT COLUMN: 已有题库版本 (DB Snapshot) -->
+<div class="bg-surface-container-low/30 rounded-2xl p-5 border border-outline-variant flex flex-col justify-between relative">
+<div class="absolute top-4 right-4">
+<span class="px-2.5 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant font-medium">
+                      知序题库历史存档 (ID: #DB-88204)
+                    </span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline">storage</span>
+<h4 class="font-title-sm text-title-sm font-bold text-on-surface">已有题库版本</h4>
+</div>
+<!-- Options Stack -->
+<div class="space-y-2 mb-5">
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">A.</span> 立即降弓惰力滑行并向上行车调度中心口头通报
+                      </div>
+<!-- Conflicted Option B (Marked Old Answer) -->
+<div class="p-3 rounded-xl bg-[#FFE8DE]/40 border-2 border-peach-text/40 font-body-sm text-body-sm text-on-surface relative">
+<span class="font-bold text-peach-text mr-2">B.</span> 立即采取常用制动并在积水前停车，严禁涉水冒进
+                        <span class="absolute right-3 top-3 inline-flex items-center gap-1 font-label-sm text-label-sm text-peach-text font-bold">
+<span class="material-symbols-outlined text-[15px]">flag</span> 旧版标记参考答案
+                        </span>
+</div>
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">C.</span> 立即减速至 20km/h 试探性通过并开启前照大灯
+                      </div>
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">D.</span> 维持原运行图既定速度，鸣笛并向工务段报告
+                      </div>
+</div>
+<!-- Answer & Explanation in DB -->
+<div class="bg-surface p-4 rounded-xl border border-outline-variant space-y-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">录入参考答案:</span>
+<span class="font-title-sm text-title-sm font-bold px-2 py-0.5 rounded bg-surface-container text-on-surface">B</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium block mb-1">存档解析内容:</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-normal">
+                          依据旧版 2018 安全规程条文第 89 条，遇路基过水严重时必须立即制动停车报备。
+                        </p>
+</div>
+</div>
+</div>
+<!-- Column Footer Footnote -->
+<div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>入库时间: 2023-09-14</span>
+<span>作答统计: 已被练习 1,420 次</span>
+</div>
+</div>
+<!-- RIGHT COLUMN: 待导入 Excel 新题 (Excel Candidate) -->
+<div class="bg-surface rounded-2xl p-5 border-2 border-primary/40 shadow-sm flex flex-col justify-between relative ring-2 ring-primary/10">
+<div class="absolute top-4 right-4">
+<span class="px-2.5 py-1 rounded-md bg-secondary-container text-primary font-label-sm text-label-sm border border-primary/20 font-bold">
+                      Excel 待审新版本 (行 39)
+                    </span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">cloud_download</span>
+<h4 class="font-title-sm text-title-sm font-bold text-primary">新导入待审版本 (新修订规程)</h4>
+</div>
+<!-- Options Stack -->
+<div class="space-y-2 mb-5">
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">A.</span> 立即降弓惰力滑行并向上行车调度中心口头通报
+                      </div>
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">B.</span> 立即采取常用制动并在积水前停车，严禁涉水冒进
+                      </div>
+<!-- Conflicted Option C (New Answer Highlighted Mint) -->
+<div class="p-3 rounded-xl bg-mint-accent border-2 border-mint-text/60 font-body-sm text-body-sm text-on-surface relative">
+<span class="font-bold text-mint-text mr-2">C.</span> 立即采取非常制动停车；若积水未漫过轨面但影响路基，按调度命令降速
+                        <span class="absolute right-3 top-3 inline-flex items-center gap-1 font-label-sm text-label-sm text-mint-text font-bold">
+<span class="material-symbols-outlined text-[15px]">check_circle</span> Excel 新指定答案: C
+                        </span>
+</div>
+<div class="p-3 rounded-xl bg-surface border border-outline-variant font-body-sm text-body-sm text-on-surface">
+<span class="font-bold text-on-surface-variant mr-2">D.</span> 维持原运行图既定速度，鸣笛并向工务段报告
+                      </div>
+</div>
+<!-- Answer & Explanation in New Excel -->
+<div class="bg-surface-container-low/70 p-4 rounded-xl border border-primary/30 space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">新录参考答案:</span>
+<span class="font-title-sm text-title-sm font-bold px-2.5 py-0.5 rounded bg-mint-accent text-mint-text">C (答案变更为 C)</span>
+</div>
+<span class="text-[11px] font-semibold text-primary">新规依据</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium block mb-1">新录解析说明 (有实质增补):</span>
+<p class="font-body-sm text-body-sm text-on-surface leading-normal">
+<mark class="bg-mint-accent/80 text-mint-text px-1 rounded">2026年最新修订案特别指出：</mark>对于突发山洪引发水漫钢轨情形，原“常用制动”调整为“第一指令非常制动停运”。选项 C 准确对应新修条目第 142 款细则。
+                        </p>
+</div>
+</div>
+</div>
+<!-- Resolution Action Command Bar on Card -->
+<div class="mt-5 pt-4 border-t border-outline-variant flex flex-wrap items-center justify-between gap-3">
+<button class="px-3.5 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+                      就地编辑并修正
+                    </button>
+<div class="flex items-center gap-2">
+<button class="px-3.5 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md transition-colors">
+                        保留两题独立 (另存为新题)
+                      </button>
+<button class="px-4 py-2 rounded-full bg-primary hover:bg-primary/95 text-on-primary font-label-md text-label-md font-bold flex items-center gap-1 shadow-sm transition-all">
+<span class="material-symbols-outlined text-[16px]">done_all</span>
+                        以新题为准 (覆盖旧版本)
+                      </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Comparison Item Preview (2nd Conflicted Record) -->
+<div class="bg-surface rounded-2xl border border-outline-variant/80 p-5 shadow-sm opacity-90 hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant font-bold flex items-center justify-center text-sm">
+                  #72
+                </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container-low font-label-md text-label-md font-medium border border-outline-variant">
+                  多项选择题
+                </span>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">CTCS-3级列控车载设备工作模式识别异常</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+                  缺失选项 E 描述
+                </span>
+</div>
+<button class="text-primary font-label-md text-label-md font-bold hover:underline flex items-center gap-1">
+                展开审查比对 <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= BOTTOM FIXED BAR: 安全操作与批量入库 ================= -->
+<footer class="absolute bottom-0 left-0 w-full bg-surface py-3.5 px-6 border-t border-outline-variant flex items-center justify-between z-30 shadow-[0_-4px_16px_rgba(0,0,0,0.03)]">
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">undo</span>
+              上一步：修改映射规则
+            </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+              导出审查比对报告 (.xlsx)
+            </button>
+</div>
+<!-- Summary Status Indicator -->
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<div class="font-title-sm text-title-sm font-bold text-on-surface">共 84 题待处理</div>
+<div class="font-body-sm text-body-sm text-mint-text">76 题就绪 • 2 题待裁定 • 6 题过滤</div>
+</div>
+<button class="h-11 px-7 rounded-full bg-primary-container hover:opacity-95 text-on-primary-container font-label-lg text-label-lg font-bold flex items-center gap-2 shadow-[0px_6px_16px_0px_rgba(98,105,200,0.28)] transition-all">
+<span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+              确认批量导入入库 (76题)
+            </button>
+</div>
+</footer>
+</section>
+</main>
+</div>
+</body></html>

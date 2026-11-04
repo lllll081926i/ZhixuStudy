@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>知序 Study - 刷题训练</title>
+<!-- Material Symbols Outlined font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Plus Jakarta Sans typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#e1e0f8",
+            "primary-fixed-dim": "#bec2ff",
+            "on-error-container": "#93000a",
+            "mint-accent": "#E6F3EB",
+            "on-primary-container": "#fbf7ff",
+            "primary": "#4950ad",
+            "on-secondary-fixed-variant": "#444558",
+            "tertiary-container": "#806f67",
+            "primary-container": "#6269c8",
+            "surface-container-high": "#e4e7ff",
+            "on-surface-variant": "#464652",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#f5ded4",
+            "inverse-surface": "#2b2f43",
+            "on-primary-fixed-variant": "#353c99",
+            "surface-variant": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#251913",
+            "surface-tint": "#4e55b2",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#161b2d",
+            "error": "#ba1a1a",
+            "mint-text": "#216C4B",
+            "background": "#F6F7FB",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c7c5d4",
+            "peach-text": "#8F4829",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "primary-fixed": "#e0e0ff",
+            "surface": "#FFFFFF",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#bec2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-secondary-container": "#626377",
+            "on-primary-fixed": "#00016d",
+            "on-tertiary-container": "#fff8f5",
+            "on-error": "#ffffff",
+            "secondary-container": "#e1e0f8",
+            "surface-container-highest": "#dee1fb",
+            "tertiary": "#67574f",
+            "secondary": "#5c5d71",
+            "outline": "#767683",
+            "surface-dim": "#d6d8f2",
+            "on-tertiary-fixed-variant": "#52443d",
+            "secondary-fixed-dim": "#c5c4dc",
+            "inverse-on-surface": "#efefff",
+            "surface-container-low": "#f3f2ff",
+            "on-background": "#161b2d",
+            "surface-container": "#ececff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-border {
+      border: 1px solid #E3E5EE;
+    }
+    .hover-subtle:hover {
+      background-color: #F8F9FD;
+      border-color: #C7C5D4;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md text-body-md antialiased selection:bg-secondary-container selection:text-primary">
+<!-- Top App Bar (Task-Focused / Linear Practice Mode) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface">
+<!-- Left: Back Button & Context Identity -->
+<div class="flex items-center gap-3">
+<button aria-label="返回上一级" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div class="flex items-baseline gap-2">
+<span class="font-title-lg text-title-lg text-on-surface tracking-tight font-bold">5</span>
+<span class="font-label-md text-label-md text-outline">/ 20 题</span>
+</div>
+</div>
+<!-- Center/Right Action Toolbar: Timer, Bookmark & Answer Sheet -->
+<div class="flex items-center gap-1.5 sm:gap-2">
+<!-- Mini Timer Chip -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+<span class="tracking-wider tabular-nums font-medium">01:15</span>
+</div>
+<!-- Bookmark (收藏) -->
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" title="收藏此题" type="button">
+<span class="material-symbols-outlined text-[22px]">bookmark_border</span>
+</button>
+<!-- Answer Sheet (答题卡) -->
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" title="答题卡" type="button">
+<span class="material-symbols-outlined text-[22px]">grid_view</span>
+</button>
+</div>
+</header>
+<!-- Progress Bar (Thin serene accent line) -->
+<div class="fixed top-16 left-0 w-full h-[3px] bg-surface-variant/40 z-40">
+<div class="h-full bg-primary-container transition-all duration-300" style="width: 25%;"></div>
+</div>
+<!-- Main Question Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-4 pt-24 pb-28 flex flex-col justify-start">
+<!-- Meta Tags & Classification Bar -->
+<div class="flex flex-wrap items-center gap-2 mb-4">
+<!-- Category Tag -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface custom-border text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[15px] text-primary">train</span>
+<span class="">车流组织与调度</span>
+</div>
+<!-- Question Type Badge -->
+<div class="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary-container text-primary font-label-md text-label-md font-semibold">
+        判断题
+      </div>
+<!-- Difficulty Chip -->
+<div class="inline-flex items-center px-2.5 py-1 rounded-full bg-mint-accent text-mint-text font-label-md text-label-md font-medium">
+        简单
+      </div>
+</div>
+<!-- Question Stem Card (Tier 1 Surface) -->
+<section class="bg-surface rounded-xl custom-border p-5 sm:p-6 mb-5 relative transition-shadow">
+<div class="flex items-start gap-3">
+<span class="mt-0.5 inline-flex items-center justify-center w-6 h-6 rounded-lg bg-surface-container text-primary font-title-sm text-title-sm shrink-0 font-bold">
+          5
+        </span>
+<div class="space-y-3">
+<p class="font-title-lg text-title-lg text-on-surface leading-relaxed tracking-normal font-semibold">
+            铁路车流组织中，重车流与空车流必须严格按照列车编组计划组织挂运，各技术站无权擅自变更运行经路。
+          </p>
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-outline pt-1">
+<span class="">分值：2.0 分</span>
+<span class="">•</span>
+<span class="">单项判断</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Judgment Options Zone (Initial Neutral Unselected State) -->
+<section class="mb-5">
+<h2 class="sr-only">判断题选项</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<!-- Option A: 正确 (True) - Neutral Idle State -->
+<label class="group relative flex items-center justify-between p-4 sm:p-5 bg-surface rounded-xl custom-border cursor-pointer transition-all duration-150 hover-subtle active:scale-[0.98]">
+<input class="sr-only peer" name="judgment_question_5" type="radio" value="TRUE">
+<div class="flex items-center gap-3.5">
+<!-- Neutral Option Identifier Letter -->
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-title-sm text-title-sm font-semibold group-hover:bg-secondary-container group-hover:text-primary transition-colors">
+              A
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">正确</span>
+<span class="font-label-sm text-label-sm text-outline">True</span>
+</div>
+</div>
+<!-- Neutral Outline Icon Container -->
+<div class="w-9 h-9 rounded-full custom-border flex items-center justify-center text-outline group-hover:text-primary group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+</label>
+<!-- Option B: 错误 (False) - Neutral Idle State -->
+<label class="group relative flex items-center justify-between p-4 sm:p-5 bg-surface rounded-xl custom-border cursor-pointer transition-all duration-150 hover-subtle active:scale-[0.98]">
+<input class="sr-only peer" name="judgment_question_5" type="radio" value="FALSE">
+<div class="flex items-center gap-3.5">
+<!-- Neutral Option Identifier Letter -->
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-title-sm text-title-sm font-semibold group-hover:bg-secondary-container group-hover:text-primary transition-colors">
+              B
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">错误</span>
+<span class="font-label-sm text-label-sm text-outline">False</span>
+</div>
+</div>
+<!-- Neutral Outline Icon Container -->
+<div class="w-9 h-9 rounded-full custom-border flex items-center justify-center text-outline group-hover:text-primary group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Contextual Guidance / Serene Prompt Message -->
+
+</main>
+<!-- Sticky Practice Bottom Operational Bar (Task-Focused / Linear Flow) -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface z-40 py-3 px-4 shadow-[0_-4px_16px_rgba(36,40,59,0.04)]">
+<div class="max-w-2xl mx-auto flex items-center justify-between gap-4">
+<!-- Left: Previous Question Button (Secondary Outlined / Tonal) -->
+<button class="h-12 px-5 rounded-full custom-border bg-surface text-on-surface font-label-lg text-label-lg flex items-center gap-1.5 hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+<span class="">上一题</span>
+</button>
+<!-- Center Utilities (Quick Skip or Scratchpad toggle) -->
+<div class="flex items-center gap-2">
+<button class="h-12 px-3 rounded-full text-on-surface-variant font-label-md text-label-md flex items-center gap-1 hover:bg-surface-container active:scale-95 transition-all" title="标记为待复查" type="button">
+<span class="material-symbols-outlined text-[18px]">flag</span>
+<span class="hidden sm:inline">标记待查</span>
+</button>
+</div>
+<!-- Right: Submit Answer Button (Primary Container Pill) -->
+<button class="h-12 px-7 rounded-full bg-primary-container text-on-primary-container font-label-lg text-label-lg flex items-center gap-1.5 shadow-[0_4px_12px_rgba(98,105,200,0.24)] hover:opacity-95 active:scale-95 transition-all" type="button">
+<span class="">提交答案</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</footer>
+
+
+</body></html>

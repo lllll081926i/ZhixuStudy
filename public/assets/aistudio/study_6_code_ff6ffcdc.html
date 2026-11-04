@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>知序 Study - 编辑题目</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#e1e0f8",
+            "primary-container": "#6269c8",
+            "secondary": "#5c5d71",
+            "tertiary-container": "#806f67",
+            "tertiary-fixed-dim": "#d8c2b9",
+            "outline-variant": "#c7c5d4",
+            "surface-container-high": "#e4e7ff",
+            "primary-fixed": "#e0e0ff",
+            "on-secondary-container": "#626377",
+            "on-background": "#161b2d",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#ececff",
+            "tertiary-fixed": "#f5ded4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "peach-text": "#8F4829",
+            "on-surface": "#161b2d",
+            "on-primary-fixed-variant": "#353c99",
+            "primary-fixed-dim": "#bec2ff",
+            "inverse-on-surface": "#efefff",
+            "background": "#F6F7FB",
+            "tertiary": "#67574f",
+            "inverse-primary": "#bec2ff",
+            "mint-text": "#216C4B",
+            "outline": "#767683",
+            "on-tertiary-fixed": "#251913",
+            "surface-tint": "#4e55b2",
+            "on-tertiary-container": "#fff8f5",
+            "surface": "#FFFFFF",
+            "surface-dim": "#d6d8f2",
+            "error": "#ba1a1a",
+            "mint-accent": "#E6F3EB",
+            "surface-container-low": "#f3f2ff",
+            "surface-variant": "#dee1fb",
+            "on-secondary-fixed-variant": "#444558",
+            "on-primary-fixed": "#00016d",
+            "surface-bright": "#fbf8ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-surface-variant": "#464652",
+            "on-tertiary-fixed-variant": "#52443d",
+            "surface-container-highest": "#dee1fb",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#e1e0f8",
+            "secondary-fixed-dim": "#c5c4dc",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "inverse-surface": "#2b2f43",
+            "primary": "#4950ad",
+            "on-primary-container": "#fbf7ff",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "display-md": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "body-lg": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "label-lg": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "display-lg": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "label-sm": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "body-sm": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "title-md": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "body-md": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "title-lg": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "label-md": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"],
+            "title-sm": ["Plus Jakarta Sans", "Noto Sans SC", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+      background-color: #F6F7FB;
+      color: #161b2d;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 1rem);
+    }
+    /* Ambient elevation shadows as per Tier 2 & Tier 3 */
+    .shadow-tier2 {
+      box-shadow: 0px 8px 24px -4px rgba(36, 40, 59, 0.08);
+    }
+    .shadow-bloom {
+      box-shadow: 0px 6px 16px 0px rgba(98, 105, 200, 0.28);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex justify-center selection:bg-secondary-container selection:text-primary">
+<!-- Mobile Container Mockup (max-w-md for mobile Android viewport simulation) -->
+<div class="w-full max-w-md bg-background min-h-screen flex flex-col relative pb-32">
+<!-- 1. Top App Bar (Shared Component Style - Task-focused edit sub-page with back action) -->
+<header class="sticky top-0 left-0 w-full z-40 bg-surface flex justify-between items-center px-4 h-16 shadow-tier2">
+<div class="flex items-center gap-3">
+<button aria-label="返回上一页" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-primary text-[24px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-title-lg text-title-lg font-bold text-on-surface tracking-tight">编辑题目</h1>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="">题库：铁路运输组织基础</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="text-primary font-medium">#104</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="查看历史版本与修订记录" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all duration-150" title="历史版本" type="button">
+<span class="material-symbols-outlined text-[22px]">history</span>
+</button>
+<button aria-label="重置更改" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all duration-150" title="重置本题" type="button">
+<span class="material-symbols-outlined text-[22px]">restart_alt</span>
+</button>
+</div>
+</header>
+<!-- Main Form Scrollable Canvas -->
+<main class="flex-1 px-4 py-4 space-y-4">
+<!-- 2. Conflict Traceability Banner (来自审查体检流的来源冲突提示) -->
+
+<!-- 3. Question Metadata & Type Selection -->
+<section class="bg-surface rounded-2xl p-4 border border-outline-variant/30 space-y-4">
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface-variant mb-2">题型选择</label>
+<div class="grid grid-cols-4 gap-2"><button class="h-9 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-surface-container flex items-center justify-center" type="button">
+              单选
+            </button>
+<button class="h-9 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: &quot;FILL&quot; 1;">check_box</span>
+<span class="">多选</span>
+</button>
+<button class="h-9 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-surface-container flex items-center justify-center" type="button">
+              判断
+            </button>
+<button class="h-9 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-surface-container flex items-center justify-center" type="button">
+              填空
+            </button></div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-1">
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface-variant mb-1.5">难度等级</label>
+<div class="flex items-center gap-1.5 bg-surface-container-low p-1 rounded-xl">
+<button class="flex-1 py-1.5 rounded-lg text-center font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface" type="button">简单</button>
+<button class="flex-1 py-1.5 rounded-lg bg-surface text-primary font-label-sm text-label-sm font-bold shadow-sm" type="button">中等</button>
+<button class="flex-1 py-1.5 rounded-lg text-center font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface" type="button">困难</button>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface-variant mb-1.5">所属章节</label>
+<div class="relative">
+<input class="w-full h-[38px] rounded-xl bg-surface-container-low border border-outline-variant/30 text-on-surface font-label-md text-label-md px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface" type="text" value="列车运行图编制">
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md font-bold text-on-surface-variant mb-1.5">关联考点 / 标签</label>
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-medium">
+              #运输组织基础
+              <span class="material-symbols-outlined text-[14px] cursor-pointer hover:opacity-75">close</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-medium">
+              #行车闭塞法
+              <span class="material-symbols-outlined text-[14px] cursor-pointer hover:opacity-75">close</span>
+</span>
+<button class="inline-flex items-center gap-0.5 px-2 py-1 rounded-full border border-dashed border-outline-variant text-on-surface-variant font-label-sm text-label-sm hover:border-primary hover:text-primary" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span class="">添加知识点</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 4. Stem Content Editing Section (题干编辑区) -->
+<section class="bg-surface rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-title-sm text-title-sm font-bold text-on-surface flex items-center gap-1.5">
+<span class="">题干内容</span>
+<span class="text-error font-body-sm">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-on-surface-variant">24 / 500 字</span>
+</div>
+<div class="rounded-xl border border-outline-variant/40 bg-surface-container-low focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<textarea class="w-full bg-transparent border-0 p-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:ring-0 resize-none leading-relaxed" placeholder="请输入题干内容..." rows="3">铁路运输组织中列车运行图的基本作用是什么？</textarea>
+<!-- Rich-text / Formatting Helper Bar -->
+<div class="flex items-center justify-between px-2 py-1.5 border-t border-outline-variant/20 bg-surface/80 rounded-b-xl">
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95" title="加粗" type="button">
+<span class="material-symbols-outlined text-[18px]">format_bold</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95" title="公式/代码" type="button">
+<span class="material-symbols-outlined text-[18px]">functions</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95" title="插入示意图/草图" type="button">
+<span class="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95" title="引用说明" type="button">
+<span class="material-symbols-outlined text-[18px]">format_quote</span>
+</button>
+</div>
+<div class="flex items-center gap-1 border-l border-outline-variant/30 pl-2">
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container" title="撤销" type="button">
+<span class="material-symbols-outlined text-[16px]">undo</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container" title="重做" type="button">
+<span class="material-symbols-outlined text-[16px]">redo</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Options and Standard Answer Section (选项与正确答案配置区) -->
+<section class="bg-surface rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+<div class="flex justify-between items-center"><div class="">
+<h2 class="font-title-sm text-title-sm font-bold text-on-surface">选项配置与标准答案</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">勾选多个正确选项</p>
+</div>
+<span class="shrink-0 px-2.5 py-0.5 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-medium">多选模式</span></div>
+<div class="space-y-2.5 pt-1"><!-- Option A (Correct Answer / Active) -->
+<div class="rounded-xl border-2 border-primary bg-secondary-container/40 p-3 transition-all relative">
+<div class="flex items-center gap-2.5">
+<!-- Checkbox Selection (Checked) -->
+<button aria-label="设为正确答案：A" class="w-7 h-7 rounded-lg bg-primary text-on-primary flex items-center justify-center shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: &quot;FILL&quot; 1;">check_box</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-primary shrink-0">A</span>
+<!-- Option Input -->
+<input class="flex-1 bg-surface border border-outline-variant/40 rounded-lg px-2.5 py-1.5 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary" type="text" value="规定列车在区间和车站的运行时刻">
+<!-- Action Handles -->
+<div class="flex items-center gap-0.5 shrink-0 text-on-surface-variant">
+<button class="w-7 h-7 flex items-center justify-center hover:text-on-surface cursor-grab" title="拖拽排序" type="button">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:text-error" title="删除选项" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="mt-2 pl-9 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm font-semibold text-mint-text bg-mint-accent px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: &quot;FILL&quot; 1;">verified</span>
+                标准基准答案
+              </span>
+</div>
+</div>
+<!-- Option B (Unchecked) -->
+<div class="rounded-xl border border-outline-variant/30 bg-surface p-3 hover:border-outline-variant/80 transition-all">
+<div class="flex items-center gap-2.5">
+<button aria-label="设为正确答案：B" class="w-7 h-7 rounded-lg border-2 border-outline-variant/60 flex items-center justify-center shrink-0 hover:border-primary text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[18px]">check_box_outline_blank</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface-variant shrink-0">B</span>
+<input class="flex-1 bg-surface-container-low border border-transparent rounded-lg px-2.5 py-1.5 font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface focus:border-outline-variant/60" type="text" value="确定旅客票价与客运服务等级">
+<div class="flex items-center gap-0.5 shrink-0 text-on-surface-variant">
+<button class="w-7 h-7 flex items-center justify-center hover:text-on-surface cursor-grab" title="拖拽排序" type="button">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:text-error" title="删除选项" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Option C (Correct Answer / Active) -->
+<div class="rounded-xl border-2 border-primary bg-secondary-container/40 p-3 transition-all relative">
+<div class="flex items-center gap-2.5">
+<!-- Checkbox Selection (Checked) -->
+<button aria-label="设为正确答案：C" class="w-7 h-7 rounded-lg bg-primary text-on-primary flex items-center justify-center shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: &quot;FILL&quot; 1;">check_box</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-primary shrink-0">C</span>
+<input class="flex-1 bg-surface border border-outline-variant/40 rounded-lg px-2.5 py-1.5 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary" type="text" value="协调机车车辆运用与列车行车组织基本技术作业">
+<div class="flex items-center gap-0.5 shrink-0 text-on-surface-variant">
+<button class="w-7 h-7 flex items-center justify-center hover:text-on-surface cursor-grab" title="拖拽排序" type="button">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:text-error" title="删除选项" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="mt-2 pl-9 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm font-semibold text-mint-text bg-mint-accent px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: &quot;FILL&quot; 1;">verified</span>
+                复合标准答案
+              </span>
+</div>
+</div>
+<!-- Option D (Unchecked) -->
+<div class="rounded-xl border border-outline-variant/30 bg-surface p-3 hover:border-outline-variant/80 transition-all">
+<div class="flex items-center gap-2.5">
+<button aria-label="设为正确答案：D" class="w-7 h-7 rounded-lg border-2 border-outline-variant/60 flex items-center justify-center shrink-0 hover:border-primary text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[18px]">check_box_outline_blank</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface-variant shrink-0">D</span>
+<input class="flex-1 bg-surface-container-low border border-transparent rounded-lg px-2.5 py-1.5 font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface focus:border-outline-variant/60" type="text" value="统计铁路线路工程与路基修筑长度">
+<div class="flex items-center gap-0.5 shrink-0 text-on-surface-variant">
+<button class="w-7 h-7 flex items-center justify-center hover:text-on-surface cursor-grab" title="拖拽排序" type="button">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center hover:text-error" title="删除选项" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div></div>
+<!-- Add Option Pill Button -->
+<button class="w-full py-2.5 rounded-xl border border-dashed border-primary/40 bg-surface-container-low text-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 hover:bg-secondary-container/50 active:scale-[0.99] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="">添加新选项 (E)</span>
+</button>
+</section>
+<!-- 6. Authority Analysis & Explanation Section (权威解析与考点精析) -->
+<section class="bg-surface rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">auto_awesome</span>
+<h2 class="font-title-sm text-title-sm font-bold text-on-surface">权威解析与考点精析</h2>
+</div>
+<!-- AI Copilot Chips -->
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 rounded-full bg-secondary-container text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1 hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[14px]">psychology</span>
+<span class="">AI 润色解析</span>
+</button>
+</div>
+</div>
+<div class="rounded-xl border border-outline-variant/40 bg-surface-container-low focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all p-3">
+<textarea class="w-full bg-transparent border-0 p-0 font-body-md text-body-md text-on-surface leading-relaxed focus:ring-0 resize-none" placeholder="输入权威解析、考点辨析及干扰项排除逻辑..." rows="4">本题正确选项为 A、C。运行图是全路组织列车运行的基础，不仅规定区间车站时刻，还作为机车车辆周转与行车闭塞的核心依据。票价属于客运运价政策范畴，工程修筑属工务基建，均非列车运行图的基本职能。</textarea>
+<div class="flex justify-end pt-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">74 / 1000 字</span>
+</div>
+</div>
+<!-- Mnemonic / Quick Memory Card (记忆口诀扩展栏) -->
+<div class="rounded-xl bg-surface-container-high/60 border border-outline-variant/30 p-3 space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">lightbulb</span>
+              记忆口诀 / 考点速记
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">将在学员做题后高亮展示</span>
+</div>
+<input class="w-full h-9 rounded-lg bg-surface border border-outline-variant/30 text-on-surface font-body-md text-body-md px-3 focus:outline-none focus:border-primary" placeholder="输入口诀或精要总结..." type="text" value="一张图管车与线，时刻组织两手全（选A、C）。">
+</div>
+</section>
+<!-- 7. Data Safety & Synchronous Impact Notice (数据保护提示) -->
+
+</main>
+<!-- 8. Fixed Bottom Action Bar (底部常驻操作栏) -->
+<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50 bg-surface/95 backdrop-blur-md px-4 py-3 flex items-center gap-3 shadow-tier2 pb-safe border-t border-outline-variant/10">
+<button class="flex-1 h-12 rounded-full border border-outline-variant/50 bg-surface hover:bg-surface-container text-on-surface font-label-lg text-label-lg font-semibold active:scale-95 transition-all flex items-center justify-center" type="button">
+        放弃更改
+      </button>
+<button class="flex-[1.5] h-12 rounded-full bg-primary-container text-on-primary-container font-label-lg text-label-lg font-bold shadow-bloom active:scale-95 transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">save</span>
+<span class="">保存并更新本题</span>
+</button>
+</footer>
+</div>
+
+
+</body></html>

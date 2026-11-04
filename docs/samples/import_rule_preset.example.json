@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "presetId": "preset-demo-rail",
+  "name": "中文常见题库示例（非用户样本）",
+  "scope": "global",
+  "enabled": true,
+  "mapping": {
+    "stem": "题目",
+    "type": "题型",
+    "answer": "参考答案",
+    "explanation": "解析",
+    "difficulty": "难度",
+    "optionA": "A",
+    "optionB": "B",
+    "optionC": "C",
+    "optionD": "D"
+  },
+  "rules": [
+    {
+      "id": "trim",
+      "stage": "NORMALIZE",
+      "priority": 10,
+      "enabled": true,
+      "kind": "UNICODE_WHITESPACE_NORMALIZE",
+      "options": {
+        "preserveLineBreaks": true
+      }
+    },
+    {
+      "id": "number",
+      "stage": "TRANSFORM",
+      "priority": 20,
+      "enabled": true,
+      "kind": "REMOVE_QUESTION_PREFIX",
+      "options": {
+        "patterns": [
+          "^\\s*\\d+[.、)]\\s*",
+          "^\\s*[(（]\\d+[)）]\\s*"
+        ]
+      }
+    },
+    {
+      "id": "ans",
+      "stage": "ANSWER_NORMALIZE",
+      "priority": 30,
+      "enabled": true,
+      "kind": "SPLIT_OPTION_LETTERS",
+      "options": {
+        "separators": [
+          "、",
+          ",",
+          "，",
+          ";",
+          "；"
+        ],
+        "allowConcatenatedLetters": true,
+        "allowedLabels": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      }
+    }
+  ],
+  "diagnosticPolicy": {
+    "invalidAnswerRef": "ERROR",
+    "typeAnswerConflict": "ERROR",
+    "duplicateConflict": "REVIEW_REQUIRED",
+    "writeInvalidAsReady": false
+  },
+  "testCases": [
+    {
+      "raw": {
+        "题型": "多选题",
+        "参考答案": "A、C"
+      },
+      "expectedCorrectLabels": [
+        "A",
+        "C"
+      ]
+    }
+  ]
+}

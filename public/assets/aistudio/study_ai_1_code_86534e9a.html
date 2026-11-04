@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>知序 Study · AI 服务与模型设置</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#d8c2b9",
+            "secondary-container": "#e1e0f8",
+            "inverse-surface": "#2b2f43",
+            "surface-container-low": "#f3f2ff",
+            "on-secondary-fixed": "#191a2b",
+            "on-surface": "#161b2d",
+            "on-tertiary-fixed": "#251913",
+            "on-tertiary-container": "#fff8f5",
+            "secondary-fixed-dim": "#c5c4dc",
+            "secondary-fixed": "#e1e0f8",
+            "surface": "#FFFFFF",
+            "secondary": "#5c5d71",
+            "surface-container-highest": "#dee1fb",
+            "on-primary-fixed-variant": "#353c99",
+            "on-secondary-container": "#626377",
+            "on-secondary-fixed-variant": "#444558",
+            "surface-dim": "#d6d8f2",
+            "inverse-on-surface": "#efefff",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "surface-tint": "#4e55b2",
+            "outline": "#767683",
+            "error": "#ba1a1a",
+            "primary-container": "#6269c8",
+            "surface-variant": "#dee1fb",
+            "on-tertiary-fixed-variant": "#52443d",
+            "primary-fixed-dim": "#bec2ff",
+            "on-surface-variant": "#7C8298",
+            "tertiary-fixed": "#f5ded4",
+            "inverse-primary": "#bec2ff",
+            "primary": "#4950ad",
+            "surface-container": "#ececff",
+            "on-tertiary": "#ffffff",
+            "mint-text": "#216C4B",
+            "on-background": "#161b2d",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c7c5d4",
+            "on-error-container": "#93000a",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#00016d",
+            "mint-accent": "#E6F3EB",
+            "tertiary-container": "#806f67",
+            "on-primary-container": "#fbf7ff",
+            "primary-fixed": "#e0e0ff",
+            "surface-bright": "#fbf8ff",
+            "peach-text": "#8F4829",
+            "surface-container-high": "#e4e7ff",
+            "on-error": "#ffffff",
+            "background": "#F6F7FB",
+            "tertiary": "#67574f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "display-md": ["45px", { "lineHeight": "52px", "fontWeight": "700" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "fontWeight": "700" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md select-none">
+<!-- TopAppBar: Derived from Shared Components JSON & Customized for Subpage "AI 辅助设置" -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-surface dark:bg-inverse-surface shadow-none border-b border-surface-container">
+<div class="flex items-center gap-3">
+<button aria-label="返回" class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-inverse-primary hover:bg-surface-container transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div>
+<h1 class="font-title-lg text-title-lg font-bold text-on-surface dark:text-inverse-on-surface tracking-tight">AI 辅助设置</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant -mt-0.5">知序 Study · 智能辅助与模型连接</p>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container transition-all active:scale-95" title="使用帮助与合规指引">
+<span class="material-symbols-outlined text-[22px]">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas with Material 3 Tonal Surface Design -->
+<main class="flex-1 w-full max-w-2xl mx-auto pt-20 pb-28 px-4 flex flex-col gap-5">
+<!-- AI Service Overview Card (Privacy & Trust) -->
+
+<!-- Section 1: 模型与连接服务 -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between px-1">
+<h3 class="font-label-lg text-label-lg text-primary font-semibold tracking-wide">模型与连接服务</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">协议驱动</span>
+</div>
+<div class="bg-surface rounded-2xl border border-surface-container divide-y divide-surface-container-low overflow-hidden shadow-sm">
+<!-- 协议类型 Selector -->
+<div class="p-4 hover:bg-surface-container-low transition-colors cursor-pointer flex items-center justify-between gap-3">
+<div class="flex-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">协议类型</span>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-on-surface font-medium">OpenAI 兼容协议 (支持 DeepSeek / GPT / Kimi)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[22px]">chevron_right</span>
+</div>
+<!-- API 端点 (Base URL) -->
+<div class="p-4 flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span class="">API 端点 (Base URL)</span>
+<span class="text-primary font-label-sm text-label-sm hover:underline cursor-pointer flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">edit</span>自定义
+            </span>
+</label>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-low border border-surface-container rounded-xl px-3.5 py-2.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary-container pr-10 tracking-wide font-mono" readonly="" type="text" value="https://api.deepseek.com/v1">
+<span class="absolute right-3 material-symbols-outlined text-secondary text-[18px]">dns</span>
+</div>
+</div>
+<!-- 模型名称 (Model ID) -->
+<div class="p-4 flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span class="">模型名称 (Model ID)</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-mint-text bg-mint-accent px-2 py-0.5 rounded-full font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text"></span>已配置
+            </span>
+</label>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-low border border-surface-container rounded-xl px-3.5 py-2.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary-container pr-10 font-mono" readonly="" type="text" value="deepseek-chat">
+<span class="absolute right-3 material-symbols-outlined text-secondary text-[18px]">neurology</span>
+</div>
+</div>
+<!-- API Key 状态 -->
+<div class="p-4 flex items-center justify-between gap-3 bg-surface">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">security</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">API Key 凭证</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-title-sm text-title-sm text-on-surface tracking-wider font-mono">••••••••••••••••38f2</span>
+
+</div>
+</div>
+</div>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md border border-outline-variant text-on-surface hover:bg-surface-container active:scale-95 transition-all">
+            修改
+          </button>
+</div>
+<!-- Connection Test Action Bar -->
+<div class="p-4 bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-mint-accent text-mint-text font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#1da067] animate-pulse"></span>280ms 畅通
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">端到端响应正常</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-label-md text-label-md bg-secondary-container text-primary hover:bg-surface-variant active:scale-95 transition-all font-medium">
+<span class="material-symbols-outlined text-[18px]">network_ping</span>
+            测试连接
+          </button>
+</div>
+</div>
+</section>
+<!-- Section 2: 智能功能开关 -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between px-1">
+<h3 class="font-label-lg text-label-lg text-primary font-semibold tracking-wide">智能功能开关</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">自适应辅导</span>
+</div>
+<div class="bg-surface rounded-2xl border border-surface-container divide-y divide-surface-container-low shadow-sm">
+<!-- Toggle 1: 智能解析与考点精讲 (ON) -->
+<div class="p-4 flex items-start justify-between gap-4">
+<div class="flex-1">
+<span class="font-title-sm text-title-sm text-on-surface font-medium block">智能解析与考点精讲</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              作答完毕后可点击「AI 深度解析」获取易错点剖析及联想考点。
+            </p>
+</div>
+<button aria-checked="true" class="relative w-12 h-7 bg-primary-container rounded-full transition-colors focus:outline-none shrink-0 self-center" role="switch">
+<span class="absolute right-1 top-1 w-5 h-5 bg-white rounded-full transition-transform shadow-sm flex items-center justify-center text-primary text-[12px]">
+<span class="material-symbols-outlined text-[13px] font-bold">check</span>
+</span>
+</button>
+</div>
+<!-- Toggle 2: 错题生成变式题 (ON) -->
+<div class="p-4 flex items-start justify-between gap-4">
+<div class="flex-1">
+<span class="font-title-sm text-title-sm text-on-surface font-medium block">错题生成变式题</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              针对高频错题生成 1~2 道考点相似题巩固学习，强化薄弱薄弱环节。
+            </p>
+</div>
+<button aria-checked="true" class="relative w-12 h-7 bg-primary-container rounded-full transition-colors focus:outline-none shrink-0 self-center" role="switch">
+<span class="absolute right-1 top-1 w-5 h-5 bg-white rounded-full transition-transform shadow-sm flex items-center justify-center text-primary text-[12px]">
+<span class="material-symbols-outlined text-[13px] font-bold">check</span>
+</span>
+</button>
+</div>
+<!-- Toggle 3: 智能导入字段辅助纠错 (OFF) -->
+<div class="p-4 flex items-start justify-between gap-4">
+<div class="flex-1">
+<span class="font-title-sm text-title-sm text-on-surface font-medium block">智能导入字段辅助纠错</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              导入表格或文档遇到缺失题型/选项字段时，使用模型辅助推断填补。
+            </p>
+</div>
+<button aria-checked="false" class="relative w-12 h-7 bg-surface-container-highest rounded-full transition-colors focus:outline-none shrink-0 self-center" role="switch">
+<span class="absolute left-1 top-1 w-5 h-5 bg-outline rounded-full transition-transform shadow-sm"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 3: Token 消耗与额度监控 (Bento Layout) -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between px-1">
+<h3 class="font-label-lg text-label-lg text-primary font-semibold tracking-wide">Token 消耗与额度监控</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">history</span> 实时统计
+        </span>
+</div>
+<div class="bg-surface rounded-2xl border border-surface-container p-4 shadow-sm flex flex-col gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<!-- Bento Metric 1 -->
+<div class="bg-surface-container-low rounded-xl p-3.5 flex flex-col justify-between border border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>今日消耗
+            </span>
+<div class="mt-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">1,420</span>
+<span class="font-label-sm text-label-sm text-secondary ml-1">Tokens</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full w-[28%]"></div>
+</div>
+</div>
+<!-- Bento Metric 2 -->
+<div class="bg-surface-container-low rounded-xl p-3.5 flex flex-col justify-between border border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-mint-text"></span>本月累计
+            </span>
+<div class="mt-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">3.8 万</span>
+<span class="font-label-sm text-label-sm text-secondary ml-1">Tokens</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-mint-text h-1.5 rounded-full w-[45%]"></div>
+</div>
+</div>
+<!-- Bento Metric 3 -->
+<div class="bg-surface-container-low rounded-xl p-3.5 flex flex-col justify-between border border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-peach-text"></span>单次解析限额
+            </span>
+<div class="mt-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">1,000</span>
+<span class="font-label-sm text-label-sm text-secondary ml-1">Tokens</span>
+</div>
+<div class="flex items-center justify-between text-label-sm text-on-surface-variant mt-2 font-label-sm">
+<span class="">防过量消耗</span>
+<span class="text-primary hover:underline cursor-pointer">调高</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant pt-1 border-t border-surface-container-low">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span class="">消耗量仅依据本地请求应答统计，实际计费请以模型供应商后台为准</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Action Bar for Secondary Setting Flow -->
+<footer class="fixed bottom-0 left-0 w-full z-40 bg-surface/90 backdrop-blur-md border-t border-surface-container py-3.5 px-4 flex justify-center shadow-lg">
+<div class="w-full max-w-2xl flex items-center justify-between gap-3">
+<button class="px-5 py-3 rounded-full font-label-lg text-label-lg text-secondary hover:bg-surface-container active:scale-95 transition-all">
+        重置为默认
+      </button>
+<button class="flex-1 sm:flex-initial sm:min-w-[220px] h-12 bg-primary-container text-on-primary font-title-sm text-title-sm rounded-full flex items-center justify-center gap-2 shadow-sm hover:brightness-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">save</span>
+<span class="">保存模型配置</span>
+</button>
+</div>
+</footer>
+
+
+</body></html>
