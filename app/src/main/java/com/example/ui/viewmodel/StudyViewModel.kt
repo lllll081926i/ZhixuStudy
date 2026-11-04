@@ -301,6 +301,9 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun navigateBack(): Boolean {
+        if (_currentScreen.value == AppScreen.QUIZ) {
+            quizTimerJob?.cancel()
+        }
         if (backStack.isNotEmpty()) {
             val prev = backStack.removeLast()
             _currentScreen.value = prev
@@ -403,12 +406,17 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun createNewBank(name: String, subtitle: String, domainTag: String = "railway") {
-        val formattedName = if (name.startsWith("《")) name else "《${name.trim()}》"
+        val trimmed = name.trim()
+        if (trimmed.isBlank()) {
+            showToast("请输入题库名称")
+            return
+        }
+        val formattedName = if (trimmed.startsWith("《") && trimmed.endsWith("》")) trimmed else "《$trimmed》"
         viewModelScope.launch {
             dao.upsertBank(
                 QuestionBankEntity(
                     name = formattedName,
-                    subtitle = subtitle.ifBlank { "自定义专业题库 · 本地存储" },
+                    subtitle = subtitle.trim().ifBlank { "自定义专业题库 · 本地存储" },
                     domainTag = domainTag,
                     totalTargetCount = 50,
                     practicedCount = 0,
@@ -541,31 +549,6 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
             showToast("随手笔记已保存")
-        }
-    }
-
-    fun createNewBank(rawName: String, subtitle: String) {
-        val trimmed = rawName.trim()
-        if (trimmed.isBlank()) {
-            showToast("请输入题库名称")
-            return
-        }
-        val formattedName = if (trimmed.startsWith("《") && trimmed.endsWith("》")) trimmed else "《$trimmed》"
-        viewModelScope.launch {
-            dao.upsertBanks(
-                listOf(
-                    QuestionBankEntity(
-                        name = formattedName,
-                        subtitle = subtitle.trim().ifBlank { "自建专属题库 · 随时添加题目" },
-                        domainTag = "custom",
-                        totalTargetCount = 20,
-                        practicedCount = 0,
-                        accuracyPercent = 100
-                    )
-                )
-            )
-            _selectedBankName.value = formattedName
-            showToast("已新建题库 $formattedName")
         }
     }
 
