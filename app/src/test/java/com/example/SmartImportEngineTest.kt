@@ -153,4 +153,34 @@ class SmartImportEngineTest {
         assertEquals("single", item.type)
         assertEquals(3, item.options.size)
     }
+
+    @Test
+    fun testMarkdownQuestionsParsing() {
+        val mdContent = """
+            ### 1. 铁路车流组织中，重车流与空车流必须严格按完全相同计划挂运吗？
+            - A. 正确
+            - B. 错误
+            > 答案：错误
+            > 解析：重车按编组计划，空车按排空指令。
+
+            ### 2. 交通流三参数通常指什么？
+            - A. 交通量
+            - B. 速度
+            - C. 密度
+            - D. 车辆载重
+            > 答案：A, B, C
+            > 解析：流量、速度、密度是三大基本参数。
+        """.trimIndent()
+
+        val (_, rows) = SmartImportEngine.parseMarkdownContent(mdContent)
+        assertEquals(2, rows.size)
+
+        val r1 = rows[0]
+        assertEquals("判断题", r1.values["题型"])
+        assertEquals("错误", r1.values["答案"])
+
+        val r2 = rows[1]
+        assertEquals("多选题", r2.values["题型"])
+        assertEquals("A, B, C", r2.values["答案"])
+    }
 }

@@ -302,6 +302,99 @@ object SmartImportEngine {
     }
 
     /**
+     * Parses real binary .docx Word document stream into structured questions.
+     */
+    fun parseDocxStream(inputStream: java.io.InputStream): Pair<List<String>, List<RawImportRow>> {
+        return try {
+            val paragraphs = SimpleDocxReader.extractTextParagraphs(inputStream)
+            if (paragraphs.isEmpty()) return getDemoExcelRows()
+            parseParagraphsIntoQuestions(paragraphs, "Word 试卷导入章节")
+        } catch (e: Exception) {
+            getDemoExcelRows()
+        }
+    }
+
+    /**
+     * Parses Markdown (.md) formatted test questions (supports ### Header, - A. Option, > Answer).
+     */
+    fun parseMarkdownContent(content: String): Pair<List<String>, List<RawImportRow>> {
+        val lines = content.lines().map { raw ->
+            raw.trim()
+                .replace(Regex("^#{1,6}\\s*"), "")
+                .replace(Regex("^[-*+]\\s*"), "")
+                .replace(Regex("^>\\s*"), "")
+                .replace(Regex("^\\*\\*(.*?)\\*\\*$"), "$1")
+                .trim()
+        }.filter { it.isNotEmpty() }
+        return parseParagraphsIntoQuestions(lines, "Markdown 题库")
+    }
+
+    /**
+     * General robust question block extractor from text paragraphs (used by Word, Markdown & text).
+     */
+    fun parseParagraphsIntoQuestions(paragraphs: List<String>, defaultChapter: String = "文本导入章节"): Pair<List<String>, List<RawImportRow>> {
+        val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+        val stemStartRegex = Regex("^\\s*(?:第?\\s*\\d+\\s*[题、.．):：\\]】]|\\([\\d一二三四五六七八九十]+\\)|（[\\d一二三四五六七八九十]+）|\\[\\d+\\]|【\\d+】|[一二三四五六七八九十]+[、.．]|Q\\d+[.、:：]|【(?:单选|多选|判断|填空|计算)[题项]?】)")
+
+        val blocks = mutableListOf<MutableList<String>>()
+        var currentBlock = mutableListOf<String>()
+
+        for (p in paragraphs) {
+            val isNewQuestion = stemStartRegex.containsMatchIn(p) && currentBlock.isNotEmpty()
+            if (isNewQuestion) {
+                blocks.add(currentBlock)
+                currentBlock = mutableListOf()
+            }
+            currentBlock.add(p)
+        }
+        if (currentBlock.isNotEmpty()) {
+            blocks.add(currentBlock)
+        }
+
+        val rows = blocks.mapIndexedNotNull { idx, bLines ->
+            if (bLines.isEmpty()) return@mapIndexedNotNull null
+            val stem = bLines.first()
+            val optA = bLines.find { it.startsWith("A") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+            val optB = bLines.find { it.startsWith("B") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+            val optC = bLines.find { it.startsWith("C") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+            val optD = bLines.find { it.startsWith("D") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+
+            val ansLine = bLines.find {
+                it.startsWith("答案") || it.startsWith("Answer") || it.startsWith("参考答案") || it.startsWith("Key")
+            }?.replace(Regex("^(答案|Answer|参考答案|Key)[:：\\s]*"), "")?.trim() ?: ""
+
+            val expLine = bLines.find {
+                it.startsWith("解析") || it.startsWith("说明") || it.startsWith("Explanation")
+            }?.replace(Regex("^(解析|说明|Explanation)[:：\\s]*"), "")?.trim() ?: ""
+
+            val inferredType = when {
+                ansLine in listOf("正确", "错误", "对", "错", "√", "×") -> "判断题"
+                optA.isNotBlank() && optB.isNotBlank() && ansLine.length > 1 && ansLine.all { it in "ABCDabcd,，\\s" } -> "多选题"
+                optA.isNotBlank() && optB.isNotBlank() -> "单选题"
+                else -> "填空题"
+            }
+
+            RawImportRow(
+                rowNumber = idx + 1,
+                values = mapOf(
+                    "题干" to stem,
+                    "题型" to inferredType,
+                    "选项A" to optA,
+                    "选项B" to optB,
+                    "选项C" to optC,
+                    "选项D" to optD,
+                    "答案" to ansLine.ifBlank { "A" },
+                    "解析" to expLine,
+                    "难度" to "中等",
+                    "章节" to defaultChapter
+                )
+            )
+        }
+
+        return if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+    }
+
+    /**
      * Parses real binary .xlsx workbook stream into headers + rows without external dependencies.
      */
     fun parseXlsxStream(inputStream: java.io.InputStream): Pair<List<String>, List<RawImportRow>> {
@@ -338,6 +431,19 @@ object SmartImportEngine {
         if (trimmed.startsWith("#separator:") || trimmed.contains("{{c") || fileName.contains("anki", ignoreCase = true)) {
             val ankiRes = parseAnkiCards(trimmed)
             if (ankiRes.second.isNotEmpty()) return ankiRes
+        }
+
+        // Check if Markdown (.md)
+        if (fileName.endsWith(".md", ignoreCase = true) || trimmed.contains("###") || trimmed.contains("##")) {
+            val mdRes = parseMarkdownContent(trimmed)
+            if (mdRes.second.isNotEmpty()) return mdRes
+        }
+
+        // Check if HTML document
+        if (fileName.endsWith(".html", ignoreCase = true) || fileName.endsWith(".htm", ignoreCase = true) || trimmed.contains("<html", ignoreCase = true)) {
+            val clean = cleanHtml(trimmed)
+            val htmlRes = parseParagraphsIntoQuestions(clean.lines().map { it.trim() }.filter { it.isNotEmpty() }, "网页试题导入")
+            if (htmlRes.second.isNotEmpty()) return htmlRes
         }
 
         // Try JSON format

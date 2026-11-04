@@ -114,6 +114,7 @@ fun ImportSourceScreen(
         if (uri != null) {
             val fileName = uri.lastPathSegment?.substringAfterLast('/') ?: "导入题库.xlsx"
             val isXlsx = fileName.endsWith(".xlsx", ignoreCase = true)
+            val isDocx = fileName.endsWith(".docx", ignoreCase = true)
             if (isXlsx) {
                 try {
                     context.contentResolver.openInputStream(uri)?.use { stream ->
@@ -121,6 +122,14 @@ fun ImportSourceScreen(
                     }
                 } catch (e: Exception) {
                     viewModel.showToast("Excel 文件读取失败，请检查文件格式")
+                }
+            } else if (isDocx) {
+                try {
+                    context.contentResolver.openInputStream(uri)?.use { stream ->
+                        viewModel.loadImportedDocxStream(fileName, stream, importState.targetBankName)
+                    }
+                } catch (e: Exception) {
+                    viewModel.showToast("Word 试卷读取失败，请检查文件格式")
                 }
             } else {
                 val content = try {
@@ -230,7 +239,7 @@ fun ImportSourceScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "支持 Excel / CSV / Anki / TXT",
+                            text = "支持 Excel / Word (.docx) / Anki / Markdown / CSV / TXT",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -269,33 +278,38 @@ fun ImportSourceScreen(
                             }
                             Button(
                                 onClick = {
-                                    val demoAnki = """
-                                        #separator:tab
-                                        #html:true
-                                        #deck:铁路运输与交通工程
-                                        单线平行运行图周期中必须包含 {{c1::纯运行时分}} 与 {{c2::车站间隔时间}}。
-                                        格林希尔治线性模型中，当达到最大通行能力时，最佳车流密度等于 {{c1::0.5 阻塞密度}}。
-                                        车站接发列车工作必须首先保证什么？	行车安全与列车按运行图正点运行	行车规章
-                                        重车流与空车流必须严格按照完全相同的编组计划组织挂运。	错误	车流组织
+                                    val demoMd = """
+                                        ### 1. 自动闭塞区段通过信号机显示绿灯表示运行前方至少有几个闭塞分区空闲？
+                                        - A. 三个及以上闭塞分区空闲
+                                        - B. 仅一个闭塞分区空闲
+                                        - C. 两个闭塞分区空闲
+                                        - D. 前方到发线占用
+                                        > 答案：A
+                                        > 解析：四显示自动闭塞绿灯表示前方至少三个分区空闲。
+
+                                        ### 2. 重车流与空车流必须严格按照完全相同的编组计划组织挂运。
+                                        - A. 正确
+                                        - B. 错误
+                                        > 答案：错误
+                                        > 解析：空车流按调度排空令调配。
                                     """.trimIndent()
                                     viewModel.loadImportedFileOrText(
-                                        fileName = "Anki_高频考点导出.tsv",
-                                        content = demoAnki,
+                                        fileName = "示例Markdown真题.md",
+                                        content = demoMd,
                                         targetBank = importState.targetBankName
                                     )
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(48.dp)
-                                    .testTag("import_use_demo_anki_btn"),
+                                    .height(48.dp),
                                 shape = RoundedCornerShape(50),
-                                colors = ButtonDefaults.buttonColors(containerColor = colors.primarySoft)
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.peachBg)
                             ) {
-                                Icon(Icons.Outlined.Psychology, contentDescription = null, tint = colors.primaryAccent, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Outlined.Description, contentDescription = null, tint = colors.peachText, modifier = Modifier.size(18.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
-                                    text = "示例 Anki 卡片",
-                                    color = colors.primaryAccent,
+                                    text = "示例 Markdown",
+                                    color = colors.peachText,
                                     maxLines = 1,
                                     softWrap = false,
                                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)

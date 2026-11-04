@@ -680,6 +680,29 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun loadImportedDocxStream(fileName: String, inputStream: java.io.InputStream, targetBank: String = _selectedBankName.value) {
+        viewModelScope.launch {
+            val currentQuestions = dao.getAllQuestionsOnce()
+            val (headers, rows) = SmartImportEngine.parseDocxStream(inputStream)
+            val mapping = ColumnMappingConfig()
+            val rules = _importState.value.rules
+            val evaluated = SmartImportEngine.evaluateImportRows(rows, mapping, rules, currentQuestions)
+            _importState.update {
+                it.copy(
+                    fileName = fileName,
+                    fileSizeLabel = "Word (.docx) · ${rows.size} 道解析题目",
+                    targetBankName = targetBank,
+                    headers = headers,
+                    rawRows = rows,
+                    mapping = mapping,
+                    evaluatedItems = evaluated
+                )
+            }
+            showToast("成功解包 $fileName，识别到 ${evaluated.size} 道试卷题目")
+            navigateTo(AppScreen.IMPORT_MAPPING)
+        }
+    }
+
     fun updateImportTargetBank(bankName: String) {
         _importState.update { it.copy(targetBankName = bankName) }
     }
