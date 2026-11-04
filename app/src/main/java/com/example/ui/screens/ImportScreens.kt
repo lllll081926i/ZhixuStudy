@@ -36,6 +36,8 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.InsertDriveFile
 import androidx.compose.material.icons.outlined.Psychology
+import androidx.compose.material.icons.outlined.School
+import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.AlertDialog
@@ -239,7 +241,7 @@ fun ImportSourceScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "支持 Excel / Word (.docx) / Anki / Markdown / CSV / TXT",
+                            text = "支持 Excel · Word · Moodle(Aiken/GIFT) · 问卷星 · Anki · Markdown · CSV · JSON",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -262,20 +264,67 @@ fun ImportSourceScreen(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(48.dp)
+                                    .height(46.dp)
                                     .testTag("import_use_demo_excel_btn"),
                                 shape = RoundedCornerShape(50),
                                 colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                             ) {
-                                Icon(Icons.Outlined.InsertDriveFile, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Outlined.InsertDriveFile, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = "示例 Excel",
                                     maxLines = 1,
                                     softWrap = false,
-                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                                 )
                             }
+                            Button(
+                                onClick = {
+                                    val demoAiken = """
+                                        铁路运输组织中列车运行图的基本作用是什么？
+                                        A. 全路组织列车运行的基础，综合性作业规划纲领
+                                        B. 仅用于客运车站时刻表的制定依据
+                                        C. 单纯记录机车车辆检修周期的统计表格
+                                        D. 仅供调度员临时调整车流的参考草图
+                                        ANSWER: A
+
+                                        影响铁路区间通过能力的核心运行图要素包括哪些？
+                                        A. 列车区间运行时分
+                                        B. 车站不同时到发间隔时间
+                                        C. 会车间隔时间
+                                        D. 货运叉车充电时间
+                                        ANSWER: A, B, C
+                                    """.trimIndent()
+                                    viewModel.loadImportedFileOrText(
+                                        fileName = "国际标准Aiken试卷.txt",
+                                        content = demoAiken,
+                                        targetBank = importState.targetBankName
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(46.dp),
+                                shape = RoundedCornerShape(50),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.primarySoft)
+                            ) {
+                                Icon(Icons.Outlined.School, contentDescription = null, tint = colors.primaryAccent, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "示例 Aiken/Moodle",
+                                    color = colors.primaryAccent,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             Button(
                                 onClick = {
                                     val demoMd = """
@@ -301,18 +350,54 @@ fun ImportSourceScreen(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(48.dp),
+                                    .height(46.dp),
                                 shape = RoundedCornerShape(50),
                                 colors = ButtonDefaults.buttonColors(containerColor = colors.peachBg)
                             ) {
-                                Icon(Icons.Outlined.Description, contentDescription = null, tint = colors.peachText, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Outlined.Description, contentDescription = null, tint = colors.peachText, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = "示例 Markdown",
                                     color = colors.peachText,
                                     maxLines = 1,
                                     softWrap = false,
-                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
+                            Button(
+                                onClick = {
+                                    val demoWjx = """
+                                        1. [单选题] 车站接发列车工作必须首先保证什么？(2分)
+                                        A. 行车安全与列车按运行图正点运行
+                                        B. 车站调车作业效率最大化
+                                        C. 货场装卸作业优先完成
+                                        D. 减少道岔转换次数
+                                        正确答案：A
+                                        答案解析：车站接发列车必须安全第一。
+
+                                        2. [判断题] 车流组织是铁路运输生产的重要组成部分。（对）
+                                        答案解析：车流组织与运行图紧密结合。
+                                    """.trimIndent()
+                                    viewModel.loadImportedFileOrText(
+                                        fileName = "问卷星_高校期末考卷.txt",
+                                        content = demoWjx,
+                                        targetBank = importState.targetBankName
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(46.dp),
+                                shape = RoundedCornerShape(50),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.mintBg)
+                            ) {
+                                Icon(Icons.Outlined.Verified, contentDescription = null, tint = colors.mintText, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "示例 问卷星试卷",
+                                    color = colors.mintText,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                                 )
                             }
                         }

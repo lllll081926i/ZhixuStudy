@@ -183,4 +183,32 @@ class SmartImportEngineTest {
         assertEquals("多选题", r2.values["题型"])
         assertEquals("A, B, C", r2.values["答案"])
     }
+
+    @Test
+    fun testAikenAndGiftParsing() {
+        // 1. Aiken 格式
+        val aikenText = """
+            What is the primary role of train diagram?
+            A. Base of train operation
+            B. Timetable only
+            ANSWER: A
+        """.trimIndent()
+        val (_, aRows) = SmartImportEngine.parseAikenQuestions(aikenText)
+        assertEquals(1, aRows.size)
+        assertEquals("What is the primary role of train diagram?", aRows[0].values["题干"])
+        assertEquals("A", aRows[0].values["答案"])
+        assertEquals("Base of train operation", aRows[0].values["选项A"])
+
+        // 2. GIFT 格式
+        val giftText = """
+            列车运行图的作用是？{=综合性规划纲领 ~临时草图}
+            双线自动闭塞采用追踪运行。{TRUE}
+        """.trimIndent()
+        val (_, gRows) = SmartImportEngine.parseGiftQuestions(giftText)
+        assertEquals(2, gRows.size)
+        assertEquals("单选题", gRows[0].values["题型"])
+        assertEquals("A", gRows[0].values["答案"])
+        assertEquals("判断题", gRows[1].values["题型"])
+        assertEquals("正确", gRows[1].values["答案"])
+    }
 }

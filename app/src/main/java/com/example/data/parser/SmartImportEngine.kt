@@ -302,6 +302,167 @@ object SmartImportEngine {
     }
 
     /**
+     * Parses international standard Aiken format:
+     * Question text line
+     * A. Option A
+     * B. Option B
+     * ANSWER: A
+     */
+    fun parseAikenQuestions(content: String): Pair<List<String>, List<RawImportRow>> {
+        val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+        val blocks = content.trim().split(Regex("\\n\\s*\\n+"))
+        val rows = blocks.mapIndexedNotNull { idx, block ->
+            val bLines = block.lines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("//") }
+            if (bLines.size < 2) return@mapIndexedNotNull null
+
+            val ansLineIdx = bLines.indexOfLast { it.uppercase().startsWith("ANSWER:") || it.uppercase().startsWith("ANSWER：") }
+            if (ansLineIdx == -1) return@mapIndexedNotNull null
+
+            val rawAns = bLines[ansLineIdx].substringAfter(":").substringAfter("：").trim()
+            val stemLines = mutableListOf<String>()
+            val optMap = mutableMapOf<Char, String>()
+
+            for (i in 0 until ansLineIdx) {
+                val line = bLines[i]
+                val optMatch = Regex("^([A-Fa-f])[.)]\\s*(.*)$").find(line)
+                if (optMatch != null) {
+                    val letter = optMatch.groupValues[1].uppercase().first()
+                    optMap[letter] = optMatch.groupValues[2].trim()
+                } else {
+                    stemLines.add(line)
+                }
+            }
+
+            val stem = stemLines.joinToString(" ").ifBlank { bLines.first() }
+            val inferredType = if (rawAns.length > 1 && rawAns != "正确" && rawAns != "错误") "多选题" else "单选题"
+
+            RawImportRow(
+                rowNumber = idx + 1,
+                values = mapOf(
+                    "题干" to stem,
+                    "题型" to inferredType,
+                    "选项A" to (optMap['A'] ?: ""),
+                    "选项B" to (optMap['B'] ?: ""),
+                    "选项C" to (optMap['C'] ?: ""),
+                    "选项D" to (optMap['D'] ?: ""),
+                    "答案" to rawAns,
+                    "解析" to "Aiken 格式试题",
+                    "难度" to "中等",
+                    "章节" to "Aiken 标准题库"
+                )
+            )
+        }
+        return if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+    }
+
+    /**
+     * Parses Moodle GIFT format:
+     * // comment
+     * Question text {=Correct ~Wrong1 ~Wrong2}
+     * or Question text {TRUE} / {FALSE}
+     */
+    fun parseGiftQuestions(content: String): Pair<List<String>, List<RawImportRow>> {
+        val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+        val clean = content.lines().filter { !it.trim().startsWith("//") }.joinToString("\n")
+        val giftRegex = Regex("(?s)(.*?)\\{(.*?)\\}")
+        val matches = giftRegex.findAll(clean).toList()
+
+        val rows = matches.mapIndexedNotNull { idx, match ->
+            val rawStem = match.groupValues[1].trim()
+                .replace(Regex("^::.*?::"), "") // Remove optional ::Title::
+                .trim()
+            val body = match.groupValues[2].trim()
+
+            // 1. True/False {TRUE} / {FALSE} / {T} / {F}
+            if (body.equals("TRUE", true) || body.equals("T", true)) {
+                return@mapIndexedNotNull RawImportRow(
+                    rowNumber = idx + 1,
+                    values = mapOf(
+                        "题干" to rawStem,
+                        "题型" to "判断题",
+                        "选项A" to "正确",
+                        "选项B" to "错误",
+                        "选项C" to "",
+                        "选项D" to "",
+                        "答案" to "正确",
+                        "解析" to "GIFT 判断题",
+                        "难度" to "简单",
+                        "章节" to "Moodle GIFT 题库"
+                    )
+                )
+            }
+            if (body.equals("FALSE", true) || body.equals("F", true)) {
+                return@mapIndexedNotNull RawImportRow(
+                    rowNumber = idx + 1,
+                    values = mapOf(
+                        "题干" to rawStem,
+                        "题型" to "判断题",
+                        "选项A" to "正确",
+                        "选项B" to "错误",
+                        "选项C" to "",
+                        "选项D" to "",
+                        "答案" to "错误",
+                        "解析" to "GIFT 判断题",
+                        "难度" to "简单",
+                        "章节" to "Moodle GIFT 题库"
+                    )
+                )
+            }
+
+            // 2. Cloze / Missing Word {=answer}
+            if (body.startsWith("=") && !body.contains("~")) {
+                val ans = body.substring(1).trim()
+                return@mapIndexedNotNull RawImportRow(
+                    rowNumber = idx + 1,
+                    values = mapOf(
+                        "题干" to "$rawStem [ 空位 1 ]",
+                        "题型" to "填空题",
+                        "选项A" to ans,
+                        "选项B" to "",
+                        "选项C" to "",
+                        "选项D" to "",
+                        "答案" to ans,
+                        "解析" to "GIFT 填空题",
+                        "难度" to "中等",
+                        "章节" to "Moodle GIFT 题库"
+                    )
+                )
+            }
+
+            // 3. Multiple Choice with {=Correct ~Wrong1 ~Wrong2}
+            val tokens = body.split(Regex("(?=[=~])")).map { it.trim() }.filter { it.isNotEmpty() }
+            val optionsList = mutableListOf<String>()
+            val correctLetters = mutableListOf<String>()
+
+            tokens.forEachIndexed { optIdx, tok ->
+                val letter = ('A' + optIdx).toString()
+                val isCorrect = tok.startsWith("=")
+                val text = tok.substring(1).trim()
+                optionsList.add(text)
+                if (isCorrect) correctLetters.add(letter)
+            }
+
+            val inferredType = if (correctLetters.size > 1) "多选题" else "单选题"
+            RawImportRow(
+                rowNumber = idx + 1,
+                values = mapOf(
+                    "题干" to rawStem,
+                    "题型" to inferredType,
+                    "选项A" to (optionsList.getOrNull(0) ?: ""),
+                    "选项B" to (optionsList.getOrNull(1) ?: ""),
+                    "选项C" to (optionsList.getOrNull(2) ?: ""),
+                    "选项D" to (optionsList.getOrNull(3) ?: ""),
+                    "答案" to correctLetters.joinToString(", ").ifBlank { "A" },
+                    "解析" to "GIFT 选择题",
+                    "难度" to "中等",
+                    "章节" to "Moodle GIFT 题库"
+                )
+            )
+        }
+        return if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+    }
+
+    /**
      * Parses real binary .docx Word document stream into structured questions.
      */
     fun parseDocxStream(inputStream: java.io.InputStream): Pair<List<String>, List<RawImportRow>> {
@@ -353,21 +514,53 @@ object SmartImportEngine {
 
         val rows = blocks.mapIndexedNotNull { idx, bLines ->
             if (bLines.isEmpty()) return@mapIndexedNotNull null
-            val stem = bLines.first()
+            var rawStem = bLines.first()
+            var extractedType: String? = null
+
+            // 1. Extract [单选题] / 【多选题】 / [判断题] / 【填空题】 prefix
+            val typePrefixRegex = Regex("^[\\[【(](单选题?|多选题?|判断题?|填空题?|计算题?)[\\]】)]\\s*")
+            val typeMatch = typePrefixRegex.find(rawStem)
+            if (typeMatch != null) {
+                extractedType = when {
+                    typeMatch.value.contains("判断") -> "判断题"
+                    typeMatch.value.contains("多选") -> "多选题"
+                    typeMatch.value.contains("填空") -> "填空题"
+                    typeMatch.value.contains("计算") -> "填空题"
+                    else -> "单选题"
+                }
+                rawStem = rawStem.replaceRange(typeMatch.range, "").trim()
+            }
+
+            // 2. Clean tail score like (2分) / [5.0分]
+            rawStem = rawStem.replace(Regex("[（(\\[【]\\s*\\d+(?:\\.\\d+)?\\s*分\\s*[)）\\]】]"), "").trim()
+
+            // 3. Extract tail judge answer like （对） / （错） / （√）
+            var tailAnswer: String? = null
+            val judgeTailRegex = Regex("[（(]\\s*(对|错|正确|错误|√|×|T|F)\\s*[)）]$", RegexOption.IGNORE_CASE)
+            val judgeMatch = judgeTailRegex.find(rawStem)
+            if (judgeMatch != null) {
+                tailAnswer = judgeMatch.groupValues[1]
+                rawStem = rawStem.substring(0, judgeMatch.range.first).trim()
+                if (extractedType == null) extractedType = "判断题"
+            }
+
             val optA = bLines.find { it.startsWith("A") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
             val optB = bLines.find { it.startsWith("B") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
             val optC = bLines.find { it.startsWith("C") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
             val optD = bLines.find { it.startsWith("D") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
 
+            // 4. Extract Answer line (support 正确答案：, 【正确答案】, 参考答案：, Answer:)
             val ansLine = bLines.find {
-                it.startsWith("答案") || it.startsWith("Answer") || it.startsWith("参考答案") || it.startsWith("Key")
-            }?.replace(Regex("^(答案|Answer|参考答案|Key)[:：\\s]*"), "")?.trim() ?: ""
+                it.contains("答案") || it.startsWith("Answer", true) || it.startsWith("Key", true)
+            }?.replace(Regex("^[【\\[]?(?:正确答案|参考答案|答案|Answer|Key)[】\\]]?[:：\\s]*"), "")?.trim()
+                ?: tailAnswer ?: ""
 
+            // 5. Extract Explanation line (support 答案解析：, 【解析】, 说明：)
             val expLine = bLines.find {
-                it.startsWith("解析") || it.startsWith("说明") || it.startsWith("Explanation")
-            }?.replace(Regex("^(解析|说明|Explanation)[:：\\s]*"), "")?.trim() ?: ""
+                it.contains("解析") || it.startsWith("说明") || it.startsWith("Explanation", true)
+            }?.replace(Regex("^[【\\[]?(?:答案解析|解析说明|解析|说明|Explanation)[】\\]]?[:：\\s]*"), "")?.trim() ?: ""
 
-            val inferredType = when {
+            val inferredType = extractedType ?: when {
                 ansLine in listOf("正确", "错误", "对", "错", "√", "×") -> "判断题"
                 optA.isNotBlank() && optB.isNotBlank() && ansLine.length > 1 && ansLine.all { it in "ABCDabcd,，\\s" } -> "多选题"
                 optA.isNotBlank() && optB.isNotBlank() -> "单选题"
@@ -377,10 +570,10 @@ object SmartImportEngine {
             RawImportRow(
                 rowNumber = idx + 1,
                 values = mapOf(
-                    "题干" to stem,
+                    "题干" to rawStem,
                     "题型" to inferredType,
-                    "选项A" to optA,
-                    "选项B" to optB,
+                    "选项A" to (if (inferredType == "判断题" && optA.isBlank()) "正确" else optA),
+                    "选项B" to (if (inferredType == "判断题" && optB.isBlank()) "错误" else optB),
                     "选项C" to optC,
                     "选项D" to optD,
                     "答案" to ansLine.ifBlank { "A" },
@@ -421,11 +614,154 @@ object SmartImportEngine {
     }
 
     /**
+     * Highly flexible adaptive JSON parser that automatically maps heterogeneous schema:
+     * - Root: questions / data / quiz / cards / items / array
+     * - Stem: stem / question / title / text / prompt / q / front
+     * - Options: options / choices / answers array or flattened A/B/C/D fields
+     * - Answer: answer / correct / right / ans / key / back
+     * - Explanation: explanation / analysis / exp / desc
+     */
+    fun parseAdaptiveJson(jsonStr: String): Pair<List<String>, List<RawImportRow>> {
+        val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+        return try {
+            val arr = if (jsonStr.startsWith("{")) {
+                val rootObj = JSONObject(jsonStr)
+                rootObj.optJSONArray("questions")
+                    ?: rootObj.optJSONArray("data")
+                    ?: rootObj.optJSONArray("quiz")
+                    ?: rootObj.optJSONArray("cards")
+                    ?: rootObj.optJSONArray("items")
+                    ?: rootObj.optJSONArray("list")
+                    ?: rootObj.optJSONArray("rows")
+                    ?: JSONArray().apply { put(rootObj) }
+            } else {
+                JSONArray(jsonStr)
+            }
+
+            val rows = mutableListOf<RawImportRow>()
+            for (i in 0 until arr.length()) {
+                val obj = arr.optJSONObject(i) ?: continue
+
+                // 1. Stem
+                val stem = obj.optString("stem").ifBlank {
+                    obj.optString("question").ifBlank {
+                        obj.optString("title").ifBlank {
+                            obj.optString("text").ifBlank {
+                                obj.optString("prompt").ifBlank {
+                                    obj.optString("q").ifBlank {
+                                        obj.optString("front")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (stem.isBlank()) continue
+
+                // 2. Options
+                val optsArr = obj.optJSONArray("options")
+                    ?: obj.optJSONArray("choices")
+                    ?: obj.optJSONArray("answers")
+                    ?: obj.optJSONArray("items")
+
+                val optA = optsArr?.optString(0, "")?.ifBlank { "" }
+                    ?: obj.optString("optionA").ifBlank { obj.optString("optA").ifBlank { obj.optString("A").ifBlank { obj.optString("a") } } }
+                val optB = optsArr?.optString(1, "")?.ifBlank { "" }
+                    ?: obj.optString("optionB").ifBlank { obj.optString("optB").ifBlank { obj.optString("B").ifBlank { obj.optString("b") } } }
+                val optC = optsArr?.optString(2, "")?.ifBlank { "" }
+                    ?: obj.optString("optionC").ifBlank { obj.optString("optC").ifBlank { obj.optString("C").ifBlank { obj.optString("c") } } }
+                val optD = optsArr?.optString(3, "")?.ifBlank { "" }
+                    ?: obj.optString("optionD").ifBlank { obj.optString("optD").ifBlank { obj.optString("D").ifBlank { obj.optString("d") } } }
+
+                // 3. Answer
+                val ans = obj.optString("answer").ifBlank {
+                    obj.optString("correct").ifBlank {
+                        obj.optString("right").ifBlank {
+                            obj.optString("ans").ifBlank {
+                                obj.optString("key").ifBlank {
+                                    obj.optString("back").ifBlank {
+                                        obj.optString("correctAnswer")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 4. Explanation
+                val exp = obj.optString("explanation").ifBlank {
+                    obj.optString("analysis").ifBlank {
+                        obj.optString("exp").ifBlank {
+                            obj.optString("desc").ifBlank {
+                                obj.optString("solution")
+                            }
+                        }
+                    }
+                }
+
+                // 5. Type
+                val type = obj.optString("type").ifBlank {
+                    obj.optString("questionType").ifBlank {
+                        when {
+                            ans in listOf("正确", "错误", "对", "错", "√", "×") -> "判断题"
+                            optA.isNotBlank() && optB.isNotBlank() && ans.length > 1 && ans.all { it in "ABCDabcd,，\\s" } -> "多选题"
+                            optA.isNotBlank() && optB.isNotBlank() -> "单选题"
+                            else -> "填空题"
+                        }
+                    }
+                }
+
+                // 6. Chapter
+                val chapter = obj.optString("chapter").ifBlank {
+                    obj.optString("section").ifBlank {
+                        obj.optString("tag").ifBlank {
+                            obj.optString("topic", "JSON 导入题库")
+                        }
+                    }
+                }
+
+                rows.add(
+                    RawImportRow(
+                        rowNumber = i + 1,
+                        values = mapOf(
+                            "题干" to stem,
+                            "题型" to type,
+                            "选项A" to optA,
+                            "选项B" to optB,
+                            "选项C" to optC,
+                            "选项D" to optD,
+                            "答案" to ans.ifBlank { "A" },
+                            "解析" to exp,
+                            "难度" to obj.optString("difficulty", "中等"),
+                            "章节" to chapter
+                        )
+                    )
+                )
+            }
+            if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+        } catch (e: Exception) {
+            getDemoExcelRows()
+        }
+    }
+
+    /**
      * Parses pasted text, CSV, TSV, or JSON string into headers + RawImportRow list.
      */
     fun parseRawTextContent(fileName: String, content: String): Pair<List<String>, List<RawImportRow>> {
         val trimmed = content.trim()
         if (trimmed.isEmpty()) return getDemoExcelRows()
+
+        // Check if Aiken format (ANSWER: A)
+        if (trimmed.contains(Regex("(?i)ANSWER[:：]\\s*[A-F]"))) {
+            val aikenRes = parseAikenQuestions(trimmed)
+            if (aikenRes.second.isNotEmpty()) return aikenRes
+        }
+
+        // Check if Moodle GIFT format ({=...} or {TRUE} or {~...})
+        if (trimmed.contains(Regex("\\{(?:=[^}]+|~[^}]+|TRUE|FALSE|T|F)\\}", RegexOption.IGNORE_CASE))) {
+            val giftRes = parseGiftQuestions(trimmed)
+            if (giftRes.second.isNotEmpty()) return giftRes
+        }
 
         // Check if Anki export format (cloze deletion {{c1::...}} or Anki header #separator:...)
         if (trimmed.startsWith("#separator:") || trimmed.contains("{{c") || fileName.contains("anki", ignoreCase = true)) {
@@ -448,39 +784,8 @@ object SmartImportEngine {
 
         // Try JSON format
         if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
-            return try {
-                val arr = if (trimmed.startsWith("{")) {
-                    JSONObject(trimmed).optJSONArray("questions") ?: JSONArray()
-                } else {
-                    JSONArray(trimmed)
-                }
-                val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
-                val rows = mutableListOf<RawImportRow>()
-                for (i in 0 until arr.length()) {
-                    val obj = arr.optJSONObject(i) ?: continue
-                    val opts = obj.optJSONArray("options")
-                    rows.add(
-                        RawImportRow(
-                            rowNumber = i + 1,
-                            values = mapOf(
-                                "题干" to obj.optString("stem", ""),
-                                "题型" to obj.optString("type", "单选题"),
-                                "选项A" to (opts?.optString(0, "") ?: obj.optString("optionA", "")),
-                                "选项B" to (opts?.optString(1, "") ?: obj.optString("optionB", "")),
-                                "选项C" to (opts?.optString(2, "") ?: obj.optString("optionC", "")),
-                                "选项D" to (opts?.optString(3, "") ?: obj.optString("optionD", "")),
-                                "答案" to obj.optString("answer", "A"),
-                                "解析" to obj.optString("explanation", ""),
-                                "难度" to obj.optString("difficulty", "中等"),
-                                "章节" to obj.optString("chapter", "导入章节")
-                            )
-                        )
-                    )
-                }
-                if (rows.isEmpty()) getDemoExcelRows() else headers to rows
-            } catch (e: Exception) {
-                getDemoExcelRows()
-            }
+            val jsonRes = parseAdaptiveJson(trimmed)
+            if (jsonRes.second.isNotEmpty()) return jsonRes
         }
 
         // CSV / TSV / Structured Text
