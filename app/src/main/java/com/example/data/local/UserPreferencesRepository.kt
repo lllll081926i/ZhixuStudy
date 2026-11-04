@@ -139,7 +139,7 @@ class UserPreferencesRepository(private val context: Context) {
     }
 
     suspend fun updateFontScale(percent: Int) {
-        context.dataStore.edit { it[Keys.FONT_SCALE] = percent.coerceIn(85, 130) }
+        context.dataStore.edit { it[Keys.FONT_SCALE] = percent.coerceIn(75, 130) }
     }
 
     suspend fun updateLineSpacing(mode: String) {

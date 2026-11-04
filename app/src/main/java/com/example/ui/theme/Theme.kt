@@ -15,6 +15,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 
 @Immutable
@@ -205,9 +207,19 @@ fun SereneStudyTheme(
         )
     }
 
+    val currentDensity = LocalDensity.current
+    val scaleFactor = (fontScalePercent / 100f).coerceIn(0.70f, 1.35f)
+    val adaptedDensity = Density(
+        density = currentDensity.density * scaleFactor,
+        fontScale = currentDensity.fontScale * scaleFactor
+    )
+
     val typography = buildSereneTypography(fontScalePercent / 100f)
 
-    CompositionLocalProvider(LocalSereneColors provides extendedColors) {
+    CompositionLocalProvider(
+        LocalSereneColors provides extendedColors,
+        LocalDensity provides adaptedDensity
+    ) {
         MaterialTheme(
             colorScheme = baseColorScheme,
             typography = typography,

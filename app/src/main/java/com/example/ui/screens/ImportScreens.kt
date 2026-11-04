@@ -35,6 +35,7 @@ import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.InsertDriveFile
+import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.AlertDialog
@@ -218,7 +219,7 @@ fun ImportSourceScreen(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Excel、CSV、Word、TXT 或者直接复制文字都能认出来",
+                            text = "支持 Excel、CSV、Anki 记忆卡片（.txt/.tsv/Cloze）、Word 或纯文本智能解析",
                             color = colors.textSecondary,
                             maxLines = 1,
                             softWrap = false,
@@ -228,28 +229,67 @@ fun ImportSourceScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        Button(
-                            onClick = {
-                                viewModel.loadDemoImportData(
-                                    fileName = "2026铁路运输模拟题.xlsx",
-                                    navigateToStep2 = true
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .testTag("import_use_demo_excel_btn"),
-                            shape = RoundedCornerShape(50),
-                            colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Icon(Icons.Outlined.InsertDriveFile, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "用现成的示例 Excel 试试看",
-                                maxLines = 1,
-                                softWrap = false,
-                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                            )
+                            Button(
+                                onClick = {
+                                    viewModel.loadDemoImportData(
+                                        fileName = "2026铁路运输模拟题.xlsx",
+                                        navigateToStep2 = true
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp)
+                                    .testTag("import_use_demo_excel_btn"),
+                                shape = RoundedCornerShape(50),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
+                            ) {
+                                Icon(Icons.Outlined.InsertDriveFile, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "示例 Excel",
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
+                            Button(
+                                onClick = {
+                                    val demoAnki = """
+                                        #separator:tab
+                                        #html:true
+                                        #deck:铁路运输与交通工程
+                                        单线平行运行图周期中必须包含 {{c1::纯运行时分}} 与 {{c2::车站间隔时间}}。
+                                        格林希尔治线性模型中，当达到最大通行能力时，最佳车流密度等于 {{c1::0.5 阻塞密度}}。
+                                        车站接发列车工作必须首先保证什么？	行车安全与列车按运行图正点运行	行车规章
+                                        重车流与空车流必须严格按照完全相同的编组计划组织挂运。	错误	车流组织
+                                    """.trimIndent()
+                                    viewModel.loadImportedFileOrText(
+                                        fileName = "Anki_高频考点导出.tsv",
+                                        content = demoAnki,
+                                        targetBank = importState.targetBankName
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp)
+                                    .testTag("import_use_demo_anki_btn"),
+                                shape = RoundedCornerShape(50),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.primarySoft)
+                            ) {
+                                Icon(Icons.Outlined.Psychology, contentDescription = null, tint = colors.primaryAccent, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "示例 Anki 卡片",
+                                    color = colors.primaryAccent,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))

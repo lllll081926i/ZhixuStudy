@@ -352,8 +352,7 @@ fun SereneStudyAppRoot(viewModel: StudyViewModel) {
                     activeTab = activePrimaryTab,
                     reviewBadgeCount = reviewDueCount,
                     isTablet = isTablet,
-                    onSelectTab = { tab -> viewModel.selectPrimaryTab(tab) },
-                    onOpenQuickSettings = { viewModel.navigateTo(AppScreen.SETTINGS) }
+                    onSelectTab = { tab -> viewModel.selectPrimaryTab(tab) }
                 )
             }
 

@@ -75,7 +75,6 @@ fun AppleFloatingDock(
     reviewBadgeCount: Int,
     isTablet: Boolean,
     onSelectTab: (PrimaryTab) -> Unit,
-    onOpenQuickSettings: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val colors = SereneTheme.colors
@@ -246,32 +245,6 @@ fun AppleFloatingDock(
                                 )
                             }
                         }
-                    }
-                }
-
-                if (isTablet && onOpenQuickSettings != null) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 6.dp)
-                            .width(1.dp)
-                            .height(24.dp)
-                            .background(colors.borderStrong.copy(alpha = 0.6f))
-                    )
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(colors.subtleSurface.copy(alpha = 0.7f))
-                            .clickable { onOpenQuickSettings() }
-                            .testTag("dock_tablet_settings"),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = "设置",
-                            tint = colors.textSecondary,
-                            modifier = Modifier.size(19.dp)
-                        )
                     }
                 }
             }

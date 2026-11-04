@@ -797,6 +797,16 @@ fun ReviewScreen(
                             tint = colors.primaryAccent
                         )
                     }
+                    IconButton(
+                        onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
+                        modifier = Modifier.testTag("review_settings_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "设置",
+                            tint = colors.textPrimary
+                        )
+                    }
                 }
             )
 
@@ -1259,6 +1269,16 @@ fun StatsScreen(
                         maxLines = 1,
                         softWrap = false,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+                IconButton(
+                    onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
+                    modifier = Modifier.testTag("stats_settings_button")
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = "设置",
+                        tint = colors.textPrimary
                     )
                 }
             }

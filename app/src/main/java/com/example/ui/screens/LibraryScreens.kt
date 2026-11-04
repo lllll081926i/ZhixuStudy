@@ -38,6 +38,7 @@ import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.material.icons.outlined.EditNote
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material.icons.outlined.FolderOpen
@@ -158,6 +159,16 @@ fun LibraryScreen(
                             imageVector = Icons.Outlined.AutoAwesome,
                             contentDescription = "AI 助手",
                             tint = colors.primaryAccent
+                        )
+                    }
+                    IconButton(
+                        onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
+                        modifier = Modifier.testTag("library_settings_btn")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "设置",
+                            tint = colors.textPrimary
                         )
                     }
                 }

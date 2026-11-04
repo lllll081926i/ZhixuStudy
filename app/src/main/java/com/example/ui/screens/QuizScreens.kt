@@ -1,7 +1,16 @@
 package com.example.ui.screens
 
 import android.view.HapticFeedbackConstants
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import com.example.ui.components.bounceClick
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -94,6 +103,7 @@ import com.example.ui.components.CompletionVectorIllustration
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
 import com.example.ui.components.SereneFilterChipRow
+import com.example.ui.components.SereneFormulaCard
 import com.example.ui.components.SereneLinearProgress
 import com.example.ui.components.SereneTopBar
 import com.example.ui.theme.SereneTheme
@@ -847,19 +857,10 @@ private fun QuizActiveQuestionContent(
 
         if (currentQ.formulaHint.isNotBlank()) {
             Spacer(modifier = Modifier.height(10.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.subtleSurface)
-                    .padding(10.dp)
-            ) {
-                Text(
-                    text = currentQ.formulaHint,
-                    color = colors.primaryAccent,
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
-                )
-            }
+            SereneFormulaCard(
+                formula = currentQ.formulaHint,
+                label = "核心计算公式与推演模型"
+            )
         }
 
         if (currentQ.referenceTableJson.isNotBlank()) {
@@ -944,26 +945,29 @@ private fun QuizActiveQuestionContent(
                 listOf("正确" to "✓", "错误" to "✕").forEach { (label, symbol) ->
                     val isSelected = label in userSelected
                     val isCorrectAns = label in currentQ.answer
-                    val cardBg = when {
+                    val targetJudgeBg = when {
                         isSubmitted && isCorrectAns -> colors.mintBg
                         isSubmitted && isSelected && !isCorrectAns -> colors.dangerBg
                         isSelected -> colors.primarySoft
                         else -> colors.cardSurface
                     }
-                    val borderCol = when {
+                    val targetJudgeBorder = when {
                         isSubmitted && isCorrectAns -> colors.mintText
                         isSubmitted && isSelected && !isCorrectAns -> colors.dangerText
                         isSelected -> colors.primaryAccent
                         else -> colors.borderSubtle
                     }
+                    val animatedJudgeBg by animateColorAsState(targetValue = targetJudgeBg, animationSpec = tween(180), label = "judge_bg")
+                    val animatedJudgeBorder by animateColorAsState(targetValue = targetJudgeBorder, animationSpec = tween(180), label = "judge_border")
+
                     SereneCard(
                         modifier = Modifier
                             .weight(1f)
+                            .bounceClick(scaleDown = 0.97f) { onOptionClick(label) }
                             .testTag("quiz_judge_option_$label"),
                         cornerRadius = 22.dp,
-                        containerColor = cardBg,
-                        borderColor = borderCol,
-                        onClick = { onOptionClick(label) }
+                        containerColor = animatedJudgeBg,
+                        borderColor = animatedJudgeBorder
                     ) {
                         Column(
                             modifier = Modifier
@@ -975,12 +979,12 @@ private fun QuizActiveQuestionContent(
                                 modifier = Modifier
                                     .size(44.dp)
                                     .clip(CircleShape)
-                                    .background(borderCol.copy(alpha = 0.16f)),
+                                    .background(animatedJudgeBorder.copy(alpha = 0.16f)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = symbol,
-                                    color = borderCol,
+                                    color = animatedJudgeBorder,
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     maxLines = 1,
@@ -1302,35 +1306,39 @@ private fun QuizOptionCard(
     val colors = SereneTheme.colors
     val cleanText = optText.replace(Regex("^[A-F][.、)\\s]+"), "").trim()
 
-    val containerBg = when {
+    val targetBg = when {
         isSubmitted && isCorrectAnswer -> colors.mintBg
         isSubmitted && isSelected && !isCorrectAnswer -> colors.dangerBg
-        isSelected -> colors.primarySoft.copy(alpha = 0.65f)
+        isSelected -> colors.primarySoft.copy(alpha = 0.75f)
         else -> colors.cardSurface
     }
-    val borderColor = when {
+    val targetBorder = when {
         isSubmitted && isCorrectAnswer -> colors.mintText
         isSubmitted && isSelected && !isCorrectAnswer -> colors.dangerText
         isSelected -> colors.primaryAccent
         else -> colors.borderSubtle
     }
-    val badgeBg = when {
+    val targetBadgeBg = when {
         isSubmitted && isCorrectAnswer -> colors.mintText
         isSubmitted && isSelected && !isCorrectAnswer -> colors.dangerText
         isSelected -> colors.primaryAccent
         else -> colors.subtleSurface
     }
+
+    val animatedBg by animateColorAsState(targetValue = targetBg, animationSpec = tween(180), label = "opt_bg")
+    val animatedBorder by animateColorAsState(targetValue = targetBorder, animationSpec = tween(180), label = "opt_border")
+    val animatedBadgeBg by animateColorAsState(targetValue = targetBadgeBg, animationSpec = tween(180), label = "badge_bg")
     val badgeFg = if (isSelected || (isSubmitted && isCorrectAnswer)) Color.White else colors.textPrimary
 
     Surface(
         modifier = modifier
             .alpha(if (isExcluded && !isSelected && !isSubmitted) 0.48f else 1f)
             .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick)
+            .bounceClick(scaleDown = 0.97f, onClick = onClick)
             .testTag("quiz_option_$code"),
         shape = RoundedCornerShape(20.dp),
-        color = containerBg,
-        border = androidx.compose.foundation.BorderStroke(if (isSelected || (isSubmitted && isCorrectAnswer)) 2.dp else 1.dp, borderColor)
+        color = animatedBg,
+        border = androidx.compose.foundation.BorderStroke(if (isSelected || (isSubmitted && isCorrectAnswer)) 2.dp else 1.dp, animatedBorder)
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -1340,7 +1348,7 @@ private fun QuizOptionCard(
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape)
-                    .background(badgeBg),
+                    .background(animatedBadgeBg),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

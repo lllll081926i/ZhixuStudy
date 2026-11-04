@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -173,48 +175,139 @@ fun SettingsScreen(
         }
 
         if (isTablet && tabletSplitActive) {
-            // Tablet Master-Detail Settings Workbench
+            // Tablet Master-Detail Settings Workbench - Strictly Equal Height (fillMaxHeight)
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Column(
+                // Left Master Navigation Panel
+                Surface(
                     modifier = Modifier
-                        .weight(0.42f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                        .weight(0.38f)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(24.dp),
+                    color = colors.cardSurface,
+                    border = BorderStroke(1.dp, colors.borderSubtle),
+                    shadowElevation = 2.dp
                 ) {
-                    SettingsCategorizedList(
-                        settings = settings,
-                        searchQuery = searchQuery,
-                        onOpenAppearance = { viewModel.setSelectedSettingsCategory("appearance") },
-                        onOpenTypography = { viewModel.setSelectedSettingsCategory("typography") },
-                        onOpenHaptics = { viewModel.setSelectedSettingsCategory("haptics") },
-                        onOpenPracticeFlow = { viewModel.setSelectedSettingsCategory("practice_flow") },
-                        onOpenReviewPlan = { viewModel.navigateTo(AppScreen.REVIEW_PLAN) },
-                        onOpenGestures = { viewModel.setSelectedSettingsCategory("gestures") },
-                        onOpenAiService = { viewModel.navigateTo(AppScreen.AI_SERVICE) },
-                        onOpenDataMgmt = { viewModel.navigateTo(AppScreen.DATA_MGMT) },
-                        onOpenAudit = { viewModel.navigateTo(AppScreen.AUDIT) },
-                        onOpenDnd = { viewModel.setSelectedSettingsCategory("dnd") }
-                    )
-                    SettingsVersionFooter()
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "功能设置分类",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.textPrimary
+                            )
+                            SereneBadge(text = "系统中心", containerColor = colors.primarySoft, contentColor = colors.primaryAccent)
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(colors.borderSubtle)
+                        )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState())
+                                .padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            SettingsCategorizedList(
+                                settings = settings,
+                                searchQuery = searchQuery,
+                                activeCategory = selectedCategory,
+                                onOpenAppearance = { viewModel.setSelectedSettingsCategory("appearance") },
+                                onOpenTypography = { viewModel.setSelectedSettingsCategory("typography") },
+                                onOpenHaptics = { viewModel.setSelectedSettingsCategory("haptics") },
+                                onOpenPracticeFlow = { viewModel.setSelectedSettingsCategory("practice_flow") },
+                                onOpenReviewPlan = { viewModel.navigateTo(AppScreen.REVIEW_PLAN) },
+                                onOpenGestures = { viewModel.setSelectedSettingsCategory("gestures") },
+                                onOpenAiService = { viewModel.navigateTo(AppScreen.AI_SERVICE) },
+                                onOpenDataMgmt = { viewModel.navigateTo(AppScreen.DATA_MGMT) },
+                                onOpenAudit = { viewModel.navigateTo(AppScreen.AUDIT) },
+                                onOpenDnd = { viewModel.setSelectedSettingsCategory("dnd") }
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(colors.borderSubtle)
+                        )
+                        SettingsVersionFooter()
+                    }
                 }
 
-                Column(
+                // Right Detail Configuration Panel
+                Surface(
                     modifier = Modifier
-                        .weight(0.58f)
-                        .fillMaxSize()
+                        .weight(0.62f)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(24.dp),
+                    color = colors.cardSurface,
+                    border = BorderStroke(1.dp, colors.borderSubtle),
+                    shadowElevation = 2.dp
                 ) {
-                    when (selectedCategory) {
-                        "typography" -> SettingsTypographyContent(viewModel = viewModel, settings = settings)
-                        "haptics" -> SettingsSoundHapticsContent(viewModel = viewModel, settings = settings)
-                        "practice_flow" -> SettingsPracticeFlowContent(viewModel = viewModel, settings = settings)
-                        "gestures" -> SettingsGesturesContent(viewModel = viewModel, settings = settings)
-                        "dnd" -> SettingsDndContent(viewModel = viewModel, settings = settings)
-                        else -> SettingsAppearanceContent(viewModel = viewModel, settings = settings)
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        val (detailTitle, detailSubtitle) = when (selectedCategory) {
+                            "typography" -> "字体字号与排版布局" to "根据阅读习惯调整题目字号大小与行间距"
+                            "haptics" -> "触感反馈与提示音效" to "配置答题微震动与选项按压提示音"
+                            "practice_flow" -> "作答判定与自动切题" to "即时解析呈现、做对自动切题与选项乱序"
+                            "gestures" -> "手势交互与答题卡风格" to "左右滑动切题、双击收藏与答题卡外观"
+                            "dnd" -> "学习计划与夜间免打扰" to "设定每日刷题目标与安静作息免打扰时段"
+                            else -> "主题风格与强调配色" to "深色模式、动态壁纸取色与个性化主色调"
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 22.dp, vertical = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Text(
+                                    text = detailTitle,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colors.textPrimary
+                                )
+                                Text(
+                                    text = detailSubtitle,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = colors.textSecondary
+                                )
+                            }
+                            SereneBadge(text = "实时生效", containerColor = colors.mintBg, contentColor = colors.mintText)
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(colors.borderSubtle)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            when (selectedCategory) {
+                                "typography" -> SettingsTypographyContent(viewModel = viewModel, settings = settings)
+                                "haptics" -> SettingsSoundHapticsContent(viewModel = viewModel, settings = settings)
+                                "practice_flow" -> SettingsPracticeFlowContent(viewModel = viewModel, settings = settings)
+                                "gestures" -> SettingsGesturesContent(viewModel = viewModel, settings = settings)
+                                "dnd" -> SettingsDndContent(viewModel = viewModel, settings = settings)
+                                else -> SettingsAppearanceContent(viewModel = viewModel, settings = settings)
+                            }
+                        }
                     }
                 }
             }
@@ -272,6 +365,7 @@ private fun SettingsVersionFooter() {
 private fun SettingsCategorizedList(
     settings: UserSettingsState,
     searchQuery: String,
+    activeCategory: String? = null,
     onOpenAppearance: () -> Unit,
     onOpenTypography: () -> Unit,
     onOpenHaptics: () -> Unit,
@@ -289,7 +383,7 @@ private fun SettingsCategorizedList(
         "light" -> "浅色模式"
         else -> "跟随系统"
     }
-    val dynamicName = if (settings.dynamicColor) "动态取色" else settings.accentPreset
+    val dynamicName = if (settings.dynamicColor) "壁纸动态取色" else settings.accentPreset
     val fontScalePercent = settings.fontScalePercent
     val habitEnabledCount = listOf(
         settings.instantExplanation,
@@ -303,36 +397,39 @@ private fun SettingsCategorizedList(
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        // Section 1: 界面与个性化
-        if (matches("界面与个性化", "外观与主题", "字号与行距", "声音与震动", themeModeName, dynamicName)) {
-            SettingsSectionGroup(title = "看起来舒服") {
-                if (matches("外观与主题", themeModeName, dynamicName, "深色", "动态取色")) {
+        // Section 1: 视觉与外观
+        if (matches("视觉与外观", "主题模式", "字号与排版", "触感与提示音", themeModeName, dynamicName)) {
+            SettingsSectionGroup(title = "外观与显示") {
+                if (matches("主题模式", "外观与主题色", themeModeName, dynamicName, "深色", "动态取色")) {
                     SettingsRowItem(
                         icon = Icons.Outlined.Palette,
-                        title = "外观与主题色",
+                        title = "主题风格与强调色",
                         subtitle = "$themeModeName · $dynamicName",
                         iconBg = colors.primarySoft,
                         iconTint = colors.primaryAccent,
+                        isActive = activeCategory == "appearance",
                         onClick = onOpenAppearance,
                         testTag = "settings_row_appearance"
                     )
                 }
-                if (matches("字号与行距", "字号", "行高", "排版")) {
+                if (matches("字号与排版", "字号大小与行距", "字号", "行高", "排版")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.FormatSize,
-                        title = "字号大小与行距",
-                        subtitle = "当前字号 ${fontScalePercent}%",
+                        title = "字体字号与排版布局",
+                        subtitle = "当前字号缩放 ${fontScalePercent}%",
+                        isActive = activeCategory == "typography",
                         onClick = onOpenTypography,
                         testTag = "settings_row_typography"
                     )
                 }
-                if (matches("声音与震动", "震动", "声音", "音效")) {
+                if (matches("触感与提示音", "答题声音与震动", "震动", "声音", "音效")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.Vibration,
-                        title = "答题声音与震动",
-                        subtitle = if (settings.hapticFeedback) "点选项有轻微震感" else "安静无震动",
+                        title = "触感反馈与提示音",
+                        subtitle = if (settings.hapticFeedback) "已开启答题轻微微震" else "静音无震动",
+                        isActive = activeCategory == "haptics",
                         onClick = onOpenHaptics,
                         testTag = "settings_row_haptics"
                     )
@@ -340,34 +437,36 @@ private fun SettingsCategorizedList(
             }
         }
 
-        // Section 2: 刷题与做题习惯
-        if (matches("刷题顺手设置", "做题顺手习惯", "怎么安排复习", "滑动手势与题号卡")) {
-            SettingsSectionGroup(title = "做题顺手习惯") {
-                if (matches("做题顺手习惯", "解析", "自动下一题", "乱序")) {
+        // Section 2: 答题流转与习惯
+        if (matches("答题流转与习惯", "作答判定", "复习节奏", "手势操作与答题卡")) {
+            SettingsSectionGroup(title = "答题偏好与交互") {
+                if (matches("作答判定与自动切题", "选完答案后的动作", "解析", "自动下一题", "乱序")) {
                     SettingsRowItem(
                         icon = Icons.Outlined.Checklist,
-                        title = "选完答案后的动作",
-                        subtitle = "已开 ${habitEnabledCount} 项顺手功能",
+                        title = "作答判定与自动切题",
+                        subtitle = "已开启 ${habitEnabledCount} 项流转选项",
+                        isActive = activeCategory == "practice_flow",
                         onClick = onOpenPracticeFlow,
                         testTag = "settings_row_practice_flow"
                     )
                 }
-                if (matches("怎么安排复习", settings.reviewPreset, "记忆")) {
+                if (matches("复习节奏", "错题隔几天提醒我背", settings.reviewPreset, "记忆")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.Psychology,
-                        title = "错题隔几天提醒我背",
+                        title = "记忆曲线与复习规划",
                         subtitle = settings.reviewPreset,
                         onClick = onOpenReviewPlan,
                         testTag = "settings_row_review_mode"
                     )
                 }
-                if (matches("滑动手势与题号卡", settings.answerSheetStyle, "手势")) {
+                if (matches("手势操作与答题卡风格", "左右滑切题与题号卡", settings.answerSheetStyle, "手势")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.Swipe,
-                        title = "左右滑切题与题号卡",
+                        title = "手势操作与答题卡风格",
                         subtitle = settings.answerSheetStyle,
+                        isActive = activeCategory == "gestures",
                         onClick = onOpenGestures,
                         testTag = "settings_row_gestures"
                     )
@@ -375,39 +474,39 @@ private fun SettingsCategorizedList(
             }
         }
 
-        // Section 3: AI 讲题助手
-        if (matches("AI 讲题助手", "连接你自己的 AI 接口", "让 AI 怎么帮你讲题", "遇到错题自动出相似题", settings.aiModelId)) {
+        // Section 3: 智能辅导与 AI 设置
+        if (matches("智能辅导与 AI 设置", "大模型接口", "错因剖析", "变式题", settings.aiModelId)) {
             SettingsSectionGroup(
-                title = "AI 讲题助手",
-                badgeText = "✦ 随时问"
+                title = "智能辅导与 AI 设置",
+                badgeText = "✦ 实时助手"
             ) {
-                if (matches("连接你自己的 AI 接口", settings.aiModelId, "Key")) {
+                if (matches("大模型接口与密钥", "连接你自己的 AI 接口", settings.aiModelId, "Key")) {
                     SettingsRowItem(
                         icon = Icons.Outlined.Hub,
-                        title = "连接你自己的 AI 接口",
-                        subtitle = "${settings.aiModelId} · Key 只存在本机",
+                        title = "大模型服务与密钥配置",
+                        subtitle = "${settings.aiModelId} · 密钥本地存储",
                         iconBg = colors.primarySoft,
                         iconTint = colors.primaryAccent,
                         onClick = onOpenAiService,
                         testTag = "settings_row_ai_api"
                     )
                 }
-                if (matches("让 AI 怎么帮你讲题", "开启")) {
+                if (matches("智能错因剖析与难点拆解", "让 AI 怎么帮你讲题", "开启")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.ChatBubbleOutline,
-                        title = "让 AI 怎么帮你讲题",
-                        subtitle = if (settings.aiSmartExplanation) "做完题帮我拆解易错点" else "暂不开启",
+                        title = "智能错因剖析与难点拆解",
+                        subtitle = if (settings.aiSmartExplanation) "作答后深度拆解易错考点" else "暂不开启",
                         onClick = onOpenAiService,
                         testTag = "settings_row_ai_explain"
                     )
                 }
-                if (matches("遇到错题自动出相似题", "练习")) {
+                if (matches("错题变式题衍生练习", "遇到错题举一反三", "练习")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.Quiz,
-                        title = "遇到错题举一反三",
-                        subtitle = if (settings.aiVariantGenerator) "需要时帮我出一道相似题" else "仅手动点按",
+                        title = "错题变式题衍生练习",
+                        subtitle = if (settings.aiVariantGenerator) "支持针对错题自动衍生相似题" else "仅手动点按",
                         onClick = onOpenAiService,
                         testTag = "settings_row_ai_quiz"
                     )
@@ -415,24 +514,24 @@ private fun SettingsCategorizedList(
             }
         }
 
-        // Section 4: 题库备份与整理
-        if (matches("题库备份与整理", "手机里的题库与备份", "检查重题和漏写的解析")) {
-            SettingsSectionGroup(title = "题库备份与整理") {
-                if (matches("手机里的题库与备份", "备份", "12.8 MB")) {
+        // Section 4: 数据管理与题库体检
+        if (matches("数据管理与题库体检", "本地备份", "深度体检")) {
+            SettingsSectionGroup(title = "数据管理与体检") {
+                if (matches("本地存储与数据备份", "手机里的题库与备份", "备份", "12.8 MB")) {
                     SettingsRowItem(
                         icon = Icons.Outlined.Folder,
-                        title = "手机里的题库与备份",
-                        subtitle = "离线保存在手机里 · 12.8 MB",
+                        title = "本地存储与数据备份",
+                        subtitle = "纯本地离线加密存储 · 12.8 MB",
                         onClick = onOpenDataMgmt,
                         testTag = "settings_row_data_mgmt"
                     )
                 }
-                if (matches("检查重题和漏写的解析", "很干净")) {
+                if (matches("题库深度体检与冲突审查", "检查重题和漏写的解析")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.Verified,
-                        title = "检查重题和漏写的解析",
-                        subtitle = "题库很干净",
+                        title = "题库深度体检与冲突审查",
+                        subtitle = "题库健康状态良好 · 暂无阻断冲突",
                         subtitleColor = colors.mintText,
                         iconBg = colors.mintBg,
                         iconTint = colors.mintText,
@@ -443,24 +542,25 @@ private fun SettingsCategorizedList(
             }
         }
 
-        // Section 5: 每日目标与安静时段
-        if (matches("每日目标与安静时段", "每天想刷多少题", "晚上几点后别打扰我")) {
-            SettingsSectionGroup(title = "每日目标与安静时段") {
-                if (matches("每天想刷多少题", "每日")) {
+        // Section 5: 学习计划与免打扰
+        if (matches("学习计划与免打扰", "每日刷题目标", "夜间免打扰时段")) {
+            SettingsSectionGroup(title = "学习计划与免打扰") {
+                if (matches("每日刷题目标", "每天想刷多少题", "每日")) {
                     SettingsRowItem(
                         icon = Icons.Outlined.Alarm,
-                        title = "每天打算刷多少题",
+                        title = "每日刷题规划目标",
                         subtitle = "每天 ${settings.dailyTargetCount} 题",
                         onClick = onOpenReviewPlan,
                         testTag = "settings_row_daily_plan"
                     )
                 }
-                if (matches("晚上几点后别打扰我", "免打扰")) {
+                if (matches("夜间免打扰时段", "晚上几点后别打扰我", "免打扰")) {
                     SettingsDivider()
                     SettingsRowItem(
                         icon = Icons.Outlined.DoNotDisturbOn,
-                        title = "晚上几点后别发提醒",
-                        subtitle = if (settings.doNotDisturbMode) settings.dndTimeRange else "没开免打扰",
+                        title = "夜间免打扰时段",
+                        subtitle = if (settings.doNotDisturbMode) settings.dndTimeRange else "未开启免打扰",
+                        isActive = activeCategory == "dnd",
                         onClick = onOpenDnd,
                         testTag = "settings_row_dnd"
                     )
@@ -836,19 +936,25 @@ private fun SettingsTypographyContent(
                 Slider(
                     value = settings.fontScalePercent.toFloat(),
                     onValueChange = { viewModel.setFontScale(it.toInt()) },
-                    valueRange = 85f..125f,
-                    steps = 3
+                    valueRange = 75f..125f,
+                    steps = 4
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "提示：调整字号同时联动整机 DPI 缩放，在 1080p 屏幕或模拟器下推荐设为 80%~85%，界面更精致紧凑。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.textSecondary
+                )
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     listOf(
-                        85 to "紧凑",
+                        75 to "精简",
+                        85 to "1080p推荐",
                         100 to "标准",
-                        110 to "舒适",
-                        125 to "大字"
+                        115 to "舒适"
                     ).forEach { (percent, label) ->
                         val selected = settings.fontScalePercent == percent
                         Surface(
@@ -864,12 +970,13 @@ private fun SettingsTypographyContent(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "$label ${percent}%",
-                                    style = MaterialTheme.typography.labelMedium,
+                                    text = "$label\n${percent}%",
+                                    style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = if (selected) Color.White else colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false
+                                    maxLines = 2,
+                                    softWrap = false,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                 )
                             }
                         }
@@ -1399,22 +1506,26 @@ private fun SettingsRowItem(
     subtitleColor: Color? = null,
     iconBg: Color? = null,
     iconTint: Color? = null,
+    isActive: Boolean = false,
     testTag: String? = null,
     onClick: () -> Unit
 ) {
     val colors = SereneTheme.colors
-    val rowMod = if (testTag != null) {
+    val baseMod = if (isActive) {
         Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(colors.primarySoft.copy(alpha = 0.85f))
+            .border(1.dp, colors.primaryAccent.copy(alpha = 0.40f), RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp)
-            .testTag(testTag)
+            .padding(horizontal = 14.dp, vertical = 12.dp)
     } else {
         Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 14.dp)
     }
+    val rowMod = if (testTag != null) baseMod.testTag(testTag) else baseMod
     Row(
         modifier = rowMod,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1429,13 +1540,13 @@ private fun SettingsRowItem(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(iconBg ?: colors.subtleSurface),
+                    .background(if (isActive) colors.primaryAccent else (iconBg ?: colors.subtleSurface)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    tint = iconTint ?: colors.primaryAccent,
+                    tint = if (isActive) Color.White else (iconTint ?: colors.primaryAccent),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -1446,8 +1557,8 @@ private fun SettingsRowItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.textPrimary,
+                    fontWeight = if (isActive) FontWeight.ExtraBold else FontWeight.Bold,
+                    color = if (isActive) colors.primaryAccent else colors.textPrimary,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis
@@ -1455,7 +1566,7 @@ private fun SettingsRowItem(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = subtitleColor ?: colors.textMuted,
+                    color = if (isActive) colors.primaryAccent.copy(alpha = 0.8f) else (subtitleColor ?: colors.textMuted),
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis
@@ -1466,7 +1577,7 @@ private fun SettingsRowItem(
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
-            tint = colors.textMuted
+            tint = if (isActive) colors.primaryAccent else colors.textMuted
         )
     }
 }

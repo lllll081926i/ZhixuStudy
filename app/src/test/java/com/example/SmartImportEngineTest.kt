@@ -104,4 +104,24 @@ class SmartImportEngineTest {
         val evalKept = SmartImportEngine.evaluateImportRows(listOf(rawRow), mapping, rulesWithoutSerial, emptyList())
         assertEquals("12. 这是一个测试题目题干", evalKept[0].stem)
     }
+
+    @Test
+    fun testAnkiImportParsing() {
+        // 1. 测试 Anki Cloze 完形填空卡片
+        val ankiClozeText = "单线平行运行图周期包含 {{c1::纯运行时分}} 与 {{c2::车站间隔时间}}。"
+        val (_, rows) = SmartImportEngine.parseAnkiCards(ankiClozeText)
+        assertEquals(1, rows.size)
+        val row = rows[0]
+        assertEquals("填空题", row.values["题型"])
+        assertEquals("单线平行运行图周期包含 [ 空位 1 ] 与 [ 空位 2 ]。", row.values["题干"])
+        assertEquals("纯运行时分, 车站间隔时间", row.values["答案"])
+
+        // 2. 测试 Anki Basic Tab 分隔卡片与 HTML 清洗
+        val ankiBasicText = "<b>格林希尔治模型</b>中最大通行能力的密度是多少？\tKm = 0.5 Kj\t交通流理论"
+        val (_, basicRows) = SmartImportEngine.parseAnkiCards(ankiBasicText)
+        assertEquals(1, basicRows.size)
+        assertEquals("格林希尔治模型中最大通行能力的密度是多少？", basicRows[0].values["题干"])
+        assertEquals("Km = 0.5 Kj", basicRows[0].values["答案"])
+        assertEquals("交通流理论", basicRows[0].values["章节"])
+    }
 }

@@ -194,11 +194,125 @@ object SmartImportEngine {
     }
 
     /**
+     * Strips HTML markup commonly found in Anki exports and web paste.
+     */
+    fun cleanHtml(input: String): String {
+        return input
+            .replace(Regex("<br\\s*/?>", RegexOption.IGNORE_CASE), "\n")
+            .replace(Regex("</div>", RegexOption.IGNORE_CASE), "\n")
+            .replace(Regex("</p>", RegexOption.IGNORE_CASE), "\n")
+            .replace(Regex("<[^>]+>"), "")
+            .replace("&nbsp;", " ")
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
+            .replace("&quot;", "\"")
+            .trim()
+    }
+
+    /**
+     * Parses Anki card export (TSV/TXT with #tags, Cloze {{c1::...}}, or Front/Back tabs).
+     */
+    fun parseAnkiCards(content: String): Pair<List<String>, List<RawImportRow>> {
+        val clozeRegex = Regex("\\{\\{c(\\d+)::(.*?)(?:::.*?)?\\}\\}")
+        val headers = listOf("题干", "题型", "选项A", "选项B", "选项C", "选项D", "答案", "解析", "难度", "章节")
+        val lines = content.lines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
+
+        val rows = lines.mapIndexedNotNull { index, rawLine ->
+            val line = cleanHtml(rawLine)
+            if (line.isBlank()) return@mapIndexedNotNull null
+
+            // 1. Cloze Deletion check
+            if (clozeRegex.containsMatchIn(line)) {
+                val matches = clozeRegex.findAll(line).toList()
+                val answers = matches.map { it.groupValues[2].trim() }
+                var stem = line
+                matches.forEachIndexed { i, m ->
+                    val slotNum = m.groupValues[1].toIntOrNull() ?: (i + 1)
+                    stem = stem.replace(m.value, "[ 空位 $slotNum ]")
+                }
+                return@mapIndexedNotNull RawImportRow(
+                    rowNumber = index + 1,
+                    values = mapOf(
+                        "题干" to stem,
+                        "题型" to "填空题",
+                        "选项A" to (answers.getOrNull(0)?.let { "空位 1：$it" } ?: ""),
+                        "选项B" to (answers.getOrNull(1)?.let { "空位 2：$it" } ?: ""),
+                        "选项C" to (answers.getOrNull(2)?.let { "空位 3：$it" } ?: ""),
+                        "选项D" to "",
+                        "答案" to answers.joinToString(", "),
+                        "解析" to "来自 Anki Cloze 完形填空卡片智能提取",
+                        "难度" to "中等",
+                        "章节" to "Anki 完形记忆库"
+                    )
+                )
+            }
+
+            // 2. Tab-separated Front/Back or Comma-separated
+            val parts = if (rawLine.contains("\t")) {
+                rawLine.split("\t").map { cleanHtml(it) }
+            } else if (rawLine.contains(",")) {
+                rawLine.split(",").map { cleanHtml(it).removeSurrounding("\"") }
+            } else {
+                listOf(line)
+            }
+
+            if (parts.size >= 2) {
+                val front = parts[0]
+                val back = parts[1]
+                val tags = parts.getOrNull(2)?.takeIf { it.isNotBlank() } ?: "Anki 导入卡片"
+
+                // Check if front contains options A/B/C/D
+                val frontLines = front.lines().map { it.trim() }.filter { it.isNotEmpty() }
+                val stem = frontLines.firstOrNull() ?: front
+                val optA = frontLines.find { it.startsWith("A") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+                val optB = frontLines.find { it.startsWith("B") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+                val optC = frontLines.find { it.startsWith("C") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+                val optD = frontLines.find { it.startsWith("D") }?.replace(Regex("^[A-D][.、)\\s]+"), "") ?: ""
+
+                val hasOptions = optA.isNotEmpty() && optB.isNotEmpty()
+                val inferredType = when {
+                    back in listOf("正确", "错误", "√", "×", "对", "错") -> "判断题"
+                    hasOptions && back.replace(Regex("[,，\\s]"), "").length > 1 -> "多选题"
+                    hasOptions -> "单选题"
+                    else -> "填空题"
+                }
+
+                RawImportRow(
+                    rowNumber = index + 1,
+                    values = mapOf(
+                        "题干" to stem,
+                        "题型" to inferredType,
+                        "选项A" to (if (hasOptions) optA else if (inferredType == "判断题") "正确" else ""),
+                        "选项B" to (if (hasOptions) optB else if (inferredType == "判断题") "错误" else ""),
+                        "选项C" to optC,
+                        "选项D" to optD,
+                        "答案" to back,
+                        "解析" to "Anki 卡片背面解析: $back",
+                        "难度" to "中等",
+                        "章节" to tags
+                    )
+                )
+            } else {
+                null
+            }
+        }
+
+        return if (rows.isEmpty()) getDemoExcelRows() else headers to rows
+    }
+
+    /**
      * Parses pasted text, CSV, TSV, or JSON string into headers + RawImportRow list.
      */
     fun parseRawTextContent(fileName: String, content: String): Pair<List<String>, List<RawImportRow>> {
         val trimmed = content.trim()
         if (trimmed.isEmpty()) return getDemoExcelRows()
+
+        // Check if Anki export format (cloze deletion {{c1::...}} or Anki header #separator:...)
+        if (trimmed.startsWith("#separator:") || trimmed.contains("{{c") || fileName.contains("anki", ignoreCase = true)) {
+            val ankiRes = parseAnkiCards(trimmed)
+            if (ankiRes.second.isNotEmpty()) return ankiRes
+        }
 
         // Try JSON format
         if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
