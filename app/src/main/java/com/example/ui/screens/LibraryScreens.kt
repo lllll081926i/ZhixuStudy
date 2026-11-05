@@ -157,16 +157,6 @@ fun LibraryScreen(
                         }
                     }
                     IconButton(
-                        onClick = { viewModel.navigateTo(AppScreen.AI_SERVICE) },
-                        modifier = Modifier.testTag("library_ai_btn")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.AutoAwesome,
-                            contentDescription = "AI 助手",
-                            tint = colors.primaryAccent
-                        )
-                    }
-                    IconButton(
                         onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
                         modifier = Modifier.testTag("library_settings_btn")
                     ) {

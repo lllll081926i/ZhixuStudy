@@ -7,10 +7,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
@@ -136,7 +141,41 @@ fun SereneStudyAppRoot(viewModel: StudyViewModel) {
             AnimatedContent(
                 targetState = currentScreen,
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(180))
+                    val isEnteringDeep = targetState != AppScreen.HOME && initialState == AppScreen.HOME
+                    val isPoppingBack = targetState == AppScreen.HOME && initialState != AppScreen.HOME
+                    when {
+                        isEnteringDeep -> {
+                            (slideInHorizontally(
+                                initialOffsetX = { fullWidth -> (fullWidth * 0.12f).toInt() },
+                                animationSpec = tween(280, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(240))) togetherWith (slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -(fullWidth * 0.08f).toInt() },
+                                animationSpec = tween(240, easing = FastOutSlowInEasing)
+                            ) + fadeOut(animationSpec = tween(200)))
+                        }
+                        isPoppingBack -> {
+                            (slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -(fullWidth * 0.08f).toInt() },
+                                animationSpec = tween(260, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(220))) togetherWith (slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> (fullWidth * 0.12f).toInt() },
+                                animationSpec = tween(240, easing = FastOutSlowInEasing)
+                            ) + fadeOut(animationSpec = tween(180)))
+                        }
+                        targetState.isPrimaryTab && initialState.isPrimaryTab -> {
+                            fadeIn(animationSpec = tween(220, easing = FastOutSlowInEasing)) togetherWith
+                                fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))
+                        }
+                        else -> {
+                            (fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) + scaleIn(
+                                initialScale = 0.98f,
+                                animationSpec = tween(240, easing = FastOutSlowInEasing)
+                            )) togetherWith (fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing)) + scaleOut(
+                                targetScale = 0.98f,
+                                animationSpec = tween(200, easing = FastOutSlowInEasing)
+                            ))
+                        }
+                    }
                 },
                 label = "serene_screen_transition"
             ) { screen ->

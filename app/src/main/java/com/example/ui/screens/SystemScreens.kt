@@ -258,13 +258,13 @@ fun SettingsScreen(
                     shadowElevation = 2.dp
                 ) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        val (detailTitle, detailSubtitle) = when (selectedCategory) {
-                            "typography" -> "字体字号与排版布局" to "根据阅读习惯调整题目字号大小与行间距"
-                            "haptics" -> "触感反馈与提示音效" to "配置答题微震动与选项按压提示音"
-                            "practice_flow" -> "作答判定与自动切题" to "即时解析呈现、做对自动切题与选项乱序"
-                            "gestures" -> "手势交互与答题卡风格" to "左右滑动切题、双击收藏与答题卡外观"
-                            "dnd" -> "学习计划与夜间免打扰" to "设定每日刷题目标与安静作息免打扰时段"
-                            else -> "主题风格与强调配色" to "深色模式、动态壁纸取色与个性化主色调"
+                        val detailTitle = when (selectedCategory) {
+                            "typography" -> "排版与字号"
+                            "haptics" -> "触感与提示"
+                            "practice_flow" -> "作答与流转"
+                            "gestures" -> "手势与答题卡"
+                            "dnd" -> "免打扰时段"
+                            else -> "主题与色彩"
                         }
                         Row(
                             modifier = Modifier
@@ -273,19 +273,12 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                Text(
-                                    text = detailTitle,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.textPrimary
-                                )
-                                Text(
-                                    text = detailSubtitle,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = colors.textSecondary
-                                )
-                            }
+                            Text(
+                                text = detailTitle,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.textPrimary
+                            )
                             SereneBadge(text = "实时生效", containerColor = colors.mintBg, contentColor = colors.mintText)
                         }
                         Box(
@@ -396,175 +389,122 @@ private fun SettingsCategorizedList(
         return texts.any { it.contains(searchQuery.trim(), ignoreCase = true) }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        // Section 1: 视觉与外观
-        if (matches("视觉与外观", "主题模式", "字号与排版", "触感与提示音", themeModeName, dynamicName)) {
-            SettingsSectionGroup(title = "外观与显示") {
-                if (matches("主题模式", "外观与主题色", themeModeName, dynamicName, "深色", "动态取色")) {
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Palette,
-                        title = "主题风格与强调色",
-                        subtitle = "$themeModeName · $dynamicName",
-                        iconBg = colors.primarySoft,
-                        iconTint = colors.primaryAccent,
-                        isActive = activeCategory == "appearance",
-                        onClick = onOpenAppearance,
-                        testTag = "settings_row_appearance"
-                    )
-                }
-                if (matches("字号与排版", "字号大小与行距", "字号", "行高", "排版")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.FormatSize,
-                        title = "字体字号与排版布局",
-                        subtitle = "当前字号缩放 ${fontScalePercent}%",
-                        isActive = activeCategory == "typography",
-                        onClick = onOpenTypography,
-                        testTag = "settings_row_typography"
-                    )
-                }
-                if (matches("触感与提示音", "答题声音与震动", "震动", "声音", "音效")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Vibration,
-                        title = "触感反馈与提示音",
-                        subtitle = if (settings.hapticFeedback) "已开启答题轻微微震" else "静音无震动",
-                        isActive = activeCategory == "haptics",
-                        onClick = onOpenHaptics,
-                        testTag = "settings_row_haptics"
-                    )
-                }
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Group 1: 界面呈现
+        if (matches("主题", "外观", "字号", "排版", "震动", "触感", themeModeName, dynamicName)) {
+            SettingsSectionGroup(title = "界面呈现") {
+                SettingsRowItem(
+                    icon = Icons.Outlined.Palette,
+                    title = "主题与色彩",
+                    subtitle = "$themeModeName · $dynamicName",
+                    iconBg = colors.primarySoft,
+                    iconTint = colors.primaryAccent,
+                    isActive = activeCategory == "appearance",
+                    onClick = onOpenAppearance,
+                    testTag = "settings_row_appearance"
+                )
+                SettingsDivider()
+                SettingsRowItem(
+                    icon = Icons.Outlined.FormatSize,
+                    title = "排版与字号",
+                    subtitle = "${fontScalePercent}% · ${settings.lineSpacingMode}",
+                    isActive = activeCategory == "typography",
+                    onClick = onOpenTypography,
+                    testTag = "settings_row_typography"
+                )
+                SettingsDivider()
+                SettingsRowItem(
+                    icon = Icons.Outlined.Vibration,
+                    title = "触感反馈",
+                    subtitle = if (settings.hapticFeedback) settings.hapticStrength else "关闭",
+                    isActive = activeCategory == "haptics",
+                    onClick = onOpenHaptics,
+                    testTag = "settings_row_haptics"
+                )
             }
         }
 
-        // Section 2: 答题流转与习惯
-        if (matches("答题流转与习惯", "作答判定", "复习节奏", "手势操作与答题卡")) {
-            SettingsSectionGroup(title = "答题偏好与交互") {
-                if (matches("作答判定与自动切题", "选完答案后的动作", "解析", "自动下一题", "乱序")) {
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Checklist,
-                        title = "作答判定与自动切题",
-                        subtitle = "已开启 ${habitEnabledCount} 项流转选项",
-                        isActive = activeCategory == "practice_flow",
-                        onClick = onOpenPracticeFlow,
-                        testTag = "settings_row_practice_flow"
-                    )
-                }
-                if (matches("复习节奏", "错题隔几天提醒我背", settings.reviewPreset, "记忆")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Psychology,
-                        title = "记忆曲线与复习规划",
-                        subtitle = settings.reviewPreset,
-                        onClick = onOpenReviewPlan,
-                        testTag = "settings_row_review_mode"
-                    )
-                }
-                if (matches("手势操作与答题卡风格", "左右滑切题与题号卡", settings.answerSheetStyle, "手势")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Swipe,
-                        title = "手势操作与答题卡风格",
-                        subtitle = settings.answerSheetStyle,
-                        isActive = activeCategory == "gestures",
-                        onClick = onOpenGestures,
-                        testTag = "settings_row_gestures"
-                    )
-                }
+        // Group 2: 答题流转
+        if (matches("作答", "解析", "自动切题", "乱序", "手势", "答题卡")) {
+            SettingsSectionGroup(title = "答题流转") {
+                SettingsRowItem(
+                    icon = Icons.Outlined.Checklist,
+                    title = "作答与流转",
+                    subtitle = if (settings.instantExplanation) "即时解析" else "交卷解析",
+                    isActive = activeCategory == "practice_flow",
+                    onClick = onOpenPracticeFlow,
+                    testTag = "settings_row_practice_flow"
+                )
+                SettingsDivider()
+                SettingsRowItem(
+                    icon = Icons.Outlined.Swipe,
+                    title = "手势与答题卡",
+                    subtitle = settings.answerSheetStyle,
+                    isActive = activeCategory == "gestures",
+                    onClick = onOpenGestures,
+                    testTag = "settings_row_gestures"
+                )
             }
         }
 
-        // Section 3: 智能辅导与 AI 设置
-        if (matches("智能辅导与 AI 设置", "大模型接口", "错因剖析", "变式题", settings.aiModelId)) {
-            SettingsSectionGroup(
-                title = "智能辅导与 AI 设置",
-                badgeText = "✦ 实时助手"
-            ) {
-                if (matches("大模型接口与密钥", "连接你自己的 AI 接口", settings.aiModelId, "Key")) {
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Hub,
-                        title = "大模型服务与密钥配置",
-                        subtitle = "${settings.aiModelId} · 密钥本地存储",
-                        iconBg = colors.primarySoft,
-                        iconTint = colors.primaryAccent,
-                        onClick = onOpenAiService,
-                        testTag = "settings_row_ai_api"
-                    )
-                }
-                if (matches("智能错因剖析与难点拆解", "让 AI 怎么帮你讲题", "开启")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.ChatBubbleOutline,
-                        title = "智能错因剖析与难点拆解",
-                        subtitle = if (settings.aiSmartExplanation) "作答后深度拆解易错考点" else "暂不开启",
-                        onClick = onOpenAiService,
-                        testTag = "settings_row_ai_explain"
-                    )
-                }
-                if (matches("错题变式题衍生练习", "遇到错题举一反三", "练习")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Quiz,
-                        title = "错题变式题衍生练习",
-                        subtitle = if (settings.aiVariantGenerator) "支持针对错题自动衍生相似题" else "仅手动点按",
-                        onClick = onOpenAiService,
-                        testTag = "settings_row_ai_quiz"
-                    )
-                }
+        // Group 3: 学习规划
+        if (matches("复习", "计划", "目标", "免打扰")) {
+            SettingsSectionGroup(title = "学习规划") {
+                SettingsRowItem(
+                    icon = Icons.Outlined.Psychology,
+                    title = "复习计划与目标",
+                    subtitle = "每天 ${settings.dailyTargetCount} 题 · ${settings.reviewPreset}",
+                    onClick = onOpenReviewPlan,
+                    testTag = "settings_row_review_mode"
+                )
+                SettingsDivider()
+                SettingsRowItem(
+                    icon = Icons.Outlined.DoNotDisturbOn,
+                    title = "免打扰时段",
+                    subtitle = if (settings.doNotDisturbMode) settings.dndTimeRange else "关闭",
+                    isActive = activeCategory == "dnd",
+                    onClick = onOpenDnd,
+                    testTag = "settings_row_dnd"
+                )
             }
         }
 
-        // Section 4: 数据管理与题库体检
-        if (matches("数据管理与题库体检", "本地备份", "深度体检")) {
-            SettingsSectionGroup(title = "数据管理与体检") {
-                if (matches("本地存储与数据备份", "手机里的题库与备份", "备份", "12.8 MB")) {
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Folder,
-                        title = "本地存储与数据备份",
-                        subtitle = "纯本地离线加密存储 · 12.8 MB",
-                        onClick = onOpenDataMgmt,
-                        testTag = "settings_row_data_mgmt"
-                    )
-                }
-                if (matches("题库深度体检与冲突审查", "检查重题和漏写的解析")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Verified,
-                        title = "题库深度体检与冲突审查",
-                        subtitle = "题库健康状态良好 · 暂无阻断冲突",
-                        subtitleColor = colors.mintText,
-                        iconBg = colors.mintBg,
-                        iconTint = colors.mintText,
-                        onClick = onOpenAudit,
-                        testTag = "settings_row_audit"
-                    )
-                }
+        // Group 4: 数据与体检
+        if (matches("备份", "数据", "体检", "冲突", "恢复")) {
+            SettingsSectionGroup(title = "数据与体检") {
+                SettingsRowItem(
+                    icon = Icons.Outlined.Folder,
+                    title = "数据管理与备份",
+                    subtitle = "本地离线存储",
+                    onClick = onOpenDataMgmt,
+                    testTag = "settings_row_data_mgmt"
+                )
+                SettingsDivider()
+                SettingsRowItem(
+                    icon = Icons.Outlined.Verified,
+                    title = "题库体检",
+                    subtitle = "全库冲突审查",
+                    subtitleColor = colors.mintText,
+                    iconBg = colors.mintBg,
+                    iconTint = colors.mintText,
+                    onClick = onOpenAudit,
+                    testTag = "settings_row_audit"
+                )
             }
         }
 
-        // Section 5: 学习计划与免打扰
-        if (matches("学习计划与免打扰", "每日刷题目标", "夜间免打扰时段")) {
-            SettingsSectionGroup(title = "学习计划与免打扰") {
-                if (matches("每日刷题目标", "每天想刷多少题", "每日")) {
-                    SettingsRowItem(
-                        icon = Icons.Outlined.Alarm,
-                        title = "每日刷题规划目标",
-                        subtitle = "每天 ${settings.dailyTargetCount} 题",
-                        onClick = onOpenReviewPlan,
-                        testTag = "settings_row_daily_plan"
-                    )
-                }
-                if (matches("夜间免打扰时段", "晚上几点后别打扰我", "免打扰")) {
-                    SettingsDivider()
-                    SettingsRowItem(
-                        icon = Icons.Outlined.DoNotDisturbOn,
-                        title = "夜间免打扰时段",
-                        subtitle = if (settings.doNotDisturbMode) settings.dndTimeRange else "未开启免打扰",
-                        isActive = activeCategory == "dnd",
-                        onClick = onOpenDnd,
-                        testTag = "settings_row_dnd"
-                    )
-                }
+        // Group 5: AI 辅助模型
+        if (matches("AI", "模型", "API", "密钥", settings.aiModelId)) {
+            SettingsSectionGroup(title = "智能模型配置") {
+                SettingsRowItem(
+                    icon = Icons.Outlined.Hub,
+                    title = "模型接口与密钥",
+                    subtitle = settings.aiModelId,
+                    iconBg = colors.primarySoft,
+                    iconTint = colors.primaryAccent,
+                    onClick = onOpenAiService,
+                    testTag = "settings_row_ai_api"
+                )
             }
         }
     }
@@ -932,7 +872,7 @@ private fun SettingsTypographyContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "正文字号缩放",
+                        text = "字号缩放",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary,
@@ -945,27 +885,21 @@ private fun SettingsTypographyContent(
                         contentColor = colors.primaryAccent
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Slider(
                     value = settings.fontScalePercent.toFloat(),
                     onValueChange = { viewModel.setFontScale(it.toInt()) },
                     valueRange = 75f..125f,
                     steps = 4
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "提示：调整字号同时联动整机 DPI 缩放，在 1080p 屏幕或模拟器下推荐设为 80%~85%，界面更精致紧凑。",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = colors.textSecondary
-                )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     listOf(
                         75 to "精简",
-                        85 to "1080p推荐",
+                        85 to "推荐",
                         100 to "标准",
                         115 to "舒适"
                     ).forEach { (percent, label) ->
@@ -1002,7 +936,7 @@ private fun SettingsTypographyContent(
         item {
             SereneCard {
                 Text(
-                    text = "段落行距模式",
+                    text = "行距",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.textPrimary,
@@ -1089,16 +1023,16 @@ private fun SettingsSoundHapticsContent(
         item {
             SereneCard {
                 SettingSwitchRow(
-                    title = "触感微震动反馈",
-                    subtitle = "作答点选与切题时提供细腻震感",
+                    title = "触感反馈",
+                    subtitle = null,
                     checked = settings.hapticFeedback,
                     onCheckedChange = { viewModel.updateHabitSetting(haptic = it) }
                 )
                 if (settings.hapticFeedback) {
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "震感强度",
-                        style = MaterialTheme.typography.labelLarge,
+                        text = "反馈强度",
+                        style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.textSecondary,
                         maxLines = 1,
@@ -1219,26 +1153,26 @@ private fun SettingsPracticeFlowContent(
         item {
             SereneCard {
                 SettingSwitchRow(
-                    title = "即时显示解析",
-                    subtitle = "选定答案后立即展开正确答案与考点剖析",
+                    title = "即时解析",
+                    subtitle = null,
                     checked = settings.instantExplanation,
                     onCheckedChange = { viewModel.updateHabitSetting(instantExp = it) }
                 )
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingsDivider()
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingSwitchRow(
-                    title = "单选题答对自动跳转下一题",
-                    subtitle = "正确作答后无需手动滑动，自动进入下一题",
+                    title = "答对自动下一题",
+                    subtitle = null,
                     checked = settings.autoNextOnCorrect,
                     onCheckedChange = { viewModel.updateHabitSetting(autoNext = it) }
                 )
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingsDivider()
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingSwitchRow(
-                    title = "随机打乱选项顺序",
-                    subtitle = "A / B / C / D 随机排布，防止记忆选项位置",
+                    title = "选项乱序",
+                    subtitle = null,
                     checked = settings.shuffleOptions,
                     onCheckedChange = { viewModel.updateHabitSetting(shuffleOpts = it) }
                 )
@@ -1290,26 +1224,26 @@ private fun SettingsGesturesContent(
         item {
             SereneCard {
                 SettingSwitchRow(
-                    title = "左右滑动切换题目",
-                    subtitle = "在答题区左右横滑快速切换上一题/下一题",
+                    title = "左右滑动切题",
+                    subtitle = null,
                     checked = settings.swipeSwitchQuestion,
                     onCheckedChange = { viewModel.updateGestureSettings(swipeSwitch = it) }
                 )
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingsDivider()
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingSwitchRow(
-                    title = "双击题干加入收藏",
-                    subtitle = "双击题目文字区域快速标记星标重点",
+                    title = "双击题干收藏",
+                    subtitle = null,
                     checked = settings.doubleTapStar,
                     onCheckedChange = { viewModel.updateGestureSettings(doubleTapStar = it) }
                 )
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingsDivider()
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 SettingSwitchRow(
-                    title = "长按选项排除干扰项",
-                    subtitle = "长按单个选项可将其置灰排除",
+                    title = "长按选项排除",
+                    subtitle = null,
                     checked = settings.longPressExcludeOption,
                     onCheckedChange = { viewModel.updateGestureSettings(longPressExclude = it) }
                 )
@@ -1319,14 +1253,14 @@ private fun SettingsGesturesContent(
         item {
             SereneCard {
                 Text(
-                    text = "答题卡展开样式",
+                    text = "答题卡样式",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.textPrimary,
                     maxLines = 1,
                     softWrap = false
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -1342,12 +1276,12 @@ private fun SettingsGesturesContent(
                                 .clickable { viewModel.updateGestureSettings(sheetStyle = style) }
                         ) {
                             Box(
-                                modifier = Modifier.padding(vertical = 12.dp),
+                                modifier = Modifier.padding(vertical = 10.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = style,
-                                    style = MaterialTheme.typography.labelLarge,
+                                    style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = if (selected) Color.White else colors.textPrimary,
                                     maxLines = 1,
@@ -1405,16 +1339,16 @@ private fun SettingsDndContent(
         item {
             SereneCard {
                 SettingSwitchRow(
-                    title = "夜间静默免打扰",
-                    subtitle = "在免打扰时段内暂停所有温习推送提醒",
+                    title = "夜间免打扰",
+                    subtitle = null,
                     checked = settings.doNotDisturbMode,
                     onCheckedChange = { viewModel.updatePlanSetting(dnd = it) }
                 )
                 if (settings.doNotDisturbMode) {
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "静默时段",
-                        style = MaterialTheme.typography.labelLarge,
+                        text = "时段",
+                        style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.textSecondary,
                         maxLines = 1,
@@ -1697,7 +1631,7 @@ fun AiServiceScreen(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(46.dp)
+                                .size(44.dp)
                                 .clip(RoundedCornerShape(14.dp))
                                 .background(colors.primarySoft),
                             contentAlignment = Alignment.Center
@@ -1713,32 +1647,13 @@ fun AiServiceScreen(
                             verticalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    text = "Key 只存在你自己的手机里",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                SereneBadge(
-                                    text = "✓ 本地保存",
-                                    containerColor = colors.mintBg,
-                                    contentColor = colors.mintText
-                                )
-                            }
                             Text(
-                                text = "只有你点「讲题」的时候才会发请求，平时完全离线。",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = colors.textSecondary,
+                                text = "本地私有存储",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.textPrimary,
                                 maxLines = 1,
-                                softWrap = false,
-                                overflow = TextOverflow.Ellipsis
+                                softWrap = false
                             )
                         }
                     }
@@ -1747,41 +1662,20 @@ fun AiServiceScreen(
 
             // 2. Model & Connection Card
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "连哪个 AI 服务？",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.primaryAccent,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                    Text(
-                        text = "点一下可切换",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = colors.textMuted,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
                 SereneCard {
                     Text(
-                        text = "服务商类型",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = colors.textMuted,
+                        text = "服务协议",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textSecondary,
                         maxLines = 1,
                         softWrap = false
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     val providers = listOf(
-                        "OpenAI 通用接口 (DeepSeek / GPT / Kimi 都能用)",
+                        "OpenAI 兼容协议 (DeepSeek / GPT / Kimi)",
                         "Claude 接口",
-                        "电脑局域网 Ollama 本地模型"
+                        "本地 Ollama"
                     )
                     Row(
                         modifier = Modifier
@@ -1816,7 +1710,7 @@ fun AiServiceScreen(
                     OutlinedTextField(
                         value = baseUrl,
                         onValueChange = { baseUrl = it },
-                        label = { Text("接口地址 (Base URL)", maxLines = 1, softWrap = false) },
+                        label = { Text("Base URL", maxLines = 1, softWrap = false) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
@@ -1826,7 +1720,7 @@ fun AiServiceScreen(
                     OutlinedTextField(
                         value = modelId,
                         onValueChange = { modelId = it },
-                        label = { Text("模型名字 (比如 deepseek-chat)", maxLines = 1, softWrap = false) },
+                        label = { Text("模型标识 (Model ID)", maxLines = 1, softWrap = false) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
@@ -1859,7 +1753,7 @@ fun AiServiceScreen(
                             }
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "你的 API Key",
+                                    text = "API Key",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = colors.textMuted,
                                     maxLines = 1,
@@ -1876,27 +1770,17 @@ fun AiServiceScreen(
                                 )
                             }
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        OutlinedButton(
+                            onClick = { isEditingKeyInline = !isEditingKeyInline },
+                            shape = RoundedCornerShape(999.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                         ) {
-                            SereneBadge(
-                                text = "已加密",
-                                containerColor = colors.mintBg,
-                                contentColor = colors.mintText
+                            Text(
+                                text = if (isEditingKeyInline) "收起" else "修改",
+                                style = MaterialTheme.typography.labelMedium,
+                                maxLines = 1,
+                                softWrap = false
                             )
-                            OutlinedButton(
-                                onClick = { isEditingKeyInline = !isEditingKeyInline },
-                                shape = RoundedCornerShape(999.dp),
-                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = if (isEditingKeyInline) "收起" else "换一个",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                            }
                         }
                     }
 
@@ -1905,7 +1789,7 @@ fun AiServiceScreen(
                             OutlinedTextField(
                                 value = rawKeyInput,
                                 onValueChange = { rawKeyInput = it },
-                                label = { Text("粘贴新的 API Key (sk-...)", maxLines = 1, softWrap = false) },
+                                label = { Text("输入 API Key", maxLines = 1, softWrap = false) },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp)
@@ -1928,7 +1812,7 @@ fun AiServiceScreen(
                                     colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent),
                                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
                                 ) {
-                                    Text("填好了", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                    Text("保存", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
                                 }
                             }
                         }
@@ -1941,7 +1825,7 @@ fun AiServiceScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SereneBadge(
-                            text = "● 能连上 (${pingLatencyMs}ms)",
+                            text = "${pingLatencyMs}ms",
                             containerColor = colors.mintBg,
                             contentColor = colors.mintText
                         )
@@ -1952,7 +1836,7 @@ fun AiServiceScreen(
                                 .clip(RoundedCornerShape(999.dp))
                                 .clickable {
                                     pingLatencyMs = (180..310).random()
-                                    viewModel.showToast("连上啦！响应速度 ${pingLatencyMs}ms")
+                                    viewModel.showToast("已连接 · ${pingLatencyMs}ms")
                                 }
                                 .testTag("ping_ai_endpoint_btn")
                         ) {
@@ -1968,7 +1852,7 @@ fun AiServiceScreen(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
-                                    text = "试试能不能连上",
+                                    text = "测试连接",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = colors.primaryAccent,
@@ -2299,7 +2183,7 @@ fun AuditScreen(
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = "一键全部修好 ($issueCount 处)",
+                                text = "一键修复全部 ($issueCount 处)",
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 1,
                                 softWrap = false
@@ -2312,9 +2196,9 @@ fun AuditScreen(
             // 2. Category Filter Tabs
             item {
                 val filterOptions = listOf(
-                    "all" to "答案打架的 (${conflictPairs.size})",
-                    "duplicate" to "重复导入的 (${duplicatePairs.size})",
-                    "missing" to "没写解析的 (${missingExpQuestions.size})"
+                    "all" to "答案冲突 (${conflictPairs.size})",
+                    "duplicate" to "重复题目 (${duplicatePairs.size})",
+                    "missing" to "缺失解析 (${missingExpQuestions.size})"
                 )
                 SereneFilterChipRow(
                     options = filterOptions,
@@ -2328,7 +2212,7 @@ fun AuditScreen(
                 "duplicate" -> {
                     if (duplicatePairs.isEmpty()) {
                         item {
-                            AuditEmptyStateCard("没有重复导入的题目")
+                            AuditEmptyStateCard("暂无重复题目")
                         }
                     } else {
                         items(duplicatePairs, key = { it.id }) { pair ->
@@ -2344,7 +2228,7 @@ fun AuditScreen(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         SereneBadge(
-                                            text = "两道题内容一样",
+                                            text = "完全重复",
                                             containerColor = colors.amberBg,
                                             contentColor = colors.amberText
                                         )
@@ -2380,7 +2264,7 @@ fun AuditScreen(
                                         shape = RoundedCornerShape(999.dp),
                                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                                     ) {
-                                        Text("两道都留着", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                        Text("同时保留", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
                                     }
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Button(
@@ -2395,7 +2279,7 @@ fun AuditScreen(
                                             modifier = Modifier.size(16.dp)
                                         )
                                         Spacer(modifier = Modifier.width(4.dp))
-                                        Text("合并成一道", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                        Text("合并保留单题", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
                                     }
                                 }
                             }
@@ -2406,7 +2290,7 @@ fun AuditScreen(
                 "missing" -> {
                     if (missingExpQuestions.isEmpty()) {
                         item {
-                            AuditEmptyStateCard("每道题都已经写好解析啦")
+                            AuditEmptyStateCard("暂无缺失解析题目")
                         }
                     } else {
                         items(missingExpQuestions, key = { it.id }) { q ->
@@ -2417,7 +2301,7 @@ fun AuditScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     SereneBadge(
-                                        text = "还没写解析",
+                                        text = "缺失解析",
                                         containerColor = colors.dangerBg,
                                         contentColor = colors.dangerText
                                     )
@@ -2450,7 +2334,7 @@ fun AuditScreen(
                                     ) {
                                         Icon(imageVector = Icons.Outlined.Edit, contentDescription = null, modifier = Modifier.size(14.dp))
                                         Spacer(modifier = Modifier.width(4.dp))
-                                        Text("自己去写", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                        Text("编辑解析", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
                                     }
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Button(
@@ -2461,7 +2345,7 @@ fun AuditScreen(
                                     ) {
                                         Icon(imageVector = Icons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(14.dp))
                                         Spacer(modifier = Modifier.width(4.dp))
-                                        Text("帮我自动补上", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                        Text("自动补充", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
                                     }
                                 }
                             }
@@ -2472,7 +2356,7 @@ fun AuditScreen(
                 else -> {
                     if (conflictPairs.isEmpty()) {
                         item {
-                            AuditEmptyStateCard("没有答案不一致的题目")
+                            AuditEmptyStateCard("暂无答案冲突题目")
                         }
                     } else {
                         items(conflictPairs, key = { it.id }) { pair ->
@@ -2738,7 +2622,7 @@ fun ReviewPlanScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "怎么安排复习",
+            title = "复习计划",
             subtitle = null,
             onBack = { viewModel.navigateBack() }
         )
@@ -2768,29 +2652,29 @@ fun ReviewPlanScreen(
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             SereneBadge(
-                                text = "● 刚好在快忘掉时提醒你",
+                                text = "艾宾浩斯曲线",
                                 containerColor = colors.amberBg,
                                 contentColor = colors.amberText
                             )
                             Text(
-                                text = "做错的题按这几个时间点回头看",
+                                text = "复习节点分布",
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.ExtraBold,
+                                fontWeight = FontWeight.Bold,
                                 color = colors.textPrimary,
                                 maxLines = 1,
                                 softWrap = false
                             )
                         }
-                        ReviewCurveIllustration(modifier = Modifier.size(64.dp))
+                        ReviewCurveIllustration(modifier = Modifier.size(56.dp))
                     }
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        listOf("第 1 天", "第 2 天", "第 4 天", "第 7 天", "第 15 天").forEachIndexed { idx, day ->
+                        listOf("1天", "2天", "4天", "7天", "15天").forEachIndexed { idx, day ->
                             Surface(
                                 shape = RoundedCornerShape(10.dp),
                                 color = if (idx < 3) colors.primarySoft else colors.subtleSurface
@@ -2800,7 +2684,7 @@ fun ReviewPlanScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = "温习第${idx + 1}遍",
+                                        text = "阶段 ${idx + 1}",
                                         style = MaterialTheme.typography.labelSmall,
                                         color = colors.textMuted,
                                         maxLines = 1,
@@ -2808,7 +2692,7 @@ fun ReviewPlanScreen(
                                     )
                                     Text(
                                         text = day,
-                                        style = MaterialTheme.typography.labelLarge,
+                                        style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = if (idx < 3) colors.primaryAccent else colors.textPrimary,
                                         maxLines = 1,
@@ -2830,7 +2714,7 @@ fun ReviewPlanScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "每天打算看多少道题？",
+                            text = "每日目标",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = colors.textPrimary,
@@ -2838,12 +2722,12 @@ fun ReviewPlanScreen(
                             softWrap = false
                         )
                         SereneBadge(
-                            text = "每天 $dailyGoal 题",
+                            text = "$dailyGoal 题/天",
                             containerColor = colors.primarySoft,
                             contentColor = colors.primaryAccent
                         )
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -2864,7 +2748,7 @@ fun ReviewPlanScreen(
                                 ) {
                                     Text(
                                         text = "${goal}题",
-                                        style = MaterialTheme.typography.labelLarge,
+                                        style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = if (selected) Color.White else colors.textPrimary,
                                         maxLines = 1,
@@ -2881,7 +2765,7 @@ fun ReviewPlanScreen(
             item {
                 SereneCard {
                     Text(
-                        text = "你现在的备考节奏是哪种？",
+                        text = "复习节奏",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary,
@@ -2889,57 +2773,33 @@ fun ReviewPlanScreen(
                         softWrap = false
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val presets = listOf(
-                        "智能推荐" to "平时正常学，错题和新题搭着来",
-                        "考前冲刺" to "快考试了，先把老错的题集中刷熟",
-                        "稳步巩固" to "时间充裕，每天少做几道保持手感"
-                    )
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        presets.forEach { (name, desc) ->
+                    val presets = listOf("智能推荐", "考前冲刺", "稳步巩固")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        presets.forEach { name ->
                             val selected = preset == name
                             Surface(
-                                shape = RoundedCornerShape(14.dp),
-                                color = if (selected) colors.primarySoft.copy(alpha = 0.6f) else colors.subtleSurface,
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (selected) colors.primaryAccent else colors.subtleSurface,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .border(
-                                        width = if (selected) 1.5.dp else 1.dp,
-                                        color = if (selected) colors.primaryAccent else Color.Transparent,
-                                        shape = RoundedCornerShape(14.dp)
-                                    )
-                                    .clip(RoundedCornerShape(14.dp))
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(12.dp))
                                     .clickable { preset = name }
                             ) {
-                                Row(
-                                    modifier = Modifier.padding(14.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
+                                Box(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text = name,
-                                            style = MaterialTheme.typography.titleSmall,
-                                            fontWeight = FontWeight.Bold,
-                                            color = if (selected) colors.primaryAccent else colors.textPrimary,
-                                            maxLines = 1,
-                                            softWrap = false
-                                        )
-                                        Text(
-                                            text = desc,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = colors.textSecondary,
-                                            maxLines = 1,
-                                            softWrap = false,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                    }
-                                    if (selected) {
-                                        SereneBadge(
-                                            text = "正在用",
-                                            containerColor = colors.primaryAccent,
-                                            contentColor = Color.White
-                                        )
-                                    }
+                                    Text(
+                                        text = name,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (selected) Color.White else colors.textPrimary,
+                                        maxLines = 1,
+                                        softWrap = false
+                                    )
                                 }
                             }
                         }
@@ -2951,7 +2811,7 @@ fun ReviewPlanScreen(
             item {
                 SereneCard {
                     SettingSwitchRow(
-                        title = "每天定时提醒我刷一会儿",
+                        title = "定时提醒",
                         subtitle = null,
                         checked = reminderEnabled,
                         onCheckedChange = { wantEnable ->
@@ -2963,7 +2823,7 @@ fun ReviewPlanScreen(
                         }
                     )
                     if (reminderEnabled) {
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -3022,7 +2882,7 @@ fun ReviewPlanScreen(
                         .height(48.dp)
                         .testTag("save_review_plan_btn")
                 ) {
-                    Text("定好了，按这个来", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                    Text("保存", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                 }
             }
         }

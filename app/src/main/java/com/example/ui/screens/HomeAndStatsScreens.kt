@@ -143,21 +143,6 @@ fun HomeScreen(
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 IconButton(
-                    onClick = { viewModel.navigateTo(AppScreen.AI_SERVICE) },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(colors.primarySoft)
-                        .testTag("home_ai_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.AutoAwesome,
-                        contentDescription = "AI 助手",
-                        tint = colors.primaryAccent,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-                IconButton(
                     onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
                     modifier = Modifier
                         .size(40.dp)
