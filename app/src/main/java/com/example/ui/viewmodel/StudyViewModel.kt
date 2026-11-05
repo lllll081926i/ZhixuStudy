@@ -40,6 +40,7 @@ enum class AppScreen(val title: String, val isPrimaryTab: Boolean = false) {
     STATS("学习统计", true),
 
     // 05-07 Question Bank Management
+    LIBRARY_SEARCH("搜索题库"),
     BOOK_DETAIL("题库详情"),
     QUESTION_LIST("题目列表"),
     QUESTION_EDITOR("题目编辑"),
@@ -1582,10 +1583,10 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
         baseUrl: String,
         modelId: String,
         apiKey: String,
-        smartExp: Boolean,
-        variant: Boolean,
-        importFix: Boolean,
-        singleLimit: Int
+        smartExp: Boolean = true,
+        variant: Boolean = true,
+        importFix: Boolean = true,
+        singleLimit: Int = 1000
     ) {
         viewModelScope.launch {
             prefsRepo.updateAiConfig(

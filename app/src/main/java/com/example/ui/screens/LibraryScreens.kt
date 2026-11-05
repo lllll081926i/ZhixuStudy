@@ -180,36 +180,36 @@ fun LibraryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = { viewModel.setLibrarySearch(it) },
-                        placeholder = {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(50))
+                            .clickable { viewModel.navigateTo(AppScreen.LIBRARY_SEARCH) }
+                            .testTag("library_search_btn"),
+                        shape = RoundedCornerShape(50),
+                        color = colors.cardSurface,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, colors.borderSubtle)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                contentDescription = "搜索",
+                                tint = colors.textSecondary,
+                                modifier = Modifier.size(18.dp)
+                            )
                             Text(
                                 text = "搜索题库...",
                                 color = colors.textMuted,
+                                style = MaterialTheme.typography.bodyMedium,
                                 maxLines = 1,
                                 softWrap = false
                             )
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Search,
-                                contentDescription = null,
-                                tint = colors.textSecondary
-                            )
-                        },
-                        singleLine = true,
-                        shape = RoundedCornerShape(50),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("library_search_input"),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = colors.cardSurface,
-                            unfocusedContainerColor = colors.cardSurface,
-                            focusedBorderColor = colors.primaryAccent,
-                            unfocusedBorderColor = colors.borderSubtle
-                        )
-                    )
+                        }
+                    }
                 }
 
                 if (showCreateInline) {

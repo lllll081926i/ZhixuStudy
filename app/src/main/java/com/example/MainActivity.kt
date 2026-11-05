@@ -52,6 +52,7 @@ import com.example.ui.screens.ImportPreviewScreen
 import com.example.ui.screens.ImportResultScreen
 import com.example.ui.screens.ImportSourceScreen
 import com.example.ui.screens.LibraryScreen
+import com.example.ui.screens.LibrarySearchScreen
 import com.example.ui.screens.PracticeConfigScreen
 import com.example.ui.screens.QuestionEditorScreen
 import com.example.ui.screens.QuestionListScreen
@@ -163,8 +164,19 @@ fun SereneStudyAppRoot(viewModel: StudyViewModel) {
                             ) + fadeOut(animationSpec = tween(180)))
                         }
                         targetState.isPrimaryTab && initialState.isPrimaryTab -> {
-                            fadeIn(animationSpec = tween(220, easing = FastOutSlowInEasing)) togetherWith
-                                fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))
+                            val primaryOrder = listOf(AppScreen.HOME, AppScreen.LIBRARY, AppScreen.REVIEW, AppScreen.STATS)
+                            val fromIdx = primaryOrder.indexOf(initialState)
+                            val toIdx = primaryOrder.indexOf(targetState)
+                            val isForward = toIdx >= fromIdx
+                            val sign = if (isForward) 1 else -1
+
+                            (slideInHorizontally(
+                                initialOffsetX = { fullWidth -> (fullWidth * 0.25f * sign).toInt() },
+                                animationSpec = tween(280, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(240))) togetherWith (slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -(fullWidth * 0.25f * sign).toInt() },
+                                animationSpec = tween(240, easing = FastOutSlowInEasing)
+                            ) + fadeOut(animationSpec = tween(200)))
                         }
                         else -> {
                             (fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) + scaleIn(
@@ -211,6 +223,14 @@ fun SereneStudyAppRoot(viewModel: StudyViewModel) {
                         questions = questions,
                         records = practiceRecords,
                         statsRange = statsRange,
+                        isTablet = isTablet
+                    )
+
+                    AppScreen.LIBRARY_SEARCH -> LibrarySearchScreen(
+                        viewModel = viewModel,
+                        banks = banks,
+                        questions = questions,
+                        searchQuery = librarySearchQuery,
                         isTablet = isTablet
                     )
 

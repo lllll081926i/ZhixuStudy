@@ -1,10 +1,14 @@
 package com.example.data.local
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.json.JSONArray
 
-@Entity(tableName = "question_banks")
+@Entity(
+    tableName = "question_banks",
+    indices = [Index(value = ["updatedAt"])]
+)
 data class QuestionBankEntity(
     @PrimaryKey val name: String,
     val subtitle: String,
@@ -16,7 +20,16 @@ data class QuestionBankEntity(
     val updatedAt: Long = System.currentTimeMillis()
 )
 
-@Entity(tableName = "questions")
+@Entity(
+    tableName = "questions",
+    indices = [
+        Index(value = ["bank"]),
+        Index(value = ["bank", "chapter"]),
+        Index(value = ["wrongCount"]),
+        Index(value = ["isStarred"]),
+        Index(value = ["nextReviewTimestamp"])
+    ]
+)
 data class QuestionEntity(
     @PrimaryKey val id: String,
     val bank: String,
@@ -73,7 +86,10 @@ data class QuestionEntity(
         }
 }
 
-@Entity(tableName = "practice_records")
+@Entity(
+    tableName = "practice_records",
+    indices = [Index(value = ["bankName"]), Index(value = ["timestamp"])]
+)
 data class PracticeRecordEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,

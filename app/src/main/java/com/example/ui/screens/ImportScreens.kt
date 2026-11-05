@@ -207,263 +207,182 @@ fun ImportSourceScreen(
                 }
             }
 
+            // 1. File & Paste Action Center
             item {
                 SereneCard(
-                    cornerRadius = 26.dp,
-                    borderColor = colors.primaryAccent.copy(alpha = 0.35f),
-                    contentPadding = PaddingValues(22.dp)
+                    cornerRadius = 24.dp,
+                    contentPadding = PaddingValues(20.dp)
                 ) {
-                    Column(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Box(
+                        Button(
+                            onClick = { filePickerLauncher.launch("*/*") },
                             modifier = Modifier
-                                .size(60.dp)
-                                .clip(CircleShape)
-                                .background(colors.primarySoft),
-                            contentAlignment = Alignment.Center
+                                .weight(1f)
+                                .height(48.dp)
+                                .testTag("import_pick_local_file_btn"),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                         ) {
-                            Icon(
-                                imageVector = Icons.Outlined.CloudUpload,
-                                contentDescription = null,
-                                tint = colors.primaryAccent,
-                                modifier = Modifier.size(30.dp)
-                            )
+                            Icon(Icons.Outlined.CloudUpload, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("选取文件", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "选择导入文件",
-                            color = colors.textPrimary,
-                            maxLines = 1,
-                            softWrap = false,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "支持 Excel · Word · Moodle(Aiken/GIFT) · 问卷星 · Anki · Markdown · CSV · JSON",
-                            color = colors.textSecondary,
-                            maxLines = 1,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall
-                        )
 
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        OutlinedButton(
+                            onClick = { showPasteInline = !showPasteInline },
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(48.dp)
+                                .testTag("import_paste_text_btn"),
+                            shape = RoundedCornerShape(16.dp)
                         ) {
+                            Icon(Icons.Outlined.ContentPaste, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(if (showPasteInline) "收起输入" else "粘贴文本", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    AnimatedVisibility(visible = showPasteInline) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 14.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = pastedText,
+                                onValueChange = { pastedText = it },
+                                placeholder = { Text("粘贴题目文本内容...") },
+                                minLines = 5,
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            )
                             Button(
                                 onClick = {
+                                    showPasteInline = false
+                                    viewModel.loadImportedFileOrText(
+                                        fileName = "剪贴板题集.txt",
+                                        content = pastedText,
+                                        targetBank = importState.targetBankName
+                                    )
+                                },
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
+                            ) {
+                                Text("开始解析", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 2. Presets Quick Start
+            item {
+                SereneCard(cornerRadius = 24.dp) {
+                    Text(
+                        text = "示例模版",
+                        color = colors.textPrimary,
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = colors.subtleSurface,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(14.dp))
+                                .clickable {
                                     viewModel.loadDemoImportData(
                                         fileName = "2026铁路运输模拟题.xlsx",
                                         navigateToStep2 = true
                                     )
-                                },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp)
-                                    .testTag("import_use_demo_excel_btn"),
-                                shape = RoundedCornerShape(50),
-                                colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
-                            ) {
-                                Icon(Icons.Outlined.InsertDriveFile, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "示例 Excel",
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                                )
+                                }
+                        ) {
+                            Box(modifier = Modifier.padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+                                Text("Excel", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.primaryAccent)
                             }
-                            Button(
-                                onClick = {
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = colors.subtleSurface,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(14.dp))
+                                .clickable {
                                     val demoAiken = """
-                                        铁路运输组织中列车运行图的基本作用是什么？
+                                        列车运行图的基本作用是什么？
                                         A. 全路组织列车运行的基础，综合性作业规划纲领
                                         B. 仅用于客运车站时刻表的制定依据
-                                        C. 单纯记录机车车辆检修周期的统计表格
-                                        D. 仅供调度员临时调整车流的参考草图
                                         ANSWER: A
-
-                                        影响铁路区间通过能力的核心运行图要素包括哪些？
-                                        A. 列车区间运行时分
-                                        B. 车站不同时到发间隔时间
-                                        C. 会车间隔时间
-                                        D. 货运叉车充电时间
-                                        ANSWER: A, B, C
                                     """.trimIndent()
                                     viewModel.loadImportedFileOrText(
-                                        fileName = "国际标准Aiken试卷.txt",
+                                        fileName = "Aiken试卷.txt",
                                         content = demoAiken,
                                         targetBank = importState.targetBankName
                                     )
-                                },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp),
-                                shape = RoundedCornerShape(50),
-                                colors = ButtonDefaults.buttonColors(containerColor = colors.primarySoft)
-                            ) {
-                                Icon(Icons.Outlined.School, contentDescription = null, tint = colors.primaryAccent, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "示例 Aiken/Moodle",
-                                    color = colors.primaryAccent,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                                )
+                                }
+                        ) {
+                            Box(modifier = Modifier.padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+                                Text("Aiken", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.primaryAccent)
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            Button(
-                                onClick = {
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = colors.subtleSurface,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(14.dp))
+                                .clickable {
                                     val demoMd = """
-                                        ### 1. 自动闭塞区段通过信号机显示绿灯表示运行前方至少有几个闭塞分区空闲？
-                                        - A. 三个及以上闭塞分区空闲
-                                        - B. 仅一个闭塞分区空闲
-                                        - C. 两个闭塞分区空闲
-                                        - D. 前方到发线占用
+                                        ### 1. 自动闭塞信号机显示绿灯表示运行前方至少几个闭塞分区空闲？
+                                        - A. 三个及以上
+                                        - B. 仅一个
                                         > 答案：A
-                                        > 解析：四显示自动闭塞绿灯表示前方至少三个分区空闲。
-
-                                        ### 2. 重车流与空车流必须严格按照完全相同的编组计划组织挂运。
-                                        - A. 正确
-                                        - B. 错误
-                                        > 答案：错误
-                                        > 解析：空车流按调度排空令调配。
                                     """.trimIndent()
                                     viewModel.loadImportedFileOrText(
-                                        fileName = "示例Markdown真题.md",
+                                        fileName = "Markdown真题.md",
                                         content = demoMd,
                                         targetBank = importState.targetBankName
                                     )
-                                },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp),
-                                shape = RoundedCornerShape(50),
-                                colors = ButtonDefaults.buttonColors(containerColor = colors.peachBg)
-                            ) {
-                                Icon(Icons.Outlined.Description, contentDescription = null, tint = colors.peachText, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "示例 Markdown",
-                                    color = colors.peachText,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                                )
+                                }
+                        ) {
+                            Box(modifier = Modifier.padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+                                Text("Markdown", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.primaryAccent)
                             }
-                            Button(
-                                onClick = {
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = colors.subtleSurface,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(14.dp))
+                                .clickable {
                                     val demoWjx = """
-                                        1. [单选题] 车站接发列车工作必须首先保证什么？(2分)
+                                        1. [单选题] 车站接发列车工作必须首先保证什么？
                                         A. 行车安全与列车按运行图正点运行
                                         B. 车站调车作业效率最大化
-                                        C. 货场装卸作业优先完成
-                                        D. 减少道岔转换次数
                                         正确答案：A
-                                        答案解析：车站接发列车必须安全第一。
-
-                                        2. [判断题] 车流组织是铁路运输生产的重要组成部分。（对）
-                                        答案解析：车流组织与运行图紧密结合。
                                     """.trimIndent()
                                     viewModel.loadImportedFileOrText(
-                                        fileName = "问卷星_高校期末考卷.txt",
+                                        fileName = "问卷星试卷.txt",
                                         content = demoWjx,
                                         targetBank = importState.targetBankName
                                     )
-                                },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp),
-                                shape = RoundedCornerShape(50),
-                                colors = ButtonDefaults.buttonColors(containerColor = colors.mintBg)
-                            ) {
-                                Icon(Icons.Outlined.Verified, contentDescription = null, tint = colors.mintText, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "示例 问卷星试卷",
-                                    color = colors.mintText,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            OutlinedButton(
-                                onClick = { filePickerLauncher.launch("*/*") },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp)
-                                    .testTag("import_pick_local_file_btn"),
-                                shape = RoundedCornerShape(50),
-                                contentPadding = PaddingValues(horizontal = 12.dp)
-                            ) {
-                                Icon(Icons.Outlined.Description, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text("选择本地文件", maxLines = 1, softWrap = false)
-                            }
-                            OutlinedButton(
-                                onClick = { showPasteInline = !showPasteInline },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(46.dp)
-                                    .testTag("import_paste_text_btn"),
-                                shape = RoundedCornerShape(50),
-                                contentPadding = PaddingValues(horizontal = 12.dp)
-                            ) {
-                                Icon(Icons.Outlined.ContentPaste, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(if (showPasteInline) "收起文本框" else "粘贴文本", maxLines = 1, softWrap = false)
-                            }
-                        }
-
-                        AnimatedVisibility(visible = showPasteInline) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 14.dp),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                OutlinedTextField(
-                                    value = pastedText,
-                                    onValueChange = { pastedText = it },
-                                    label = { Text("粘贴文本题目") },
-                                    minLines = 5,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                                Button(
-                                    onClick = {
-                                        showPasteInline = false
-                                        viewModel.loadImportedFileOrText(
-                                            fileName = "剪贴板题集.txt",
-                                            content = pastedText,
-                                            targetBank = importState.targetBankName
-                                        )
-                                    },
-                                    shape = RoundedCornerShape(50),
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("开始解析", maxLines = 1, softWrap = false, fontWeight = FontWeight.Bold)
                                 }
+                        ) {
+                            Box(modifier = Modifier.padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+                                Text("问卷星", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.primaryAccent)
                             }
                         }
                     }

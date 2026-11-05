@@ -550,66 +550,11 @@ private fun SettingsAppearanceContent(
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 1. Live Theme Card Preview
-        item {
-            SereneCard {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "当前界面视觉预览",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.textPrimary,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                    SereneBadge(
-                        text = if (settings.dynamicColor) "Material You" else settings.accentPreset,
-                        containerColor = colors.primarySoft,
-                        contentColor = colors.primaryAccent
-                    )
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Surface(
-                    shape = RoundedCornerShape(14.dp),
-                    color = colors.subtleSurface,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(modifier = Modifier.padding(14.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "《铁路运输组织基础》",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = colors.textPrimary,
-                                maxLines = 1,
-                                softWrap = false
-                            )
-                            SereneBadge(
-                                text = "掌握度 88%",
-                                containerColor = colors.mintBg,
-                                contentColor = colors.mintText
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SereneLinearProgress(progress = 0.68f, indicatorColor = colors.primaryAccent)
-                    }
-                }
-            }
-        }
-
-        // 2. Theme Mode Selection (System / Light / Dark)
+        // 1. Theme Mode Selection (System / Light / Dark)
         item {
             SereneCard {
                 Text(
-                    text = "深色模式与昼夜切换",
+                    text = "主题外观",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.textPrimary,
@@ -619,8 +564,8 @@ private fun SettingsAppearanceContent(
                 Spacer(modifier = Modifier.height(12.dp))
                 val modes = listOf(
                     Triple("system", "跟随系统", Icons.Outlined.SettingsBrightness),
-                    Triple("light", "浅色模式", Icons.Outlined.LightMode),
-                    Triple("dark", "深色模式", Icons.Outlined.DarkMode)
+                    Triple("light", "浅色", Icons.Outlined.LightMode),
+                    Triple("dark", "深色", Icons.Outlined.DarkMode)
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -646,7 +591,7 @@ private fun SettingsAppearanceContent(
                                     imageVector = icon,
                                     contentDescription = label,
                                     tint = if (selected) Color.White else colors.primaryAccent,
-                                    modifier = Modifier.size(22.dp)
+                                    modifier = Modifier.size(20.dp)
                                 )
                                 Text(
                                     text = label,
@@ -663,7 +608,7 @@ private fun SettingsAppearanceContent(
             }
         }
 
-        // 3. Monet Dynamic Theme & Classic Accent Palettes
+        // 2. Monet Dynamic & Classic Accent Palettes
         item {
             SereneCard {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -673,8 +618,8 @@ private fun SettingsAppearanceContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "系统莫奈配色",
-                            style = MaterialTheme.typography.titleSmall,
+                            text = "动态取色",
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = colors.textPrimary
                         )
@@ -685,9 +630,11 @@ private fun SettingsAppearanceContent(
                         )
                     }
                     Spacer(modifier = Modifier.height(14.dp))
+                    SettingsDivider()
+                    Spacer(modifier = Modifier.height(14.dp))
                 }
                 Text(
-                    text = "经典主题备选",
+                    text = "主色调",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.textSecondary,
@@ -724,7 +671,7 @@ private fun SettingsAppearanceContent(
                                 }
                         ) {
                             Column(
-                                modifier = Modifier.padding(vertical = 10.dp, horizontal = 6.dp),
+                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 6.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
@@ -1591,21 +1538,34 @@ fun AiServiceScreen(
     isTablet: Boolean
 ) {
     val colors = SereneTheme.colors
-    var provider by remember(settings.aiProtocol) { mutableStateOf(settings.aiProtocol) }
+
+    data class AiPreset(val name: String, val baseUrl: String, val modelId: String)
+    val presets = remember {
+        listOf(
+            AiPreset("DeepSeek", "https://api.deepseek.com/v1", "deepseek-chat"),
+            AiPreset("OpenAI", "https://api.openai.com/v1", "gpt-4o-mini"),
+            AiPreset("月之暗面 Kimi", "https://api.moonshot.cn/v1", "moonshot-v1-8k"),
+            AiPreset("智谱 GLM", "https://open.bigmodel.cn/api/paas/v4", "glm-4-flash"),
+            AiPreset("本地 Ollama", "http://10.0.2.2:11434/v1", "llama3"),
+            AiPreset("自定义", "", "")
+        )
+    }
+
+    var selectedPresetName by remember(settings.aiBaseUrl) {
+        val found = presets.find { it.baseUrl.isNotBlank() && settings.aiBaseUrl.startsWith(it.baseUrl) }
+        mutableStateOf(found?.name ?: "自定义")
+    }
+
     var baseUrl by remember(settings.aiBaseUrl) { mutableStateOf(settings.aiBaseUrl) }
     var modelId by remember(settings.aiModelId) { mutableStateOf(settings.aiModelId) }
     var apiKey by remember(settings.aiApiKeyMasked) { mutableStateOf(settings.aiApiKeyMasked) }
-    var smartExplain by remember(settings.aiSmartExplanation) { mutableStateOf(settings.aiSmartExplanation) }
-    var variantGen by remember(settings.aiVariantGenerator) { mutableStateOf(settings.aiVariantGenerator) }
-    var importFix by remember(settings.aiImportCorrection) { mutableStateOf(settings.aiImportCorrection) }
-    var tokenLimit by remember(settings.aiSingleLimitTokens) { mutableIntStateOf(settings.aiSingleLimitTokens) }
-    var pingLatencyMs by remember { mutableIntStateOf(280) }
+    var pingLatencyMs by remember { mutableIntStateOf(260) }
     var isEditingKeyInline by remember { mutableStateOf(false) }
     var rawKeyInput by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize()) {
         SereneTopBar(
-            title = "AI 讲题助手设置",
+            title = "大模型服务",
             subtitle = null,
             onBack = { viewModel.navigateBack() }
         )
@@ -1622,105 +1582,83 @@ fun AiServiceScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // 1. Privacy First Hero Banner
+            // 1. Provider Presets
             item {
                 SereneCard {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(44.dp)
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(colors.primarySoft),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Psychology,
-                                contentDescription = null,
-                                tint = colors.primaryAccent,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                text = "本地私有存储",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = colors.textPrimary,
-                                maxLines = 1,
-                                softWrap = false
-                            )
+                    Text(
+                        text = "服务商",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textPrimary,
+                        maxLines = 1,
+                        softWrap = false
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    val rows = presets.chunked(3)
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        rows.forEach { rowItems ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                rowItems.forEach { p ->
+                                    val isSelected = selectedPresetName == p.name
+                                    Surface(
+                                        shape = RoundedCornerShape(12.dp),
+                                        color = if (isSelected) colors.primaryAccent else colors.subtleSurface,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .clip(RoundedCornerShape(12.dp))
+                                            .clickable {
+                                                selectedPresetName = p.name
+                                                if (p.name != "自定义") {
+                                                    baseUrl = p.baseUrl
+                                                    modelId = p.modelId
+                                                }
+                                            }
+                                    ) {
+                                        Box(
+                                            modifier = Modifier.padding(vertical = 10.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = p.name,
+                                                style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = if (isSelected) Color.White else colors.textPrimary,
+                                                maxLines = 1,
+                                                softWrap = false
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            // 2. Model & Connection Card
+            // 2. Endpoint & Key Settings
             item {
                 SereneCard {
-                    Text(
-                        text = "服务协议",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.textSecondary,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    val providers = listOf(
-                        "OpenAI 兼容协议 (DeepSeek / GPT / Kimi)",
-                        "Claude 接口",
-                        "本地 Ollama"
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable {
-                                val nextIdx = (providers.indexOf(provider) + 1) % providers.size
-                                provider = providers[nextIdx]
-                            }
-                            .padding(vertical = 6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = provider,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.textPrimary,
-                            modifier = Modifier.weight(1f),
-                            maxLines = 1,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                            contentDescription = null,
-                            tint = colors.textMuted
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
                     OutlinedTextField(
                         value = baseUrl,
-                        onValueChange = { baseUrl = it },
+                        onValueChange = {
+                            baseUrl = it
+                            selectedPresetName = "自定义"
+                        },
                         label = { Text("Base URL", maxLines = 1, softWrap = false) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
+
                     OutlinedTextField(
                         value = modelId,
                         onValueChange = { modelId = it },
-                        label = { Text("模型标识 (Model ID)", maxLines = 1, softWrap = false) },
+                        label = { Text("Model ID", maxLines = 1, softWrap = false) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
@@ -1732,64 +1670,35 @@ fun AiServiceScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(CircleShape)
-                                    .background(colors.primarySoft),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Security,
-                                    contentDescription = null,
-                                    tint = colors.primaryAccent,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "API Key",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = colors.textMuted,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                                Text(
-                                    text = apiKey,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "API Key",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colors.textMuted
+                            )
+                            Text(
+                                text = apiKey,
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                color = colors.textPrimary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
                         OutlinedButton(
                             onClick = { isEditingKeyInline = !isEditingKeyInline },
-                            shape = RoundedCornerShape(999.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                            shape = RoundedCornerShape(50),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                         ) {
-                            Text(
-                                text = if (isEditingKeyInline) "收起" else "修改",
-                                style = MaterialTheme.typography.labelMedium,
-                                maxLines = 1,
-                                softWrap = false
-                            )
+                            Text(if (isEditingKeyInline) "收起" else "修改", maxLines = 1, softWrap = false)
                         }
                     }
 
                     AnimatedVisibility(visible = isEditingKeyInline) {
-                        Column(modifier = Modifier.padding(top = 12.dp)) {
+                        Column(modifier = Modifier.padding(top = 10.dp)) {
                             OutlinedTextField(
                                 value = rawKeyInput,
                                 onValueChange = { rawKeyInput = it },
-                                label = { Text("输入 API Key", maxLines = 1, softWrap = false) },
+                                label = { Text("输入 API Key", maxLines = 1) },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp)
@@ -1808,11 +1717,10 @@ fun AiServiceScreen(
                                         }
                                         isEditingKeyInline = false
                                     },
-                                    shape = RoundedCornerShape(999.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent),
-                                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                                    shape = RoundedCornerShape(50),
+                                    colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                                 ) {
-                                    Text("保存", style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false)
+                                    Text("保存", maxLines = 1, softWrap = false)
                                 }
                             }
                         }
@@ -1830,184 +1738,22 @@ fun AiServiceScreen(
                             contentColor = colors.mintText
                         )
                         Surface(
-                            shape = RoundedCornerShape(999.dp),
+                            shape = RoundedCornerShape(50),
                             color = colors.primarySoft,
                             modifier = Modifier
-                                .clip(RoundedCornerShape(999.dp))
+                                .clip(RoundedCornerShape(50))
                                 .clickable {
-                                    pingLatencyMs = (180..310).random()
-                                    viewModel.showToast("已连接 · ${pingLatencyMs}ms")
+                                    pingLatencyMs = (160..290).random()
+                                    viewModel.showToast("连接正常 · ${pingLatencyMs}ms")
                                 }
-                                .testTag("ping_ai_endpoint_btn")
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Speed,
-                                    contentDescription = null,
-                                    tint = colors.primaryAccent,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Text(
-                                    text = "测试连接",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.primaryAccent,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 3. Smart Feature Switches
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "平时让 AI 帮你做什么？",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.primaryAccent,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                    Text(
-                        text = "按需开启",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = colors.textMuted,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                SereneCard {
-                    SettingSwitchRow(
-                        title = "帮我把题目解析讲得更通俗",
-                        subtitle = "做完题可以点一下看易错点和口诀",
-                        checked = smartExplain,
-                        onCheckedChange = { smartExplain = it }
-                    )
-                    Spacer(modifier = Modifier.height(14.dp))
-                    SettingSwitchRow(
-                        title = "做错题时帮我出一道相似题巩固",
-                        subtitle = "换个问法考同一个知识点，看看真懂了没",
-                        checked = variantGen,
-                        onCheckedChange = { variantGen = it }
-                    )
-                    Spacer(modifier = Modifier.height(14.dp))
-                    SettingSwitchRow(
-                        title = "导题库遇到缺漏时帮我自动补全",
-                        subtitle = "表格没写题型或漏写解析时顺手补上",
-                        checked = importFix,
-                        onCheckedChange = { importFix = it }
-                    )
-                }
-            }
-
-            // 4. Token Usage & Quota Monitor
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "大概用了多少字数额度",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.primaryAccent,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                    Text(
-                        text = "手机本地估算",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = colors.textMuted,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                SereneCard {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = colors.subtleSurface,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(modifier = Modifier.padding(14.dp)) {
-                                Text("● 今天用了", style = MaterialTheme.typography.labelSmall, color = colors.primaryAccent, maxLines = 1, softWrap = false)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "${settings.aiTodayTokens} Tokens",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                            }
-                        }
-
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = colors.subtleSurface,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(modifier = Modifier.padding(14.dp)) {
-                                Text("● 这个月一共", style = MaterialTheme.typography.labelSmall, color = colors.mintText, maxLines = 1, softWrap = false)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "3.8 万 Tokens",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = colors.subtleSurface,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(14.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("● 每次讲题最多用多少额度（省着点用）", style = MaterialTheme.typography.labelSmall, color = colors.amberText, maxLines = 1, softWrap = false)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "$tokenLimit Tokens",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = colors.textPrimary,
-                                    maxLines = 1,
-                                    softWrap = false
-                                )
-                            }
-                            TextButton(onClick = { tokenLimit = if (tokenLimit >= 4000) 1000 else tokenLimit + 500 }) {
-                                Text("调高一点", fontWeight = FontWeight.Bold, color = colors.primaryAccent, maxLines = 1, softWrap = false)
+                                Icon(Icons.Outlined.Speed, contentDescription = null, tint = colors.primaryAccent, modifier = Modifier.size(15.dp))
+                                Text("测试", color = colors.primaryAccent, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                             }
                         }
                     }
@@ -2021,63 +1767,24 @@ fun AiServiceScreen(
             shadowElevation = 8.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextButton(
-                    onClick = {
-                        provider = "OpenAI 通用接口 (DeepSeek / GPT / Kimi 都能用)"
-                        baseUrl = "https://api.deepseek.com/v1"
-                        modelId = "deepseek-chat"
-                        tokenLimit = 1000
-                    },
-                    modifier = Modifier.weight(0.35f)
-                ) {
-                    Text(
-                        text = "恢复默认",
-                        fontWeight = FontWeight.Bold,
-                        color = colors.textSecondary,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
                 Button(
                     onClick = {
                         viewModel.saveAiServiceConfig(
-                            protocol = provider,
+                            protocol = "OpenAI",
                             baseUrl = baseUrl,
                             modelId = modelId,
-                            apiKey = apiKey,
-                            smartExp = smartExplain,
-                            variant = variantGen,
-                            importFix = importFix,
-                            singleLimit = tokenLimit
+                            apiKey = apiKey
                         )
                         viewModel.navigateBack()
                     },
-                    shape = RoundedCornerShape(999.dp),
+                    shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent),
                     modifier = Modifier
-                        .weight(0.65f)
+                        .fillMaxWidth()
                         .height(48.dp)
-                        .testTag("save_ai_config_btn")
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Save,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "保存设置",
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        softWrap = false
-                    )
+                    Text("保存", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
                 }
             }
         }

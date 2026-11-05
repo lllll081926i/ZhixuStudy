@@ -145,17 +145,16 @@ fun HomeScreen(
                 IconButton(
                     onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
-                        .background(colors.cardSurface)
-                        .border(1.dp, colors.borderSubtle, CircleShape)
+                        .background(colors.subtleSurface)
                         .testTag("home_settings_button")
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = "设置",
-                        tint = colors.textPrimary,
-                        modifier = Modifier.size(20.dp)
+                        tint = colors.textSecondary,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }

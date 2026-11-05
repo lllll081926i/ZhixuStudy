@@ -13,7 +13,7 @@ import androidx.room.RoomDatabase
         ImportPresetEntity::class,
         ImportLogEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -531,7 +531,7 @@ object SeedDataFactory {
                 )
             ),
             answersJson = listToJson(listOf("A")),
-            explanation = "", // Intentionally blank for Audit inspection!
+            explanation = "在韦伯斯特信号交叉口配时模型中，L 为信号周期内的总损失时间（包括各关键相位绿灯初启动损失与黄灯末清空损失之和）。",
             trapAnalysis = "L 为周期总损失时间，Y 为各关键相位流量比 y_i 之和。",
             mnemonic = "1.5倍总损失加5，除以1减总流量比Y",
             wrongCount = 1,

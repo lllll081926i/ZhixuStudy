@@ -22,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -1216,7 +1217,10 @@ private fun QuizActiveQuestionContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.Psychology,
                         contentDescription = null,
@@ -1225,21 +1229,25 @@ private fun QuizActiveQuestionContent(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "为什么选这个 & 怎么记最快",
+                        text = "解析与技巧",
                         color = colors.textPrimary,
                         maxLines = 1,
                         softWrap = false,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold)
                     )
                 }
-                TextButton(onClick = { showNoteEditor = !showNoteEditor }) {
+                TextButton(
+                    onClick = { showNoteEditor = !showNoteEditor },
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                ) {
                     Icon(Icons.Outlined.EditNote, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(3.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = if (showNoteEditor) "收起笔记" else "记条自己的心得",
+                        text = if (showNoteEditor) "收起" else "笔记",
                         maxLines = 1,
                         softWrap = false,
-                        fontSize = 12.sp
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -1285,57 +1293,61 @@ private fun QuizActiveQuestionContent(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                if (currentQ.trapAnalysis.isNotBlank()) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(colors.subtleSurface)
-                            .padding(12.dp)
-                    ) {
-                        Text(
-                            text = "最容易踩的坑",
-                            color = colors.primaryAccent,
-                            maxLines = 1,
-                            softWrap = false,
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = currentQ.trapAnalysis,
-                            color = colors.textSecondary,
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    if (currentQ.trapAnalysis.isNotBlank()) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(colors.subtleSurface)
+                                .padding(12.dp)
+                        ) {
+                            Text(
+                                text = "易错点",
+                                color = colors.primaryAccent,
+                                maxLines = 1,
+                                softWrap = false,
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = currentQ.trapAnalysis,
+                                color = colors.textSecondary,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+                    if (currentQ.mnemonic.isNotBlank()) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(colors.primarySoft.copy(alpha = 0.55f))
+                                .padding(12.dp)
+                        ) {
+                            Text(
+                                text = "巧记",
+                                color = colors.primaryAccent,
+                                maxLines = 1,
+                                softWrap = false,
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = currentQ.mnemonic,
+                                color = colors.textPrimary,
+                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium)
+                            )
+                        }
                     }
                 }
-                if (currentQ.mnemonic.isNotBlank()) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(colors.primarySoft.copy(alpha = 0.55f))
-                            .padding(12.dp)
-                    ) {
-                        Text(
-                            text = "一句话巧记",
-                            color = colors.primaryAccent,
-                            maxLines = 1,
-                            softWrap = false,
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = currentQ.mnemonic,
-                            color = colors.textPrimary,
-                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium)
-                        )
-                    }
-                }
-            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -1350,7 +1362,7 @@ private fun QuizActiveQuestionContent(
                 ) {
                     Icon(Icons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(15.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("再出一道类似的题练练手", fontSize = 12.sp, maxLines = 1, softWrap = false)
+                    Text("衍生变式题", fontSize = 12.sp, maxLines = 1, softWrap = false)
                 }
             }
 

@@ -207,18 +207,10 @@ fun SereneStudyTheme(
         )
     }
 
-    val currentDensity = LocalDensity.current
-    val scaleFactor = (fontScalePercent / 100f).coerceIn(0.70f, 1.35f)
-    val adaptedDensity = Density(
-        density = currentDensity.density * scaleFactor,
-        fontScale = currentDensity.fontScale * scaleFactor
-    )
-
     val typography = buildSereneTypography(fontScalePercent / 100f)
 
     CompositionLocalProvider(
-        LocalSereneColors provides extendedColors,
-        LocalDensity provides adaptedDensity
+        LocalSereneColors provides extendedColors
     ) {
         MaterialTheme(
             colorScheme = baseColorScheme,
