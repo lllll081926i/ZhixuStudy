@@ -211,4 +211,36 @@ class SmartImportEngineTest {
         assertEquals("判断题", gRows[1].values["题型"])
         assertEquals("正确", gRows[1].values["答案"])
     }
+
+    @Test
+    fun testSm2AlgorithmProgression() {
+        // 测试初次答对、连续答对与答错的周期调度
+        val r0 = com.example.data.scheduler.Sm2Scheduler.calculate(
+            repetitions = 0,
+            intervalDays = 1,
+            easeFactor = 2.5,
+            quality = com.example.data.scheduler.ReviewQuality.GOOD
+        )
+        assertEquals(1, r0.repetitions)
+        assertEquals(1, r0.intervalDays)
+
+        val r1 = com.example.data.scheduler.Sm2Scheduler.calculate(
+            repetitions = r0.repetitions,
+            intervalDays = r0.intervalDays,
+            easeFactor = r0.easeFactor,
+            quality = com.example.data.scheduler.ReviewQuality.GOOD
+        )
+        assertEquals(2, r1.repetitions)
+        assertEquals(6, r1.intervalDays)
+
+        // 答错重来 (AGAIN)
+        val rRelapse = com.example.data.scheduler.Sm2Scheduler.calculate(
+            repetitions = r1.repetitions,
+            intervalDays = r1.intervalDays,
+            easeFactor = r1.easeFactor,
+            quality = com.example.data.scheduler.ReviewQuality.AGAIN
+        )
+        assertEquals(0, rRelapse.repetitions)
+        assertEquals(1, rRelapse.intervalDays)
+    }
 }

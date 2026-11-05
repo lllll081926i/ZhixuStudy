@@ -604,7 +604,7 @@ fun ImportMappingScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
                     ) {
                         Text(
-                            text = "看看认出来的 ${importState.evaluatedItems.size} 道题",
+                            text = "查看解析结果 (${importState.evaluatedItems.size} 题)",
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
                             softWrap = false
@@ -675,7 +675,7 @@ private fun MappingAndRulesPaneContent(
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = "工作表：${importState.sheetName} · 从第 ${importState.startRow} 行开始读",
+                        text = "数据源：${importState.sheetName} · 起始行：${importState.startRow}",
                         color = colors.textSecondary,
                         maxLines = 1,
                         softWrap = false,
@@ -684,7 +684,7 @@ private fun MappingAndRulesPaneContent(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 SereneBadge(
-                    text = "已自动对好列",
+                    text = "映射就绪",
                     containerColor = colors.mintBg,
                     contentColor = colors.mintText
                 )
@@ -693,7 +693,7 @@ private fun MappingAndRulesPaneContent(
 
         SereneCard(cornerRadius = 22.dp) {
             Text(
-                text = "表格里的每一列对应什么？",
+                text = "字段映射",
                 color = colors.textPrimary,
                 maxLines = 1,
                 softWrap = false,
@@ -739,14 +739,14 @@ private fun MappingAndRulesPaneContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "顺手帮你整理排版",
+                    text = "文本预处理规则",
                     color = colors.textPrimary,
                     maxLines = 1,
                     softWrap = false,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                 )
                 TextButton(onClick = onOpenSavePreset) {
-                    Text("记住这套设置", fontSize = 12.sp, maxLines = 1, softWrap = false)
+                    Text("保存为预设", fontSize = 12.sp, maxLines = 1, softWrap = false)
                 }
             }
 
@@ -779,17 +779,17 @@ private fun MappingAndRulesPaneContent(
             }
 
             RuleSwitchItem(
-                title = "自动去掉题目开头的旧题号（如 1. 、(1)）",
+                title = "自动剥离题干序号",
                 checked = rules.removeSerial,
                 onCheckedChange = { onUpdateRules(rules.copy(removeSerial = it)) }
             )
             RuleSwitchItem(
-                title = "把答案里的大小写和打勾统一整理干净",
+                title = "标准答案归一化",
                 checked = rules.normalizeAnswer,
                 onCheckedChange = { onUpdateRules(rules.copy(normalizeAnswer = it)) }
             )
             RuleSwitchItem(
-                title = "没写题型时，根据答案自动猜是单选还是多选",
+                title = "自动推断题型",
                 checked = rules.inferType,
                 onCheckedChange = { onUpdateRules(rules.copy(inferType = it)) }
             )
@@ -900,36 +900,36 @@ fun ImportPreviewContentPane(
                 ) {
                     PreviewStatTile(
                         modifier = Modifier.weight(1f),
-                        label = "一共读出",
+                        label = "总计识别",
                         count = totalCount.toString(),
-                        unit = "道",
+                        unit = "题",
                         accentColor = colors.textPrimary,
                         badgeBg = colors.primarySoft,
                         onClick = { viewModel.setImportPreviewFilter("all") }
                     )
                     PreviewStatTile(
                         modifier = Modifier.weight(1f),
-                        label = "直接能用",
+                        label = "通过检验",
                         count = validCount.toString(),
-                        unit = "道",
+                        unit = "题",
                         accentColor = colors.mintText,
                         badgeBg = colors.mintBg,
                         onClick = { viewModel.setImportPreviewFilter("valid") }
                     )
                     PreviewStatTile(
                         modifier = Modifier.weight(1f),
-                        label = "和旧题重了",
+                        label = "题目冲突",
                         count = conflictCount.toString(),
-                        unit = "道",
+                        unit = "题",
                         accentColor = colors.peachText,
                         badgeBg = colors.peachBg,
                         onClick = { viewModel.setImportPreviewFilter("conflict") }
                     )
                     PreviewStatTile(
                         modifier = Modifier.weight(1f),
-                        label = "缺了选项",
+                        label = "格式异常",
                         count = invalidCount.toString(),
-                        unit = "道",
+                        unit = "题",
                         accentColor = colors.dangerText,
                         badgeBg = colors.dangerBg,
                         onClick = { viewModel.setImportPreviewFilter("invalid") }
@@ -945,7 +945,7 @@ fun ImportPreviewContentPane(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "遇到重复题怎么办？",
+                            text = "冲突策略",
                             color = colors.textPrimary,
                             maxLines = 1,
                             softWrap = false,
@@ -953,9 +953,9 @@ fun ImportPreviewContentPane(
                         )
                         Box {
                             val currentStrategyLabel = when (importState.defaultDuplicateStrategy) {
-                                "replace" -> "用新题换掉旧题"
-                                "keep" -> "两道都留着"
-                                else -> "跳过重复题（推荐）"
+                                "replace" -> "覆盖旧题"
+                                "keep" -> "保留两者"
+                                else -> "跳过重复"
                             }
                             Row(
                                 modifier = Modifier
@@ -980,21 +980,21 @@ fun ImportPreviewContentPane(
                                 onDismissRequest = { strategyMenuExpanded = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text("跳过重复题（推荐）", maxLines = 1) },
+                                    text = { Text("跳过重复", maxLines = 1) },
                                     onClick = {
                                         viewModel.setDefaultDuplicateStrategy("skip")
                                         strategyMenuExpanded = false
                                     }
                                 )
                                 DropdownMenuItem(
-                                    text = { Text("用新题换掉旧题", maxLines = 1) },
+                                    text = { Text("覆盖旧题", maxLines = 1) },
                                     onClick = {
                                         viewModel.setDefaultDuplicateStrategy("replace")
                                         strategyMenuExpanded = false
                                     }
                                 )
                                 DropdownMenuItem(
-                                    text = { Text("两道都留着", maxLines = 1) },
+                                    text = { Text("保留两者", maxLines = 1) },
                                     onClick = {
                                         viewModel.setDefaultDuplicateStrategy("keep")
                                         strategyMenuExpanded = false
@@ -1010,9 +1010,9 @@ fun ImportPreviewContentPane(
                 SereneFilterChipRow(
                     options = listOf(
                         "all" to "全部 $totalCount",
-                        "invalid" to "得改一下 $invalidCount",
-                        "conflict" to "有重复 $conflictCount",
-                        "valid" to "没问题 $validCount"
+                        "invalid" to "需修正 $invalidCount",
+                        "conflict" to "冲突 $conflictCount",
+                        "valid" to "正常 $validCount"
                     ),
                     selectedKey = importState.previewFilter,
                     onSelect = { viewModel.setImportPreviewFilter(it) }
@@ -1032,11 +1032,11 @@ fun ImportPreviewContentPane(
                         }
                         viewModel.updateImportItemResolution(item.id, next)
                         val label = when (next) {
-                            "replace" -> "换掉旧题"
-                            "keep" -> "两道都留"
-                            else -> "跳过不导"
+                            "replace" -> "覆盖旧题"
+                            "keep" -> "保留两者"
+                            else -> "跳过"
                         }
-                        viewModel.showToast("第 ${item.rowNumber} 行已改为：$label")
+                        viewModel.showToast("行 ${item.rowNumber} 已设定为：$label")
                     },
                     onDiscard = { viewModel.discardImportItem(item.id) }
                 )
@@ -1080,7 +1080,7 @@ fun ImportPreviewContentPane(
                     Icon(Icons.Outlined.CloudUpload, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "确认把这 $validCount 道题导进去",
+                        text = "确认导入 ($validCount 题)",
                         maxLines = 1,
                         softWrap = false,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
@@ -1283,10 +1283,10 @@ private fun ImportRowInspectionCard(
 ) {
     val colors = SereneTheme.colors
     val (badgeText, badgeBg, badgeFg) = when (item.status) {
-        "invalid" -> Triple("⊗ 得改一下", colors.dangerBg, colors.dangerText)
-        "conflict" -> Triple("⚠ 答案不一样", colors.peachBg, colors.peachText)
-        "duplicate" -> Triple("⇄ 完全重了", colors.amberBg, colors.amberText)
-        else -> Triple("✓ 没问题", colors.mintBg, colors.mintText)
+        "invalid" -> Triple("异常", colors.dangerBg, colors.dangerText)
+        "conflict" -> Triple("冲突", colors.peachBg, colors.peachText)
+        "duplicate" -> Triple("重复", colors.amberBg, colors.amberText)
+        else -> Triple("正常", colors.mintBg, colors.mintText)
     }
 
     SereneCard(
@@ -1329,9 +1329,9 @@ private fun ImportRowInspectionCard(
             if (item.resolutionAction != "default") {
                 SereneBadge(
                     text = when (item.resolutionAction) {
-                        "replace" -> "换掉旧题"
-                        "keep" -> "两道都留"
-                        else -> "跳过不导"
+                        "replace" -> "覆盖"
+                        "keep" -> "保留两者"
+                        else -> "跳过"
                     },
                     containerColor = colors.primarySoft,
                     contentColor = colors.primaryAccent

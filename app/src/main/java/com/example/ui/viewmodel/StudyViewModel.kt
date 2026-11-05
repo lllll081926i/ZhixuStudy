@@ -927,6 +927,18 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                 )
             )
 
+            // Update question bank counts and accuracy
+            val updatedAll = dao.getAllQuestionsOnce().filter { it.bank == targetBank }
+            val existingBank = dao.getAllBanks().find { it.name == targetBank }
+            if (existingBank != null) {
+                dao.upsertBank(
+                    existingBank.copy(
+                        totalTargetCount = maxOf(existingBank.totalTargetCount, updatedAll.size),
+                        updatedAt = System.currentTimeMillis()
+                    )
+                )
+            }
+
             _importState.update {
                 it.copy(
                     lastCommitStats = CommitStats(
@@ -1257,6 +1269,22 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                     durationSec = session.elapsedSeconds.coerceAtLeast(15)
                 )
             )
+            // Update daily practice counter
+            prefsRepo.incrementDailyDone(total)
+
+            // Update bank practiced count & accuracy
+            val currentBank = dao.getAllBanks().find { it.name == _selectedBankName.value }
+            if (currentBank != null) {
+                val newPracticed = currentBank.practicedCount + total
+                val newAcc = ((currentBank.accuracyPercent * 0.7) + (scorePercent * 0.3)).toInt().coerceIn(10, 100)
+                dao.upsertBank(
+                    currentBank.copy(
+                        practicedCount = newPracticed,
+                        accuracyPercent = newAcc,
+                        updatedAt = System.currentTimeMillis()
+                    )
+                )
+            }
             navigateTo(AppScreen.QUIZ_RESULT)
         }
     }
