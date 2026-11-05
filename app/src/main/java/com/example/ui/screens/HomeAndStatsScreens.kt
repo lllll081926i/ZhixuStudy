@@ -123,7 +123,12 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = if (isTablet) 28.dp else 20.dp, vertical = 14.dp),
+                    .padding(
+                        start = if (isTablet) 24.dp else 16.dp,
+                        end = if (isTablet) 20.dp else 12.dp,
+                        top = 8.dp,
+                        bottom = 8.dp
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -135,7 +140,7 @@ fun HomeScreen(
                         Text(
                             text = "知序",
                             color = colors.textPrimary,
-                            style = MaterialTheme.typography.headlineMedium.copy(
+                            style = MaterialTheme.typography.headlineSmall.copy(
                                 fontWeight = FontWeight.Black,
                                 letterSpacing = (-0.5).sp
                             )
@@ -195,18 +200,64 @@ fun HomeScreen(
                     }
                 }
             }
-        }
 
-        if (isTablet && tabletSplitActive) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
+            if (isTablet && tabletSplitActive) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(bottom = 96.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        item {
+                            HomeHeroBannerCard(
+                                dailyDone = settings.dailyDoneCount,
+                                dailyTarget = settings.dailyTargetCount,
+                                onAdjustPlan = { viewModel.navigateTo(AppScreen.REVIEW_PLAN) }
+                            )
+                        }
+                        item {
+                            HomeQuickActionGrid(
+                                wrongCount = wrongCount,
+                                onStartPractice = { viewModel.openPracticeConfig(activeBank.name) },
+                                onWrongReview = { viewModel.startQuickReviewSession() },
+                                onImport = { viewModel.navigateTo(AppScreen.IMPORT_SOURCE) },
+                                onHistory = { viewModel.navigateTo(AppScreen.HISTORY) }
+                            )
+                        }
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(bottom = 96.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        item {
+                            HomeRecentBankCard(
+                                banks = banks,
+                                selectedBankIndex = selectedBankIndex,
+                                onSelectBankIndex = { selectedBankIndex = it },
+                                bank = activeBank,
+                                onContinue = { viewModel.openPracticeConfig(activeBank.name) },
+                                onQuickFive = { viewModel.startQuickFiveSprint(activeBank.name) },
+                                onOpenDetail = { viewModel.openBankDetail(activeBank.name) }
+                            )
+                        }
+                        item {
+                            HomeAuditShortcutBanner(
+                                onOpenAudit = { viewModel.navigateTo(AppScreen.AUDIT) }
+                            )
+                        }
+                    }
+                }
+            } else {
                 LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(bottom = 96.dp),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     item {
@@ -216,22 +267,6 @@ fun HomeScreen(
                             onAdjustPlan = { viewModel.navigateTo(AppScreen.REVIEW_PLAN) }
                         )
                     }
-                    item {
-                        HomeQuickActionGrid(
-                            wrongCount = wrongCount,
-                            onStartPractice = { viewModel.openPracticeConfig(activeBank.name) },
-                            onWrongReview = { viewModel.startQuickReviewSession() },
-                            onImport = { viewModel.navigateTo(AppScreen.IMPORT_SOURCE) },
-                            onHistory = { viewModel.navigateTo(AppScreen.HISTORY) }
-                        )
-                    }
-                }
-
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(bottom = 96.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
                     item {
                         HomeRecentBankCard(
                             banks = banks,
@@ -244,49 +279,19 @@ fun HomeScreen(
                         )
                     }
                     item {
+                        HomeQuickActionGrid(
+                            wrongCount = wrongCount,
+                            onStartPractice = { viewModel.openPracticeConfig(activeBank.name) },
+                            onWrongReview = { viewModel.startQuickReviewSession() },
+                            onImport = { viewModel.navigateTo(AppScreen.IMPORT_SOURCE) },
+                            onHistory = { viewModel.navigateTo(AppScreen.HISTORY) }
+                        )
+                    }
+                    item {
                         HomeAuditShortcutBanner(
                             onOpenAudit = { viewModel.navigateTo(AppScreen.AUDIT) }
                         )
                     }
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                item {
-                    HomeHeroBannerCard(
-                        dailyDone = settings.dailyDoneCount,
-                        dailyTarget = settings.dailyTargetCount,
-                        onAdjustPlan = { viewModel.navigateTo(AppScreen.REVIEW_PLAN) }
-                    )
-                }
-                item {
-                    HomeRecentBankCard(
-                        banks = banks,
-                        selectedBankIndex = selectedBankIndex,
-                        onSelectBankIndex = { selectedBankIndex = it },
-                        bank = activeBank,
-                        onContinue = { viewModel.openPracticeConfig(activeBank.name) },
-                        onQuickFive = { viewModel.startQuickFiveSprint(activeBank.name) },
-                        onOpenDetail = { viewModel.openBankDetail(activeBank.name) }
-                    )
-                }
-                item {
-                    HomeQuickActionGrid(
-                        wrongCount = wrongCount,
-                        onStartPractice = { viewModel.openPracticeConfig(activeBank.name) },
-                        onWrongReview = { viewModel.startQuickReviewSession() },
-                        onImport = { viewModel.navigateTo(AppScreen.IMPORT_SOURCE) },
-                        onHistory = { viewModel.navigateTo(AppScreen.HISTORY) }
-                    )
-                }
-                item {
-                    HomeAuditShortcutBanner(
-                        onOpenAudit = { viewModel.navigateTo(AppScreen.AUDIT) }
-                    )
                 }
             }
         }

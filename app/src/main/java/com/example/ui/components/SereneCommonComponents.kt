@@ -113,7 +113,12 @@ fun SereneTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = if (isTablet) 24.dp else 16.dp, vertical = 10.dp),
+            .padding(
+                start = if (onBack != null) (if (isTablet) 12.dp else 4.dp) else (if (isTablet) 20.dp else 16.dp),
+                end = if (isTablet) 20.dp else 14.dp,
+                top = 2.dp,
+                bottom = 4.dp
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -132,13 +137,13 @@ fun SereneTopBar(
                         tint = colors.textPrimary
                     )
                 }
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(2.dp))
             }
             Column {
                 Text(
                     text = title,
                     color = colors.textPrimary,
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis
