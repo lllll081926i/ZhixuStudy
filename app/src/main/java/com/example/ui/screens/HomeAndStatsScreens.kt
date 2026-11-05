@@ -144,17 +144,12 @@ fun HomeScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 IconButton(
                     onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
-                    modifier = Modifier
-                        .size(34.dp)
-                        .clip(CircleShape)
-                        .background(colors.subtleSurface)
-                        .testTag("home_settings_button")
+                    modifier = Modifier.testTag("home_settings_button")
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = "设置",
-                        tint = colors.textSecondary,
-                        modifier = Modifier.size(18.dp)
+                        tint = colors.textPrimary
                     )
                 }
             }
@@ -790,7 +785,7 @@ fun ReviewScreen(
                             tint = colors.primaryAccent
                         )
                     }
-                    IconButton(onClick = { showSearchBar = !showSearchBar }) {
+                    IconButton(onClick = { viewModel.navigateTo(AppScreen.LIBRARY_SEARCH) }) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
                             contentDescription = "搜索",
@@ -819,24 +814,6 @@ fun ReviewScreen(
                     }
                 }
             )
-
-            AnimatedVisibility(visible = showSearchBar) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { viewModel.setReviewSearch(it) },
-                    placeholder = { Text("搜错题、章节或自己的笔记...", maxLines = 1, softWrap = false) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
-                    singleLine = true,
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = colors.cardSurface,
-                        unfocusedContainerColor = colors.cardSurface
-                    )
-                )
-            }
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),

@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.CloudUpload
 import androidx.compose.material.icons.outlined.CompareArrows
@@ -110,6 +111,9 @@ fun ImportSourceScreen(
         )
     }
 
+    var showNewBankInline by remember { mutableStateOf(false) }
+    var newBankNameInput by remember { mutableStateOf("") }
+
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -171,13 +175,62 @@ fun ImportSourceScreen(
         ) {
             item {
                 SereneCard(cornerRadius = 22.dp) {
-                    Text(
-                        text = "目标题库",
-                        color = colors.textPrimary,
-                        maxLines = 1,
-                        softWrap = false,
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "目标题库",
+                            color = colors.textPrimary,
+                            maxLines = 1,
+                            softWrap = false,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        )
+                        TextButton(
+                            onClick = { showNewBankInline = !showNewBankInline },
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Icon(Icons.Outlined.Add, contentDescription = null, modifier = Modifier.size(15.dp))
+                            Spacer(modifier = Modifier.width(3.dp))
+                            Text(if (showNewBankInline) "收起" else "新建题库", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    AnimatedVisibility(visible = showNewBankInline) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = newBankNameInput,
+                                onValueChange = { newBankNameInput = it },
+                                placeholder = { Text("输入新题库名称...") },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            Button(
+                                onClick = {
+                                    if (newBankNameInput.isNotBlank()) {
+                                        val formatted = if (newBankNameInput.startsWith("《")) newBankNameInput else "《${newBankNameInput.trim()}》"
+                                        viewModel.createNewBank(newBankNameInput, "本地导入题库")
+                                        viewModel.updateImportTargetBank(formatted)
+                                        newBankNameInput = ""
+                                        showNewBankInline = false
+                                    }
+                                },
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.primaryAccent)
+                            ) {
+                                Text("新建", maxLines = 1, softWrap = false)
+                            }
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         modifier = Modifier
@@ -280,7 +333,62 @@ fun ImportSourceScreen(
                 }
             }
 
-            // 2. Presets Quick Start
+            // 2. Supported Formats Tag List (Wrapped & Clear)
+            item {
+                SereneCard(cornerRadius = 24.dp) {
+                    Text(
+                        text = "支持格式",
+                        color = colors.textPrimary,
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    val formats = listOf(
+                        "Excel (.xlsx)" to colors.mintText,
+                        "Word (.docx)" to colors.primaryAccent,
+                        "Aiken / Moodle" to colors.primaryBright,
+                        "问卷星 / 学习通" to colors.peachText,
+                        "Markdown (.md)" to colors.amberText,
+                        "Anki 卡片 (.txt/.tsv)" to colors.mintText,
+                        "结构化 JSON" to colors.primaryAccent,
+                        "CSV 表格" to colors.textSecondary
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        formats.take(4).forEach { (fmt, color) ->
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = colors.subtleSurface,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Box(modifier = Modifier.padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+                                    Text(fmt.substringBefore(" "), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = color)
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        formats.drop(4).forEach { (fmt, color) ->
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = colors.subtleSurface,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Box(modifier = Modifier.padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+                                    Text(fmt.substringBefore(" "), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = color)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Presets Quick Start
             item {
                 SereneCard(cornerRadius = 24.dp) {
                     Text(

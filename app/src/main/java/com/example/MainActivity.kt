@@ -84,7 +84,8 @@ class MainActivity : ComponentActivity() {
 
             SereneStudyTheme(
                 themeMode = settings.themeMode,
-                fontScalePercent = settings.fontScalePercent
+                fontScalePercent = settings.fontScalePercent,
+                lineSpacingMode = settings.lineSpacingMode
             ) {
                 SereneStudyAppRoot(viewModel = studyViewModel)
             }
@@ -135,8 +136,10 @@ fun SereneStudyAppRoot(viewModel: StudyViewModel) {
             .background(colors.bgCanvas)
             .windowInsetsPadding(WindowInsets.statusBars)
     ) {
-        val isTablet = maxWidth >= 600.dp
-        val tabletSplitActive = settings.tabletSplitViewPreferred
+        // Strict Tablet Landscape/Expanded condition: Width must be at least 760dp AND wider than height (Landscape).
+        // Vertical/portrait orientations on phones, foldables and vertical tablets strictly use mobile single-pane layout.
+        val isTablet = maxWidth >= 760.dp && maxWidth > maxHeight
+        val tabletSplitActive = isTablet && settings.tabletSplitViewPreferred
 
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedContent(

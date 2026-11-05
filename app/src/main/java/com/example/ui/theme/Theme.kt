@@ -136,6 +136,7 @@ val SereneShapes = Shapes(
 fun SereneStudyTheme(
     themeMode: String = "system", // "system", "light", "dark"
     fontScalePercent: Int = 100,
+    lineSpacingMode: String = "标准 (1.5x)",
     content: @Composable () -> Unit
 ) {
     val systemDark = isSystemInDarkTheme()
@@ -207,7 +208,7 @@ fun SereneStudyTheme(
         )
     }
 
-    val typography = buildSereneTypography(fontScalePercent / 100f)
+    val typography = buildSereneTypography(fontScalePercent / 100f, lineSpacingMode)
 
     CompositionLocalProvider(
         LocalSereneColors provides extendedColors

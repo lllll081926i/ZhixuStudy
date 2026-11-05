@@ -80,7 +80,7 @@ fun LibrarySearchScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Search Bar Top Bar
+        // Search Bar Top Bar (Clean & Immersive, no redundant back button - system gesture or keyboard dismiss)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,20 +88,12 @@ fun LibrarySearchScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            IconButton(onClick = { viewModel.navigateBack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "返回",
-                    tint = colors.textPrimary
-                )
-            }
-
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setLibrarySearch(it) },
                 placeholder = {
                     Text(
-                        text = "搜题库、章节或拼音首字母...",
+                        text = "输入题库名称、考点或拼音首字母...",
                         color = colors.textMuted,
                         maxLines = 1,
                         softWrap = false

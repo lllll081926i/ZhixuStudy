@@ -130,49 +130,8 @@ fun SettingsScreen(
             onBack = { viewModel.navigateBack() },
             isTablet = isTablet,
             tabletSplitActive = tabletSplitActive,
-            onToggleTabletSplit = { viewModel.setTabletSplitPreferred(!tabletSplitActive) },
-            actions = {
-                IconButton(
-                    onClick = {
-                        showSearch = !showSearch
-                        if (!showSearch) searchQuery = ""
-                    },
-                    modifier = Modifier.testTag("settings_search_btn")
-                ) {
-                    Icon(
-                        imageVector = if (showSearch) Icons.Outlined.Close else Icons.Outlined.Search,
-                        contentDescription = "搜索设置",
-                        tint = colors.textPrimary
-                    )
-                }
-            }
+            onToggleTabletSplit = { viewModel.setTabletSplitPreferred(!tabletSplitActive) }
         )
-
-        AnimatedVisibility(visible = showSearch) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = if (isTablet) 24.dp else 16.dp, vertical = 6.dp)
-            ) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    placeholder = { Text("搜索设置项...", maxLines = 1, softWrap = false) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Search,
-                            contentDescription = null,
-                            tint = colors.textMuted
-                        )
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("settings_search_input")
-                )
-            }
-        }
 
         if (isTablet && tabletSplitActive) {
             // Tablet Master-Detail Settings Workbench - Strictly Equal Height (fillMaxHeight)

@@ -131,6 +131,13 @@ fun LibraryScreen(
                 tabletSplitActive = tabletSplitActive,
                 onToggleTabletSplit = { viewModel.setTabletSplitPreferred(!tabletSplitActive) },
                 actions = {
+                    IconButton(onClick = { viewModel.navigateTo(AppScreen.LIBRARY_SEARCH) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = "搜索题库",
+                            tint = colors.textPrimary
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
@@ -179,39 +186,6 @@ fun LibraryScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                item {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(50))
-                            .clickable { viewModel.navigateTo(AppScreen.LIBRARY_SEARCH) }
-                            .testTag("library_search_btn"),
-                        shape = RoundedCornerShape(50),
-                        color = colors.cardSurface,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, colors.borderSubtle)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Search,
-                                contentDescription = "搜索",
-                                tint = colors.textSecondary,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Text(
-                                text = "搜索题库...",
-                                color = colors.textMuted,
-                                style = MaterialTheme.typography.bodyMedium,
-                                maxLines = 1,
-                                softWrap = false
-                            )
-                        }
-                    }
-                }
-
                 if (showCreateInline) {
                     item {
                         SereneCard(
@@ -1185,6 +1159,13 @@ fun QuestionListScreen(
                 onBack = { viewModel.navigateBack() },
                 isTablet = isTablet,
                 actions = {
+                    IconButton(onClick = { viewModel.navigateTo(AppScreen.LIBRARY_SEARCH) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = "搜索题目",
+                            tint = colors.textPrimary
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
@@ -1294,33 +1275,6 @@ fun QuestionListScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                item {
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = { viewModel.setQuestionListSearch(it) },
-                        placeholder = { Text("搜题干、选项或者解析里的词...", maxLines = 1, softWrap = false) },
-                        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
-                        trailingIcon = {
-                            if (chapterFilter != null) {
-                                TextButton(onClick = { viewModel.setChapterFilter(null) }) {
-                                    Text("看全书", fontSize = 11.sp, maxLines = 1, softWrap = false)
-                                }
-                            } else {
-                                Icon(Icons.Outlined.Tune, contentDescription = null, tint = colors.textSecondary)
-                            }
-                        },
-                        singleLine = true,
-                        shape = RoundedCornerShape(50),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("question_list_search"),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = colors.cardSurface,
-                            unfocusedContainerColor = colors.cardSurface
-                        )
-                    )
-                }
-
                 item {
                     SereneFilterChipRow(
                         options = listOf(
