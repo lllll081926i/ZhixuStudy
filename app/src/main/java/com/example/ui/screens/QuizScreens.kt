@@ -808,7 +808,7 @@ fun QuizScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("点击题号直接跳过去", maxLines = 1, softWrap = false, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                        Text("跳转题号", maxLines = 1, softWrap = false, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
                         IconButton(onClick = { viewModel.toggleAnswerSheet(false) }) {
                             Icon(Icons.Outlined.Close, contentDescription = "关闭")
                         }

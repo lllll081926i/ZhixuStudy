@@ -56,10 +56,12 @@ fun SereneCard(
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val clickMod = if (onClick != null) {
+        Modifier.bounceClick(scaleDown = 0.985f, onClick = onClick)
+    } else Modifier
+
     Surface(
-        modifier = modifier.then(
-            if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier
-        ),
+        modifier = modifier.then(clickMod),
         shape = RoundedCornerShape(cornerRadius),
         color = containerColor,
         border = BorderStroke(1.dp, borderColor),
