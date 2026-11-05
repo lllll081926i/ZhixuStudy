@@ -82,6 +82,7 @@ import com.example.data.local.QuestionEntity
 import com.example.data.local.UserSettingsState
 import com.example.ui.components.EmptyInboxIllustration
 import com.example.ui.components.ReviewCurveIllustration
+import com.example.ui.components.SereneConfettiEffect
 import com.example.ui.components.StudyHeatmapCard
 import com.example.ui.components.SereneBadge
 import com.example.ui.components.SereneCard
@@ -114,43 +115,84 @@ fun HomeScreen(
     )
     val wrongCount = questions.count { it.wrongCount > 0 }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Compact Top Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = if (isTablet) 24.dp else 16.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    text = "知序 Study",
-                    color = colors.textPrimary,
-                    maxLines = 1,
-                    softWrap = false,
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold)
-                )
-                SereneBadge(
-                    text = "连续打卡 7 天",
-                    containerColor = colors.peachBg,
-                    contentColor = colors.peachText
-                )
-            }
+    var showConfettiEgg by remember { mutableStateOf(false) }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                IconButton(
-                    onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
-                    modifier = Modifier.testTag("home_settings_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "设置",
-                        tint = colors.textPrimary
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Elegant & Distinctive Top Header
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = if (isTablet) 28.dp else 20.dp, vertical = 14.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            text = "知序",
+                            color = colors.textPrimary,
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Black,
+                                letterSpacing = (-0.5).sp
+                            )
+                        )
+                        Text(
+                            text = "STUDY",
+                            color = colors.primaryAccent,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 2.sp
+                            )
+                        )
+                    }
+                    Text(
+                        text = "专注本地题库与间隔复习",
+                        color = colors.textMuted,
+                        style = MaterialTheme.typography.labelSmall
                     )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = colors.primarySoft.copy(alpha = 0.8f),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .clickable {
+                                showConfettiEgg = true
+                                viewModel.showToast("🎉 连续打卡 7 天！自律笃行，必有回响")
+                            }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = "🔥 7天",
+                                color = colors.primaryAccent,
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold)
+                            )
+                        }
+                    }
+
+                    IconButton(
+                        onClick = { viewModel.navigateTo(AppScreen.SETTINGS) },
+                        modifier = Modifier.testTag("home_settings_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "设置",
+                            tint = colors.textPrimary
+                        )
+                    }
                 }
             }
         }
@@ -249,6 +291,12 @@ fun HomeScreen(
             }
         }
     }
+
+    if (showConfettiEgg) {
+        SereneConfettiEffect(
+            onFinished = { showConfettiEgg = false }
+        )
+    }
 }
 
 @Composable
@@ -339,7 +387,7 @@ private fun HomeHeroBannerCard(
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "改计划",
+                                text = "调整计划",
                                 color = colors.primaryAccent,
                                 maxLines = 1,
                                 softWrap = false,
@@ -569,7 +617,7 @@ private fun HomeQuickActionGrid(
         ) {
             QuickActionTile(
                 modifier = Modifier.weight(1f),
-                title = "选模式刷题",
+                title = "开始练习",
                 subtitle = "顺序 · 随机 · 模考",
                 icon = Icons.Outlined.PlayCircleOutline,
                 iconBg = colors.primarySoft,
@@ -579,8 +627,8 @@ private fun HomeQuickActionGrid(
             )
             QuickActionTile(
                 modifier = Modifier.weight(1f),
-                title = "消灭错题",
-                subtitle = "还有 $wrongCount 道错题",
+                title = "错题巩固",
+                subtitle = "待复习 $wrongCount 题",
                 icon = Icons.Outlined.Refresh,
                 iconBg = colors.peachBg,
                 iconTint = colors.peachText,
@@ -594,8 +642,8 @@ private fun HomeQuickActionGrid(
         ) {
             QuickActionTile(
                 modifier = Modifier.weight(1f),
-                title = "导入新题",
-                subtitle = "支持表格与文本",
+                title = "导入题库",
+                subtitle = "多格式智能导入",
                 icon = Icons.Outlined.CloudUpload,
                 iconBg = colors.mintBg,
                 iconTint = colors.mintText,
@@ -604,8 +652,8 @@ private fun HomeQuickActionGrid(
             )
             QuickActionTile(
                 modifier = Modifier.weight(1f),
-                title = "做题记录",
-                subtitle = "每次练习的成绩",
+                title = "练习记录",
+                subtitle = "练习历史与成绩",
                 icon = Icons.Outlined.History,
                 iconBg = colors.amberBg,
                 iconTint = colors.amberText,
@@ -1109,7 +1157,7 @@ fun ReviewScreen(
                                             modifier = Modifier.size(14.dp)
                                         )
                                         Text(
-                                            text = if (isPeeked) "收起答案" else "看一眼答案",
+                                            text = if (isPeeked) "收起答案" else "查看答案",
                                             color = colors.textSecondary,
                                             maxLines = 1,
                                             softWrap = false,
@@ -1157,7 +1205,7 @@ fun ReviewScreen(
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
                             ) {
                                 Text(
-                                    text = "去重做 ▷",
+                                    text = "重练 ▷",
                                     color = colors.primaryAccent,
                                     maxLines = 1,
                                     softWrap = false,
@@ -1182,7 +1230,7 @@ fun ReviewScreen(
                         Icon(imageVector = Icons.Outlined.Refresh, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "集中重做这 ${todayDueList.size} 道题",
+                            text = "开始本次复习 (${todayDueList.size} 题)",
                             maxLines = 1,
                             softWrap = false,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)

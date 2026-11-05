@@ -433,7 +433,7 @@ fun QuizScreen(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "题号卡 $answeredCount/${questions.size}",
+                                text = "答题卡 $answeredCount/${questions.size}",
                                 color = colors.primaryAccent,
                                 maxLines = 1,
                                 softWrap = false,

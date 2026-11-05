@@ -1,6 +1,8 @@
 package com.example.ui.screens
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.webkit.WebView
@@ -15,20 +17,33 @@ object WrongBookPrintHelper {
     fun printWrongQuestions(context: Context, questions: List<QuestionEntity>) {
         if (questions.isEmpty()) return
 
-        val htmlContent = buildHtmlDocument(questions)
-        val webView = WebView(context)
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                val printManager = context.getSystemService(Context.PRINT_SERVICE) as? PrintManager ?: return
-                val jobName = "知序错题集_${SimpleDateFormat("yyyyMMdd_HHmm", Locale.CHINA).format(Date())}"
-                val printAdapter = view.createPrintDocumentAdapter(jobName)
-                val printAttributes = PrintAttributes.Builder()
-                    .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
-                    .build()
-                printManager.print(jobName, printAdapter, printAttributes)
+        Handler(Looper.getMainLooper()).post {
+            try {
+                val htmlContent = buildHtmlDocument(questions)
+                val webView = WebView(context)
+                webView.settings.javaScriptEnabled = false
+                webView.settings.domStorageEnabled = false
+
+                webView.webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView, url: String) {
+                        try {
+                            val printManager = context.getSystemService(Context.PRINT_SERVICE) as? PrintManager
+                            if (printManager != null) {
+                                val jobName = "知序错题集_${SimpleDateFormat("yyyyMMdd_HHmm", Locale.CHINA).format(Date())}"
+                                val printAdapter = view.createPrintDocumentAdapter(jobName)
+                                val printAttributes = PrintAttributes.Builder()
+                                    .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                                    .build()
+                                printManager.print(jobName, printAdapter, printAttributes)
+                            }
+                        } catch (_: Exception) {
+                        }
+                    }
+                }
+                webView.loadDataWithBaseURL("about:blank", htmlContent, "text/html", "UTF-8", null)
+            } catch (_: Exception) {
             }
         }
-        webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null)
     }
 
     private fun buildHtmlDocument(questions: List<QuestionEntity>): String {

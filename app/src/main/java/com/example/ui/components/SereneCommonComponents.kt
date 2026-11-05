@@ -124,21 +124,15 @@ fun SereneTopBar(
             if (onBack != null) {
                 IconButton(
                     onClick = onBack,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(colors.cardSurface)
-                        .border(1.dp, colors.borderSubtle, CircleShape)
-                        .testTag("top_bar_back_button")
+                    modifier = Modifier.testTag("top_bar_back_button")
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = "返回",
-                        tint = colors.textPrimary,
-                        modifier = Modifier.size(20.dp)
+                        tint = colors.textPrimary
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(6.dp))
             }
             Column {
                 Text(
