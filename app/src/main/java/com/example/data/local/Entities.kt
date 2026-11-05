@@ -61,17 +61,33 @@ data class QuestionEntity(
 ) {
     val options: List<String>
         get() = try {
-            val arr = JSONArray(optionsJson)
-            List(arr.length()) { arr.getString(it) }
-        } catch (e: Exception) {
+            val trimmed = optionsJson.trim()
+            if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                val inner = trimmed.substring(1, trimmed.length - 1).trim()
+                if (inner.isEmpty()) emptyList()
+                else inner.split(Regex("\",\\s*\"|',\\s*'"))
+                    .map { it.trim().trim('"', '\'').replace("\\\"", "\"") }
+            } else {
+                val arr = JSONArray(optionsJson)
+                List(arr.length()) { arr.getString(it) }
+            }
+        } catch (e: Throwable) {
             emptyList()
         }
 
     val answer: List<String>
         get() = try {
-            val arr = JSONArray(answersJson)
-            List(arr.length()) { arr.getString(it) }
-        } catch (e: Exception) {
+            val trimmed = answersJson.trim()
+            if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                val inner = trimmed.substring(1, trimmed.length - 1).trim()
+                if (inner.isEmpty()) emptyList()
+                else inner.split(Regex("\",\\s*\"|',\\s*'"))
+                    .map { it.trim().trim('"', '\'').replace("\\\"", "\"") }
+            } else {
+                val arr = JSONArray(answersJson)
+                List(arr.length()) { arr.getString(it) }
+            }
+        } catch (e: Throwable) {
             emptyList()
         }
 

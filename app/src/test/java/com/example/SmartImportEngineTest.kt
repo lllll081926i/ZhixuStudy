@@ -23,7 +23,7 @@ class SmartImportEngineTest {
     fun testEvaluateImportRowsValidation() {
         val (_, rows) = SmartImportEngine.getDemoExcelRows()
         val mapping = ColumnMappingConfig()
-        val rules = PreprocessRulesConfig()
+        val rules = PreprocessRulesConfig(removeSerial = true)
 
         // 构造已有题库中的对比题目
         val existingQuestions = listOf(

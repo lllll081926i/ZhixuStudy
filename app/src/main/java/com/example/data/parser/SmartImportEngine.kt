@@ -561,9 +561,10 @@ object SmartImportEngine {
             }?.replace(Regex("^[【\\[]?(?:答案解析|解析说明|解析|说明|Explanation)[】\\]]?[:：\\s]*"), "")?.trim() ?: ""
 
             val inferredType = extractedType ?: when {
-                ansLine in listOf("正确", "错误", "对", "错", "√", "×") -> "判断题"
-                optA.isNotBlank() && optB.isNotBlank() && ansLine.length > 1 && ansLine.all { it in "ABCDabcd,，\\s" } -> "多选题"
+                ansLine in listOf("正确", "错误", "对", "错", "√", "×") && optC.isBlank() && optD.isBlank() -> "判断题"
+                optA.isNotBlank() && optB.isNotBlank() && (ansLine.contains(",") || ansLine.contains("，") || (ansLine.length > 1 && ansLine.all { it in "ABCDabcd" })) -> "多选题"
                 optA.isNotBlank() && optB.isNotBlank() -> "单选题"
+                ansLine in listOf("正确", "错误", "对", "错", "√", "×") -> "判断题"
                 else -> "填空题"
             }
 
